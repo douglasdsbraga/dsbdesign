@@ -1,0 +1,30 @@
+@use "../../global/functions";
+@use "../../lib/mapeamento/fonts";
+
+.titleSession {
+  // Font-size's
+  &.fz-14 {
+      font-size: 14px;
+  }
+  &.fz-16 {
+      font-size: 16px;
+  }
+  &.fz-18 {
+      font-size: 18px;
+  }
+  &.fz-22 {
+      @include functions.font-size(fonts.$fs-ate22px);
+  }
+  &.fz-24 {
+      @include functions.font-size(fonts.$fs-ate24px);
+  }
+  &.fz-32 {
+      @include functions.font-size(fonts.$fs-ate32px);
+  }
+  &.fz-36 {
+      @include functions.font-size(fonts.$fs-ate36px);
+  }
+  &.fz-42 {
+      @include functions.font-size(fonts.$fs-ate42px);
+  }
+}

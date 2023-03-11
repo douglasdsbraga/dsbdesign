@@ -1,0 +1,112 @@
+@charset "UTF-8";
+/*
+
+	Document   	: estilos.css
+	Autor		: @douglasdsbraga - designer digital and front-end developer
+
+*/
+
+	// Global init
+	@use "global/_variaveis.scss"; 					// Carrega toddas as variaveis do projeto
+	@use "global/_functions.scss"; 					// Carrega as funções
+	@use "global/_resets.scss"; 						// Carrega o resets
+	@use "global/_constantes.scss"; 					// Carrega as constantes
+
+////////////////////////////////////////////////////////////
+
+	// Mapeamento
+	@use "lib/mapeamento/_fonts.scss";
+	@use "lib/mapeamento/_heights.scss";
+
+	// menus
+	@use "lib/menus/_menuSAnduiche.scss";
+
+	// Objetos geométricos
+	@use "lib/objetos-geometricos/_quadrado.scss";
+	@use "lib/objetos-geometricos/_retangular.scss";
+	@use "lib/objetos-geometricos/_triangulo.scss";
+
+	// Transformacões
+	@use "lib/transformacoes/_rotate.scss";
+	@use "lib/transformacoes/_scale.scss";
+	@use "lib/transformacoes/_skew.scss";
+	@use "lib/transformacoes/_translate.scss";
+	@use "lib/transformacoes/_mixins.scss";
+
+	// Transições
+	@use "lib/transicoes/_mixin.scss";
+	@use "lib/transicoes/_transitions.scss";
+
+	// efeitos
+	@use "lib/efeitos/_animations.scss";
+	@use "lib/efeitos/_box-shadows.scss";
+	@use "lib/efeitos/_grayScale.scss";
+	@use "lib/efeitos/_text-shadow.scss";
+	@use "lib/efeitos/_gradientes.scss";
+
+////////////////////////////////////////////////////////////
+
+	// Componetes  ------------------------------------------
+	@use "componentes/_botoes.scss";
+	@use "componentes/_form.scss";
+	@use "componentes/_slider.scss";
+	@use "componentes/_caroucel.scss";
+	@use "componentes/_gcBox.scss";
+	@use "componentes/_breadcrumbs.scss";
+
+	// Navigations ------------------------------------------
+	@use "navigation/_header.scss";
+	@use "navigation/_footer.scss";
+	@use "navigation/_paginacao.scss";
+	@use "navigation/_menuResponsivo.scss";
+	@use "navigation/_widgets.scss";
+
+	// layout -----------------------------------------------
+
+	@use "layout/_sessions.scss"; 	 					// Regras globais para cada sessão dentro da página
+
+	@use "layout/_taglines.scss";
+	@use "layout/titleSession/_core.scss";
+	@use "layout/titleSession/_fontsize.scss";
+	@use "layout/titleSession/_colors.scss";
+	@use "layout/_icon.scss";
+
+	// Terceiros -------------------------------------------
+	// @import "terceiros/owl-carousel/owl.carousel.scss";
+
+////////////////////////////////////////////////////////////
+
+	// Páginas ---------------------------------------------
+	@use "paginas/_pages.scss";
+	@use "paginas/_frontpage.scss";
+	@use "paginas/_contato.scss";
+
+
+	// listagem --------------------------------------------
+	@use "paginas/_listagem.scss";
+	@use "paginas/_itens.scss";
+
+	// Views -----------------------------------------------
+	@use "paginas/_views.scss";
+
+
+////////////////////////////////////////////////////////////
+
+	// responsivo ------------------------------------------
+
+	// Screen --> "min-width" e "max-width"
+	@use "responsivo/screen/_desktops.scss";
+	@use "responsivo/screen/_tablets.scss";
+	@use "responsivo/screen/_smartphone.scss";
+
+	// breakpoint --> Ajuste por pontos de controle
+	@use "responsivo/breakpoint/_desktopWide.scss";
+	@use "responsivo/breakpoint/_desktopsView.scss";
+	@use "responsivo/breakpoint/_tabletsView.scss";
+	@use "responsivo/breakpoint/_smartphoneView.scss";
+
+	// devices --> por dispositivos
+	// @import "responsivo/device/_iPadView.scss";
+	// @import "responsivo/device/_iphoneView.scss";
+	// @import "responsivo/device/_retinaScreens.scss";
+	// @import "responsivo/device/_googlePixel.scss";

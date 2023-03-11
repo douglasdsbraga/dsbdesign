@@ -1,0 +1,6 @@
+@use "sass:color";
+// grayScale 
+@mixin grayScale ( $value ){
+    -webkit-filter: color.grayscale($value);
+    filter: color.grayscale($value);
+}

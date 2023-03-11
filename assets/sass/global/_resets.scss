@@ -1,0 +1,53 @@
+@use "functions";
+@use "variaveis";
+@use "sass:meta";
+
+:root{
+	--colorAzul: #{meta.inspect(variaveis.$brand_1)};
+	--colorAmarelo: #{meta.inspect(variaveis.$brand_2)};
+}
+
+
+html{
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--colorAmarelo);
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1920px;
+	@include functions.fontBase ( 
+		$textBlock 			: block, 
+		$color 				: variaveis.$gcBoxColor, 
+		$size 				: 16px, 
+		$lineHeight 		: 1.5, 
+		$FontFamily 		: variaveis.$fontPadrao, 
+		$weight 			: variaveis.$regular, 
+		$testUppCase 		: null, 
+		$testAlign 			: -1 
+	);
+}
+.main { 
+	overflow: hidden; 
+	background-color: #fff;
+	//background-color: #000;
+}
+header,
+footer {
+	& h1, 
+	& h2, 
+	& h3, 
+	& h4, 
+	& h5 {
+		margin: 0;
+	}
+	& a {
+		text-decoration: none;
+	}
+}
+nav {
+	& a {
+		text-decoration: none;
+	}
+}

@@ -1,0 +1,28 @@
+@use "../../global/variaveis";
+
+.titleSession {
+  // Color's
+  &.color-vermelho {
+      color: variaveis.$brand_1;
+  }
+  &.color-laranja {
+      color: variaveis.$brand_2;
+  }
+  &.color-preto {
+      color: variaveis.$brand_4;
+  }
+  &.color-branco {
+      color: #fff;
+  }
+  
+  // color social
+  &.color-whatsapp {
+      color: #47C53E;
+  }
+  &.color-facebook {
+      color: #39589A;
+  }
+  &.color-twiiter {
+      color: #049FF6;
+  }
+}

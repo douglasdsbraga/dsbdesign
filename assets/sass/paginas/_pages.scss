@@ -1,0 +1,57 @@
+@use "../global/variaveis";
+@use "../layout/sessions";
+@use '../global/functions';
+@use '../global/constantes';
+
+@use "../lib/transformacoes/scale";
+@use "../lib/transicoes/transitions";
+@use "../lib/efeitos/box-shadows";
+@use "../lib/efeitos/gradientes";
+@use "../lib/transformacoes/translate";
+// @use "../componentes/shadows";
+
+
+// map fontes
+@use "../lib/mapeamento/fonts";
+@use "sass:map";
+
+@use "sass:math";
+@use "sass:meta";
+
+.logobrand {
+    margin-top: 10vh;
+    max-width: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.social {
+    margin-top: 1em;
+    @extend .listStyleNone;
+    @include functions.displayFlex( 
+        true, row, 0, center );
+    & a {
+        color: #fff;
+        display: block;
+    }
+    & li {
+        margin: 0px .67em;
+    }
+}
+
+.listLink {
+    @extend .listStyleNone;
+    & li {
+        margin-top: 1em;
+    }
+    & a {
+        display: block;
+        width: 100%;
+        padding: 1em 0;
+        background-color: #fff;
+        color: #222;
+        text-align: center;
+        text-decoration: none;
+        font-weight: variaveis.$bold;
+    }
+}

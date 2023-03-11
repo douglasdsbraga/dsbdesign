@@ -1,0 +1,47 @@
+@use "../global/functions";
+@use "../global/variaveis";
+
+/*
+  # referencia
+  @include font-size($fs-ate48px);
+
+  # sumario
+  1. titlesPadrão
+  2. textPadrão
+
+*/
+
+// titlesPadrão ===============================
+.titleMain {
+  @include functions.fontBase (
+        $textBlock : block,
+        $color : null,
+        $size : null,
+        $lineHeight : 1,
+        $FontFamily : variaveis.$fontTitles,
+        $weight : variaveis.$bold,
+        $testUppCase : 1,
+        $testAlign : -1);
+}
+.subtitle {
+    @include functions.fontBase ($textBlock : block,
+        $color : null,
+        $size : null,
+        $lineHeight : 1,
+        $FontFamily : variaveis.$fontSubtitles,
+        $weight : variaveis.$regular,
+        $testUppCase : null,
+        $testAlign : -1);
+}
+// textPadrão ===============================
+.textDefault {
+    @include functions.fontBase (
+        $textBlock : block,
+        $color : null,
+        $size : null,
+        $lineHeight : 1,
+        $FontFamily : variaveis.$fontPadrao,
+        $weight : variaveis.$regular,
+        $testUppCase : null,
+        $testAlign : -1);
+}

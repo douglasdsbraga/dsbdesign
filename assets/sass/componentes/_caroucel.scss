@@ -1,0 +1,56 @@
+@use "../global/functions";
+@use "../global/variaveis";
+
+.owl-carousel {
+    &#slideNossosPostos {
+        & .owl-stage-outer {
+            overflow: visible;
+        }
+        & .owl-nav {
+            display: none;
+        }
+        & .owl-dots {
+            position: absolute;
+            left: 0;
+            bottom: -6em;
+            z-index: 1;
+        }
+    }
+    &#valoresSobre {
+        & .owl-nav {
+            display: none;
+        }
+        & .owl-dots {
+            position: absolute;
+            left: 0;
+            bottom: -6em;
+            z-index: 1;
+            width: 100%;
+            @include functions.displayFlex(
+                $is_Flex : true,
+                $tipoDirection : row,
+                $justify_content : 0,
+                $align_items : center );
+        }
+        & .owl-item img {
+            width: auto;
+        }
+    }
+    & .owl-dots{
+        display: block;
+        width: 100%;
+        font-size: 12px;
+        margin-top: 1em;
+        & .owl-dot{
+            background-color: variaveis.$brand_2;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            outline: none;
+            margin-right: .5em;
+            &.active{
+                background-color: variaveis.$brand_1;
+            }
+        }
+    }
+}

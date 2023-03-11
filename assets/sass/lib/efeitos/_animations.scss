@@ -1,0 +1,8 @@
+
+@mixin animation ($name, $duration, $timing) {
+    animation-duration: $duration;
+    animation-name: $name;
+    animation-timing-function: $timing;
+}
+
+// @import "lib/keyframes/_showMenu.scss";

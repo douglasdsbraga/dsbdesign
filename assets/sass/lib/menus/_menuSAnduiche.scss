@@ -1,0 +1,49 @@
+@use "sass:math";
+
+@use "../../global/functions";
+
+// setup Menu
+$w          : 30px; 
+$h          : 24px; 
+$z-index    : 1;
+
+// color padrão
+$r          : 0; 
+$g          : 0; 
+$b          : 0; 
+$alpha      : 1;      
+$colorBg    : rgba($r, $g, $b, $alpha);
+
+// modelbox - span
+$wCons      : 100%;
+$hBar       : 3px;
+
+.menuSanduiche {
+    position: relative; 
+    z-index: $z-index;
+    width: $w;
+    height: $h;
+    padding: 0;
+    margin: 0;
+    @include functions.displayFlex( 
+        $is_Flex            : true, 
+        $tipoDirection      : column,    
+        $justify_content    : 3,
+        $align_items        : flex-end );
+    @extend .t3s !optional;
+    & span {
+        display: block;
+        z-index: 1;
+        width: $wCons;
+        height: $hBar;
+        background-color: $colorBg;
+        @extend .t3s !optional;
+    }
+    &:hover {
+        & span{
+            &:nth-child(3){
+                width: math.div($wCons, 3) * 2;
+            }
+        }
+    }
+}

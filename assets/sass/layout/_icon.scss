@@ -1,0 +1,83 @@
+.icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    &.inline{
+        display: inline-block;
+    }
+    &.icon-12 {
+        width: 12px;
+        height: 18px;
+    }
+    &.icon-15 {
+        width: 15px;
+        height: 15px;
+    }
+    &.icon-18 {
+        width: 18px;
+        height: 18px;
+    }
+    &.icon-30 {
+        width: 30px;
+        height: 30px;
+    }
+    &.icon-32 {
+        width: 32px;
+        height: 32px;
+    }
+    &.icon-60 {
+        width: 60px;
+        height: 22px;
+    }
+    &.icon-48 {
+        width: 48px;
+        height: 48px;
+    }
+    &.icon-video {
+        width: 14px;
+        height: 17px;
+    }
+    &.icon-playerSobre {
+        width: 48px;
+        height: 52px;
+    }
+    &.icon-dropDown {
+        width: 10px;
+        height: 10px;
+    }
+    &.icon-slide-nav {
+        width: 14px;
+        height: 72px;
+    }
+    &.icon-caroucel-nav {
+        width: 7px;
+        height: 16px;
+    }
+    &.icon-dropdown-circle {
+        width: 4px;
+        height: 18px;
+    }
+    &.icon-arrow-right-conteudo {
+        width: 38px;
+        height: 10px;
+    }
+    &.icon-white {
+        color: #fff;
+    }
+    &.icon-cinza {
+        color: #d1d3d4;
+    } 
+    &.icon-laranja {
+      //  color: $brand_3;
+    } 
+    &.icon-azul {
+      //  color: $brand_4;
+    }
+    &.icon-azul-2 {
+        color: #022249;
+    } 
+    &.icon-cinza-azul{
+        color: #6D6D6D;
+    }
+}

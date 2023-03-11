@@ -1,0 +1,165 @@
+@use "../global/functions";
+@use "../global/variaveis";
+@use "../lib/efeitos/box-shadows";
+@use "../lib/efeitos/gradientes";
+
+@charset "UTF-8";
+// A classe ".cta" ela é o tipo de classe que nào pode ser 
+// usada em nenhum outro lugar pois ela, assim como a classe
+// ".btn" do bootstrap, é uma classe espcial para framework.
+
+.ctaBox {
+    width: 300px;
+    & .cta {
+        padding: 0.7em 0;
+        &:nth-child(1){
+            margin-bottom: 1em;
+        }
+    }
+}
+
+// A base do estilo de .cta --> A cahamada é por @extend
+.cta {
+    padding: .625em 1em;  
+    @include functions.fontBase (
+        $textBlock  : inline, 
+        $color      : null, 
+        $size       : 16px, 
+        $lineHeight : 1, 
+        $FontFamily : variaveis.$fontLink, 
+        $weight     : variaveis.$regular, 
+        $testUppCase : 1, 
+        $testAlign  : 0
+    );
+    border-radius: 0 15px 0 15px;
+    border: none;
+    text-decoration: none;
+    @extend .t3s  !optional;
+    & span {
+        display: block;
+    }
+    &.cta-inline {
+        text-transform: none;
+        &:hover {
+            text-decoration: underline;
+        @include box-shadows.shadowbox(
+            $horizontal : 0, 
+            $vertical   : 5px, 
+            $blur       : 13px, 
+            $spread     : 0px, 
+            $color      : #000000, 
+            $alpha      : 0);
+        }
+    }
+    // Casos singulares
+    &.fullsize {
+        display: block;
+        width: 100% !important;
+    }
+    &.fz-14 {
+        font-size: 14px;
+    }
+    &.fz-18 {
+        font-size: 14px;
+    }
+    // text style
+    &.text-bold {
+        font-weight: variaveis.$bold;
+    }
+    &.text-normal {
+        text-decoration: none;
+        text-transform: none;
+    }
+    // padds
+    &.padd-laranja-button {
+        padding: 1em 1.5em;  
+    }
+    &.padd-branco-button {
+        padding: 1em 3em;  
+    }
+    // color
+    &.color-preto {
+        color: variaveis.$brand_4;
+    }
+    &.color-vermelho {
+        color: variaveis.$brand_1;
+    }
+    &.color-branco {
+        color: #fff;
+    }
+    // bg
+    &.bg-vermelho {
+        background-color: variaveis.$brand_1;
+    }
+    &.bg-laranja {
+        background-color: variaveis.$brand_2;
+    }
+    &.bg-amarelo {
+        background-color: variaveis.$brand_3;
+    }
+    &.bg-preto {
+        background-color: variaveis.$brand_4;
+    }
+    &.bg-branco {
+        background-color: #fff;
+    }
+    // display
+    &.d-inline {
+        display: inline-block !important;
+    }
+    
+    // gradients 
+    &.gradient-laranja {
+        @include gradientes.gradient(
+            $is_Gradient        : linear, 
+            $angulo             : 180deg, 
+            $firstColor         : variaveis.$brand_3, 
+            $firstAlpha         : .9, 
+            $start              : 0%, 
+            $secondColor        : variaveis.$brand_2, 
+            $secondAlpha        : .9, 
+            $end                : 100% );
+    }
+    &.gradient-vermelho {
+        @include gradientes.gradient(
+            $is_Gradient        : linear, 
+            $angulo             : 180deg, 
+            $firstColor         : #DC1D2B, 
+            $firstAlpha         : .9, 
+            $start              : 0%, 
+            $secondColor        : #B01E28, 
+            $secondAlpha        : .9, 
+            $end                : 100% );
+    }
+    &.bg-alpha-zero {
+        background-color: transparent;
+        padding: 0;
+        &:hover {
+            @include box-shadows.shadowbox(
+                $horizontal : 0, 
+                $vertical   : 5px, 
+                $blur       : 13px, 
+                $spread     : 0px, 
+                $color      : #000000, 
+                $alpha      : 0);    
+        }
+        &.color-vermelho:hover {
+            color:variaveis.$brand_2;
+        }
+    }
+    
+    // hovers
+    &.border-all:hover{
+        background-color: variaveis.$brand_1;
+        color: #fff;
+    }
+    &:hover {
+        @include box-shadows.shadowbox(
+            $horizontal : 0, 
+            $vertical   : 5px, 
+            $blur       : 13px, 
+            $spread     : 0px, 
+            $color      : #000000, 
+            $alpha      : .45);
+    }
+}

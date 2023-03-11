@@ -1,0 +1,41 @@
+@use "../../global/variaveis";
+
+.titleSession {
+    position: relative;
+    margin: 0;
+    display: block;
+    @extend .titleMain !optional; 
+    // text-transform: uppercase !important;
+    &.notUpper {
+        // text-transform: none !important;
+    }
+    & a {
+        display: inline-block;
+        color: currentColor;
+        text-decoration: none;
+    }
+    // tipo de peso
+    &.font-light {
+        font-weight: variaveis.$light !important;
+    }
+    &.font-regular {
+        font-weight: variaveis.$regular !important;
+    }
+    &.font-bold {
+        font-weight: variaveis.$bold !important;
+    }
+    // justify-content
+    &.title-center {
+        text-align: center;
+    }
+    &.title-left {
+        text-align: left;
+    }
+    &.title-right {
+        text-align: right;
+    }
+    &.title-normal {
+        font-style: normal !important;
+        text-transform: none !important;
+    }
+}

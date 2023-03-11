@@ -1,0 +1,55 @@
+/* show Menu ----------------- */
+@-webkit-keyframes showMenu {
+    0% {
+        top: -3em;
+        @include visivel (false);
+    }
+
+    100% {
+        top: 0;
+        @include visivel (true);
+    }
+
+}
+
+@-moz-keyframes showMenu {
+    0% {
+        top: -3em;
+        @include visivel (false);
+    }
+
+    100% {
+        top: 0;
+        @include visivel (true);
+    }
+
+
+}
+
+@-o-keyframes showMenu {
+    0% {
+        top: -3em;
+        @include visivel (false);
+    }
+
+    100% {
+        top: 0;
+        @include visivel (true);
+    }
+
+
+}
+
+@keyframes showMenu {
+    0% {
+        top: -3em;
+        @include visivel (false);
+    }
+
+    100% {
+        top: 0;
+        @include visivel (true);
+    }
+
+
+}

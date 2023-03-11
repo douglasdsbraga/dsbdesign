@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+// Convensões
+@use "sass:math";
+
+$base16em      : 16px;
+$base16em      : math.div($base16em, 16px) * 1em;
+
+// paleta de cores
+// paleta de cores
+$brand_1       : #0F1631;
+$brand_2       : #0F1631;
+$brand_3       : #EDD8C6;
+$brand_4       : #816434;
+$brand_5       : #D8D8D8;
+
+$secondary1    : #F0F0F0;
+$secondary2    : #FFFFFF;
+$secondary3    : #D59C1B;
+$secondary4    : #1A1818;
+$secondary5    : #70707000;
+
+// altenativas
+$alternativa1  : #D20059;
+$alternativa2  : #1D4093;
+$alternativa3  : #5FAE32;
+
+
+// Mapeamento de cores
+$gcBoxColor    : #fff;
+
+// Load Maps ----------------------------------------
+@use "../lib/mapeamento/_fonts.scss";         // Tamanho de fontes mapeadas
+@use "../lib/mapeamento/_heights.scss";      // Mapa de Alturas de containers - determina
+                                              // o tamanho mínimo para cada breakpoint
+                                              // em relação ao viewport
+
+// Fontes ----------------------------------------
+$ubuntu              : 'Ubuntu', Helvetica, Arial, sans-serif;
+
+// familia de fontes do proejto
+$fontPadrao		      : $ubuntu;
+$fontPadraoTitulo     : $ubuntu;
+$fontTitles           : $fontPadraoTitulo;
+$fontSubtitles        : $fontPadraoTitulo;
+$fontText 	          : $fontPadrao;
+$fontLink 	          : $fontPadraoTitulo;
+
+// font weghth
+$thin 			: 100;
+$extralight 	: 200;
+$light 			: 300;
+$regular 		: 400;
+$medium 		: 500;
+$semi-bold 		: 600;
+$bold 			: 700;
+$black 			: 900;

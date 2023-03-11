@@ -1,0 +1,15 @@
+@use "mixin";
+
+// Transitions
+.t3s{
+	@include mixin.transitions(.3s);
+}
+.t5s{
+	@include mixin.transitions(.5s);
+}
+.t7s{
+	@include mixin.transitions(.7s);
+}
+.t100s{
+	@include mixin.transitions(1s);
+}
