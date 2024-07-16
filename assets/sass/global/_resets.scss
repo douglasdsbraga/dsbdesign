@@ -10,13 +10,36 @@
 
 html{
 	scroll-behavior: smooth;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 body {
 	background-color: var(--colorAmarelo);
 	margin: 0 auto;
 	width: 100%;
-	max-width: 1920px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	&::-webkit-scrollbar {
+		width: 7px;
+		border-radius: 10px;
+	}
+
+	/* Track */
+	&::-webkit-scrollbar-track {
+		background: #333;
+	}
+
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		background: #fc0;
+		transition: ease-in-out .3s all;
+	}
+
+	/* Handle on hover */
+	&::-webkit-scrollbar-thumb:hover {
+		background: #000;
+	}
 	@include functions.fontBase ( 
 		$textBlock 			: block, 
 		$color 				: variaveis.$gcBoxColor, 

@@ -28,14 +28,14 @@
         $lineHeight : 1, 
         $FontFamily : variaveis.$fontLink, 
         $weight     : variaveis.$regular, 
-        $testUppCase : 1, 
+        $testUppCase : 0, 
         $testAlign  : 0
     );
     border-radius: 7px;
     padding: 1em 3em;  
     border: none;
-    text-decoration: none;
-    @extend .t3s  !optional;
+    text-decoration: none !important;
+    transition: all .3s ease-in-out;
     & span {
         display: block;
     }
@@ -155,6 +155,7 @@
         color: #fff;
     }
     &:hover {
+        background-color: #fc0;
         @include box-shadows.shadowbox(
             $horizontal : 0, 
             $vertical   : 5px, 

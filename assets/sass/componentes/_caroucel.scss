@@ -2,10 +2,10 @@
 @use "../global/variaveis";
 
 .owl-carousel {
-    &#slideNossosPostos {
-        & .owl-stage-outer {
-            overflow: visible;
-        }
+    &#cliente {
+        margin-bottom: 2em;
+        
+        
         & .owl-nav {
             display: none;
         }
@@ -16,25 +16,8 @@
             z-index: 1;
         }
     }
-    &#valoresSobre {
-        & .owl-nav {
-            display: none;
-        }
-        & .owl-dots {
-            position: absolute;
-            left: 0;
-            bottom: -6em;
-            z-index: 1;
-            width: 100%;
-            @include functions.displayFlex(
-                $is_Flex : true,
-                $tipoDirection : row,
-                $justify_content : 0,
-                $align_items : center );
-        }
-        & .owl-item img {
-            width: auto;
-        }
+    .owl-stage-outer {
+        overflow: visible !important;
     }
     & .owl-dots{
         display: block;
@@ -42,14 +25,15 @@
         font-size: 12px;
         margin-top: 1em;
         & .owl-dot{
-            background-color: variaveis.$brand_2;
+            background-color: transparent;
+            border:1px solid #fc0;
             width: 10px;
             height: 10px;
             border-radius: 50%;
             outline: none;
             margin-right: .5em;
             &.active{
-                background-color: variaveis.$brand_1;
+                background-color: #fc0;
             }
         }
     }

@@ -82,7 +82,7 @@ function libJavascript() {
 }
 
 function funcoes() {
-	return src( 'js/funcoes/**/*.js')
+	return src( 'js/prod/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(concat('main.min.js'))
@@ -102,7 +102,7 @@ exports.libJavascript = libJavascript;
 function watcher() {
 	watch(['sass/**/*.scss'], styles);
 	// watch(['img/**/*.*'], images);
-	watch(['js/funcoes/**/*.js'], funcoes);
+	watch(['js/prod/**/*.js'], funcoes);
 }    
     
 // watching
