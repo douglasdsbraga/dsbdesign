@@ -1,142 +1,118 @@
+'use strict';
+
+/*
+    Verificar: 
+
+    Node
+    v20.13.1
+
+    Gulp
+    CLI version: 3.0.0
+    Local version: 5.0.0
+
+*/
+
 const { src, dest, watch, parallel, series } = require('gulp');
 
-const scss = require('gulp-sass')(require('sass'));
-const concat = require('gulp-concat');
-const autoprefixer = require('gulp-autoprefixer');
-const uglify = require('gulp-uglify');
-const imagemin = require('gulp-imagemin'); // WARNING!! > PRECISA INTALAR ESSA: npm install --save-dev gulp-imagemin@7.1.0
-const browserSync = require('browser-sync').create();
-// const del = require('del');
+const sass = require('gulp-sass')(require('sass'));
+const sourcemaps = require('gulp-sourcemaps');
+var concat = require('gulp-concat');
+// js
+var uglify = require('gulp-uglify');                // apenas para o Javascript
 
-// function browsersync() {
-// 	browserSync.init({
-// 		server: {
-// 			baseDir: 'app/',
-// 		},
-// 		notify: false,
-// 	});
-// }
-function libCssExternal() {
-	return src(['terceiros/bootstrap/scss/bootstrap.scss', 'terceiros/caroucel/owl.carousel/src/scss/owl.carousel.scss'], {sourcemaps: true})
-		.pipe(scss({ outputStyle: 'compressed' }))
-		// .pipe(concat('bootstrap.min.css'))
-		.pipe(
-			autoprefixer({
-				overrideBrowserslist: ['last 15 versions'],
-				grid: true,
-			})
-		)
-		.pipe(dest('../lib/css/'));
-		// .pipe(browserSync.stream());
-}
+// css
+const cleanCSS = require('gulp-clean-css');
+const path = require('path');
+const autoprefixer = require('autoprefixer')
+const postcss = require('gulp-postcss')
+// img
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+// sass
 function styles() {
-	return src('sass/estilos.scss', {sourcemaps: true})
-		.pipe(scss({ outputStyle: 'compressed' }))
-		.pipe(concat('estilos.min.css'))
-		.pipe(
-			autoprefixer({
-				overrideBrowserslist: ['last 15 versions'],
-				grid: true,
-			})
-		)
-		.pipe(dest('../lib/css/'));
-		// .pipe(browserSync.stream());
-}
-// function fontsBrand() {
-// 	return src('fontes/stylesheet.css', {sourcemaps: true})
-// 		.pipe(scss({ outputStyle: 'compressed' }))
-// 		.pipe(concat('fontBrand.min.css'))
-// 		.pipe(
-// 			autoprefixer({
-// 				overrideBrowserslist: ['last 15 versions'],
-// 				grid: true,
-// 			})
-// 		)
-// 		.pipe(dest('../lib/css/'));
-// }
-// function fontsBrandLib() {
-// 	return src([
-//             'fontes/*.eot',
-//             'fontes/*.ttf',
-//             'fontes/*.woff'
-//         ])
-//     .pipe(dest('../lib/fontes/'));
-// }
+    return src('sass/estilos.scss')    
+        .pipe(sourcemaps.init())
+        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(postcss([ autoprefixer() ]))
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('../lib/css'));
+};
+// Lib CSS
+function bibliotecasCSS() {
+    return src(['node_modules/bootstrap/dist/css/bootstrap.css', 'node_modules/owl.carousel/dist/assets/owl.carousel.css'])
+        .pipe(concat('biblioteca.css'))
+        .pipe(sourcemaps.init())
+        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('../lib/css'));
+};
 
-function scriptsCustom() {
-	return src( 'js/prod/**/*.js', {sourcemaps: true})
-		.pipe(concat('main.min.js'))
-		.pipe(uglify())
-		.pipe(dest('../lib/js'));
-		// .pipe(browserSync.stream());
+// fontes
+function fontes() {
+    return src(['fontes/*.ttf', 'fontes/*.eot', 'fontes/*.woff'])
+        .pipe(dest('../lib/fontes/'));
 }
-function scripts() {
-	return src( 'js/lib/**/*.js', {sourcemaps: true})
-		// .pipe(concat('scripts.min.js'))
-		.pipe(uglify())
-		.pipe(dest('../lib/js'));
-		// .pipe(browserSync.stream());
-}
+function fontStyles() {
+    return src('fontes/stylesheet.css')    
+        .pipe(concat('fontes.css'))
+        .pipe(sourcemaps.init())
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('../lib/css'));
+};
 
-
-function images() {
-	return src('img/**/*.*')
-		.pipe(
-			imagemin([
-				imagemin.gifsicle({ interlaced: true }),
-				imagemin.mozjpeg({ quality: 75, progressive: true }),
-				imagemin.optipng({ optimizationLevel: 5 }),
-				imagemin.svgo({
-					plugins: [{ removeViewBox: true }, { cleanupIDs: false }],
-				}),
-			])
-		)
-		.pipe(dest('../lib/img'));
-		// .pipe(browserSync.stream());
-}
-
-function build() {
-	return src(['app/**/*.html', 'app/css/style.min.css', 'app/js/main.min.js'], { base: 'app' })
-	.pipe(dest('../lib/'));
-}
-
-// function cleanDist() {
-// 	 return del('dist/');
-// }
-
-function watching() {
-	watch(['sass/**/*.scss'], styles);
-	// watch(['images/**/*.*'], images);
-	// watch(['js/prod/**/*.js'], scriptsCustom);
-}
-
-function watchRecursos() {
-	// watch(['sass/**/*.scss'], styles);
-	watch(['img/**/*.*'], images);
-	watch(['js/prod/**/*.js'], scriptsCustom);
-}
-exports.libCssExternal = libCssExternal;
-// exports.fontsBrand = fontsBrand;
-// exports.fontsBrandLib = fontsBrandLib;
+// exports from functions
 exports.styles = styles;
-exports.scripts = scripts;
-exports.scriptsCustom = scriptsCustom;
-exports.images = images;
-// exports.browsersync = browsersync;
-// exports.cleanDist = cleanDist;
-exports.watching = watching;
-exports.watchRecursos = watchRecursos;
-exports.build = series(images, build);
+exports.bibliotecasCSS = bibliotecasCSS;
+exports.fontes = fontes;
+exports.fontStyles = fontStyles;
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+function libJavascript() {
+	return src( 'js/lib/**/*.js', {sourcemaps: true})
+        
+        .pipe(uglify())
+        
+		.pipe(dest('../lib/js'));
+}
+
+function funcoes() {
+	return src( 'js/funcoes/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(concat('main.min.js'))
+        .pipe(sourcemaps.write('.'))
+		.pipe(dest('../lib/js'));
+}
+
+exports.funcoes = funcoes;
+exports.libJavascript = libJavascript;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+function watcher() {
+	watch(['sass/**/*.scss'], styles);
+	// watch(['img/**/*.*'], images);
+	watch(['js/funcoes/**/*.js'], funcoes);
+}    
+    
+// watching
+exports.watcher = watcher;
+
+
+exports.build = series(fontes, fontStyles, styles, bibliotecasCSS, libJavascript, funcoes  );
 exports.default = parallel(
-	libCssExternal,
-	// fontsBrand,
-	// fontsBrandLib,
-	styles,
-	scripts,
-	scriptsCustom,
-	images,
-	// browsersync,
-	// watching
-	);
+    styles,
+    funcoes,
+    // bibliotecas, 
+    watcher
+);

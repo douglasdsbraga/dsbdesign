@@ -31,7 +31,8 @@
         $testUppCase : 1, 
         $testAlign  : 0
     );
-    border-radius: 0 15px 0 15px;
+    border-radius: 7px;
+    padding: 1em 3em;  
     border: none;
     text-decoration: none;
     @extend .t3s  !optional;
@@ -75,11 +76,11 @@
         padding: 1em 1.5em;  
     }
     &.padd-branco-button {
-        padding: 1em 3em;  
+        
     }
     // color
     &.color-preto {
-        color: variaveis.$brand_4;
+        color: variaveis.$brand_1;
     }
     &.color-vermelho {
         color: variaveis.$brand_1;
