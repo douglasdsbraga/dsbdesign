@@ -45,8 +45,55 @@
 
 .listLink {
     @extend .listStyleNone;
-    & li {
+    li, .itemListLink {
         margin-top: 1em;
+        a {
+            color: #fff;
+            &:hover {
+                background-color: #fc0;
+            }
+        }
+        &:nth-child(8n + 1){
+            a {background-color: #5b137f; color:#fc0; }
+        }
+        &:nth-child(8n + 2){
+            a {background-color: #fc0082;}
+        }
+        &:nth-child(8n + 3){
+            a {background-color: #ff6a00;}
+        }
+        &:nth-child(8n + 4){
+            a {background-color: #5C08E7;}
+        }
+        &:nth-child(8n + 5){
+            a {background-color: #006dfc;}
+        }
+        
+        
+        &:nth-child(8n + 6){
+            a {background-color: #2FB554;}
+        }
+        &:nth-child(8n + 7){
+            a {background-color: transparent; border:1px solid #fc0; color: #fc0;}
+        }
+        &:nth-child(8n + 8){
+            a {background-color: #254bd3;}
+        }
+    }
+    .itemListNavSuperior {
+        margin-top: 1em;
+        a {
+            color: #fff;
+            background-color: transparent; 
+            border:1px solid #fc0; 
+            color: #fc0;
+            transition: all .3s ease-in-out;
+            &:hover {
+                color: #5b137f;
+                background-color: #fc0;
+            }
+        }
+        
     }
     & a {
         display: block;
