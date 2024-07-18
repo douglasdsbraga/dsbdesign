@@ -187,6 +187,10 @@
        .oVideo {
             width: 126%;
             transform: translateX(-7em);
+            @media screen and (max-width:740px) {
+                width: 100%;
+                transform: translateX(0);
+            }
        } 
     }
 }

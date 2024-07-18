@@ -23,6 +23,9 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-start;
+    @media screen and (max-width:740px) {
+        justify-content: center;
+    }
     align-items: center;
     list-style: none;
     padding: 1.67rem 1rem;
@@ -45,6 +48,9 @@
         padding: 0;
         margin: 0;
         margin-left: 3rem;
+        @media screen and (max-width:740px) {
+            margin-left: 0;
+        }
         li {
             margin-left: 1rem;
             a {
