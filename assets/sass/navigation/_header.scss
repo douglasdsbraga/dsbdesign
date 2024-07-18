@@ -1,0 +1,60 @@
+@use "../global/variaveis";
+@use "../layout/sessions";
+@use '../global/functions';
+@use '../global/constantes';
+
+@use "../lib/transformacoes/scale";
+@use "../lib/transicoes/transitions";
+@use "../lib/efeitos/box-shadows";
+@use "../lib/efeitos/gradientes";
+@use "../lib/transformacoes/translate";
+// @use "../componentes/shadows";
+
+
+// map fontes
+@use "../lib/mapeamento/fonts";
+@use "sass:map";
+
+@use "sass:math";
+@use "sass:meta";
+
+.navMain {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    list-style: none;
+    padding: 1.67rem 1rem;
+    .titleSession {
+        a {
+            display: inline-block;
+            color: currentColor;
+            &:hover {
+                color: #fc0;
+            }
+        }
+    }
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-left: 3rem;
+        li {
+            margin-left: 1rem;
+            a {
+                color: #fff;
+                display: block;
+                transition: all .3s ease-in-out;
+                &:hover,&.ativo {
+                    color: #fc0;
+                }
+            }
+        }
+    }
+}

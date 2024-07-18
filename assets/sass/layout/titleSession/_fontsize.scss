@@ -27,4 +27,7 @@
   &.fz-42 {
       @include functions.font-size(fonts.$fs-ate42px);
   }
+  &.fz-128 {
+    @include functions.font-size(fonts.$fs-ate128px);
+}
 }

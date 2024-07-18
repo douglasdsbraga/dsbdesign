@@ -1,99 +1,30 @@
-// Mapas de Fontes ----------------------------------------
-// 		O uso dos mapas se baseia no tamanho máximo e, 
-// 		de forma descendente, ele determina o tamanho 
-//		mínimo para cada breakpoint
-//
-//		Uso:
-// 		p.fontText {
-//			@include font-size($p-font-sizes);
-//		}
-
 //Fonts
 $base-font-sizes: (null : 16px,
 1440px : 17px,
 1920px: 18px);
 
 
-$navMenu: (
-  null : 14px,
-  1024px : 16px,
-  1440px : 18px);
+$navMenu:               (  null : 14px,     1024px : 16px,      1440px : 18px );
+// Matriz                 null              740px               992px           1200px              1400px              1600px              1920px
+$fs-ate18px:            ( null : 16px,      740px : 24px,       992x: 19px,     1200px: 22px,      1400px : 17px,       1600px:17px,      1920px: 18px    );
+$fs-ate20px:            ( null : 18px,      740px : 19px,       992x: 19px,     1200px: 20px    );
+$fs-ate22px:            ( null : 18px,      740px : 20px,       992x: 19px,     1200px: 18px,      1400px: 22px    );
+$fs-ate24px:            ( null: 20px,       740px : 24px,       992x: 18px,     1200px:18px,       1400px: 24px,        1600px:24px,     );
+$fs-ate30px:            ( null : 18px,      740px : 24px,       992x: 28px,     1200px:28px,       1400px: 30px,        1600px:30px,        1920px:30px );
 
-// Matriz
-$fs-ate18px: (null : 16px,
-1440px : 17px,
-1920px: 18px);
+$fs-ate32px:            ( null : 22px,      740px : 22px,       992x: 28px,     1200px:24px,       1400px: 32px,        1600px:32px,        1920px:32px );
 
-$fs-ate22px: (null : 18px,
-768px : 20px,
-1024px: 22px);
+$fs-ate36px:            ( null : 20px ,     740px : 22px,       992x: 32px,     1200px:32px,       1400px: 36px,        1600px:36px,        1920px:36px );
+$fs-ate38px:            ( null : 20px,      740px : 22px,       992x: 32px,     1200px:32px,       1400px: 38px,        1600px:38px,        1920px:38px );
+$fs-ate40px:            ( null : 30px,      740px : 32px,       992x: 36px,     1200px:36px,       1400px: 40px,        1600px:40px,        1920px:40px );
+$fs-ate42px:            ( null : 22px,      740px : 36px,       992x: 42px,     1200px:36px,       1400px: 42px,        1600px:42px,        1920px:42px );
+$fs-ate60px:            ( null : 32px,      740px : 36px,       992x: 48px,     1200px:48px,       1400px: 60px,        1600px:60px,        1920px:60px );
+$fs-ate64px:            ( null : 32px,      740px : 5vw,        992x: 4vw,     1200px:2.8vw,       1400px: 3vw,         1600px:3vw,         1920px:64px );
+$fs-ate72px:            ( null : 32px,      740px : 48px,       992x: 64px,     1200px:64px,       1400px: 72px,        1600px:72px,        1920px:72px );
+$fs-ate128px:           ( null : 54px,      740px : 72px,       992x: 92px,     1200px:92px,       1400px: 128px,       1600px:128px,       1920px:128px );
 
-$fs-ate20px: (null : 18px,
-    768px : 19px,
-    1024px: 20px);
 
-$fs-ate24px: (null: 20px,
-1280px: 22px,
-1440px: 24px);
 
-$fs-ate30px: (
-null : 18px,
-480px : 20px,
-576px : 22px,
-768px : 24px,
-1024px: 28px,
-1280px: 30px);
 
-$fs-ate32px: (null : 22px,
-768px : 24px,
-1024px: 28px ,
-1280px: 32px );
 
-$fs-ate36px: (null : 20px ,
-768px : 22px ,
-1024px: 32px ,
-1440px: 36px );
 
-$fs-ate38px: (null : 20px ,
-768px : 22px ,
-1024px: 32px ,
-1440px: 38px );
-
-$fs-ate40px: (null : 30px ,
-768px : 32px ,
-1024px: 36px ,
-1440px: 40px ,
-);
-
-$fs-ate42px: (
-null : 22px ,
-480px: 24px ,
-576px: 32px ,
-768px : 36px ,
-1024px: 42px
-);
-
-$fs-ate60px: (null : 32px ,
-768px : 36px ,
-1024px: 48px ,
-1440px: 60px ,
-);
-
-$fs-ate65px: (null : 32px ,
-768px : 36px ,
-1024px: 48px ,
-1440px: 65px ,
-);
-
-$fs-ate72px: (
-    null : 32px ,
-    768px : 48px ,
-    1024px: 64px ,
-    1440px: 72px ,
-);
-$fs-ate128px: (
-    null : 54px ,
-    768px : 72px ,
-    1024px: 92px ,
-    1440px: 128px ,
-);
