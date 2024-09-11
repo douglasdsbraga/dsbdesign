@@ -57,7 +57,54 @@
 				display: none;
 			}
 		}
-		
+		.sidebarFixed {
+			position: fixed;
+			top: 8vw;
+			left: 6vw;
+			width: 30vw;
+			@media screen and (max-width:1170px) {
+				top: 5vw;
+				.titleSession.fz-36 {
+					font-size: 2.5vw;
+				}
+				h2 {
+					font-size: 1.67vw;
+				}
+			}
+			@media screen and (max-width:992px) {
+				position: relative;
+				top: 0;
+				margin-top: 10vw;
+				left: 0;
+				width: 100%;
+				.logobrand {
+					margin: 0 auto;
+				}
+				.titleSession.fz-36 {
+					font-size: 6vw;
+					text-align: center;
+				}
+				.social {
+					text-align: center;
+					justify-content: center !important;
+					li {
+						margin: 0 1vw;
+					}
+				}
+				h2 {
+					font-size: 3vw;
+					text-align: center;
+				}
+			}
+			@media screen and (max-width:740px) {
+				.titleSession.fz-36 {
+					font-size: 7vw;
+				}
+				h2 {
+					font-size: 3.9vw!important;
+				}
+			}
+		}
 	}
 }
 .bgPalco {

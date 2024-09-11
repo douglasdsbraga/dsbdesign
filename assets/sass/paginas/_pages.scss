@@ -23,7 +23,7 @@
 }
 
 .logobrand {
-    margin-top: 10vh;
+    // margin-top: 10vh;
     max-width: 200px;
     border-radius: 50%;
     overflow: hidden;
@@ -118,6 +118,11 @@
         margin: 0 0 .67em;
         a {
             padding: 0;
+        }
+    }
+    #clientes {
+        &:hover {
+            cursor: grab;
         }
     }
 }
