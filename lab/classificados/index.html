@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificados - Anúncios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        #anunciosContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 4rem;
+        }
+        .item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+        .item:hover {
+            transform: scale(1.05);
+        }
+        .item h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .item p {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .item a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .item a:hover {
+            background-color: #0056b3;
+        }
+        #proximaPagina {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        #proximaPagina:hover {
+            background-color: #218838;
+        }
+        button {
+            position: fixed;
+            bottom: 1rem;
+        }
+        button#carregarMenos {
+            left: 1rem;
+        }
+        button#carregarMais {
+            right: 1rem;
+        }
+        #loading {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Classificados - Anúncios</h1>
+    <div id="anunciosContainer"></div>
+
+    <!-- Botões para carregar mais ou menos anúncios -->
+    <button id="carregarMais">Carregar Mais</button>
+    <button id="carregarMenos">Carregar Menos</button>
+
+    <!-- Indicador de "loading" -->
+    <div id="loading" style="display: none;">Carregando...</div>
+
+    <div id="conteudo"></div>
+
+    <script>
+        async function acessarPaginaComProxy(url) {
+            const proxy = 'https://api.allorigins.win/raw?url='; // Usando o AllOrigins
+            const urlComProxy = proxy + encodeURIComponent(url);
+
+            try {
+                const resposta = await fetch(urlComProxy);
+                const conteudo = await resposta.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(conteudo, 'text/html');
+
+                // Acessando o título do anúncio
+                const tituloElement = doc.querySelector('.elementor-229 .elementor-element.elementor-element-1f87bb9 .jet-listing-dynamic-field .jet-listing-dynamic-field__content');
+                
+                // Recupera o título ou retorna 'Não encontrado'
+                const titulo = tituloElement ? tituloElement.innerText : 'Não encontrado';
+                return titulo;
+            } catch (erro) {
+                console.error('Erro ao acessar a página:', erro);
+                return 'Erro ao carregar';
+            }
+        }
+
+        // Função para buscar os dados das taxonomias (categoria, cidade, tipo)
+        async function getTaxonomiaNome(taxonomia, id) {
+            const url = `https://crosc.org.br/classificados/wp-json/wp/v2/${taxonomia}/${id}`;
+            try {
+                const resposta = await fetch(url);
+                if (resposta.ok) {
+                    const dados = await resposta.json();
+                    return dados.name; // Retorna o nome da taxonomia
+                } else {
+                    console.warn(`Taxonomia ${taxonomia} não encontrada para o ID ${id}`);
+                    return "Desconhecido"; // Caso o nome da taxonomia não seja encontrado
+                }
+            } catch (erro) {
+                console.error(`Erro ao buscar ${taxonomia}:`, erro);
+                return "Erro ao carregar";
+            }
+        }
+
+        // Função para buscar os anúncios com base no número de anúncios a exibir
+        async function getAnuncios(quantidade = 10, offset = 0) {
+            const url = `https://crosc.org.br/classificados/wp-json/wp/v2/anuncios?per_page=${quantidade}&offset=${offset}`;
+            
+            // Mostrar o "loading"
+            document.getElementById('loading').style.display = 'block';
+            
+            try {
+                const resposta = await fetch(url);
+                const anuncios = await resposta.json();
+
+                if (anuncios.length === 0) {
+                    console.warn("Nenhum anúncio encontrado");
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
+
+                const container = document.getElementById('anunciosContainer');
+
+                // Itera sobre os anúncios e exibe as informações
+                for (const anuncio of anuncios) {
+                    // Verifica se as propriedades existem antes de acessar
+                    const cidadeId = anuncio.cidade ? anuncio.cidade[0] : null;
+                    const tipoId = anuncio['tipo-do-anuncio'] ? anuncio['tipo-do-anuncio'][0] : null;
+                    const categoriaId = anuncio.categoria ? anuncio.categoria[0] : null;
+                    // getTaxonomia --> Nome
+                    const cidadeNome = cidadeId ? await getTaxonomiaNome('cidade', cidadeId) : 'Não definida';
+                    const tipoNome = tipoId ? await getTaxonomiaNome('tipo-do-anuncio', tipoId) : 'Não definido';
+                    const categoriaNome = categoriaId ? await getTaxonomiaNome('categoria', categoriaId) : 'Não categorizado';
+                    const link = anuncio.link ? anuncio.link : '#';
+                    // obtem o "titulo" pois o titulo na verdade é codigo ( oi? é... poiseh...)
+                    const tituloDoAnuncio = await acessarPaginaComProxy(link); // Passando o link do anúncio aqui
+
+                    const div = document.createElement('div');
+                    div.classList.add('item');
+                    div.innerHTML = `
+                        <h2>${tituloDoAnuncio}</h2> <!-- Usando o título do anúncio -->
+                        <p><strong>Cidade:</strong> ${cidadeNome}</p>
+                        <p><strong>Tipo do Anúncio:</strong> ${tipoNome}</p>
+                        <p><strong>Categoria:</strong> ${categoriaNome}</p>
+                        <a href="${link}" target="_blank">Ver mais</a>
+                    `;
+                    container.appendChild(div);
+                }
+
+                // Esconder o "loading" quando os anúncios forem carregados
+                document.getElementById('loading').style.display = 'none';
+            } catch (erro) {
+                console.error('Erro ao buscar anúncios:', erro);
+                alert('Houve um erro ao carregar os anúncios. Tente novamente.');
+                document.getElementById('loading').style.display = 'none'; // Esconder o "loading" caso haja erro
+            }
+        }
+
+        // Variáveis para controlar a quantidade de anúncios e o offset
+        let quantidadeAnuncios = 30; // Inicia com 10 anúncios
+        let offsetAnuncios = 0; // Inicia com o primeiro anúncio
+
+        // Carregar mais anúncios
+        document.getElementById('carregarMais').addEventListener('click', () => {
+            offsetAnuncios += quantidadeAnuncios;
+            getAnuncios(quantidadeAnuncios, offsetAnuncios);
+        });
+
+        // Carregar menos anúncios
+        document.getElementById('carregarMenos').addEventListener('click', () => {
+            if (offsetAnuncios > 0) {
+                offsetAnuncios -= quantidadeAnuncios;
+                getAnuncios(quantidadeAnuncios, offsetAnuncios);
+            }
+        });
+
+        // Inicializa com 10 anúncios
+        getAnuncios(quantidadeAnuncios, offsetAnuncios);
+    </script>
+
+</body>
+</html>
