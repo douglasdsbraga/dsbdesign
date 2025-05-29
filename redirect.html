@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Abrir no Obsidian</title>
+
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 50px;">
+  <h2>Quer abrir este link no Obsidian?</h2>
+  <button onclick="window.location.href = decodeURIComponent(getParam('url'))"
+          style="padding: 10px 20px; font-size: 16px;">
+    👉 Abrir agora no Obsidian
+  </button>
+
+  <script>
+    function getParam(key) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(key);
+    }
+  </script>
+</body>
+</html>
