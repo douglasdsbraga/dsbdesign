@@ -1,0 +1,50 @@
+/* ============================================================
+   MOTION. Tudo e transform/opacity (compositor). Estado final = estado padrao.
+   Hero: 2 animacoes compostas (tira suja, tira limpa) + 1 entrada unica do H1 (peso e largura).
+   ============================================================ */
+@keyframes flow{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+@keyframes h1-fill{from{font-weight:300;font-stretch:62%}to{font-weight:900;font-stretch:78%}}
+@keyframes rise{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:no-preference){
+  .hero .track{animation:flow 26s linear infinite;will-change:transform}
+  .hero.is-off .track{animation-play-state:paused}
+  .hero h1 .bk{animation:h1-fill var(--dur-illustrative) var(--ease-out-expo) both}
+  .hero h1 .ln:nth-child(2) .bk{animation-delay:120ms}
+  .hero .hero-in>p,.hero .hero-cta{animation:rise 700ms var(--ease-out-expo) 420ms both}
+  .hero .hero-cta{animation-delay:540ms}
+}
+
+/* ---------- hotspots e pins: ondas (transform/opacity); pausam fora da viewport ---------- */
+@keyframes pulse{from{transform:scale(.55);opacity:.9}to{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:no-preference){
+  .hs::after{animation:pulse 2.4s var(--ease-out-quart) infinite}
+  .hs:nth-of-type(2)::after{animation-delay:-.8s}.hs:nth-of-type(3)::after{animation-delay:-1.6s}
+  .pin::after{animation:pulse 3.4s var(--ease-out-quart) infinite;animation-delay:calc(var(--i) * -.28s)}
+  .is-off,.is-off *,.is-off *::before,.is-off *::after{animation-play-state:paused!important}
+}
+
+/* ---------- respiro: scroll-driven (CSS puro). Fora do @supports, a composicao estatica ja esta pronta ---------- */
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    @keyframes rp1{from{transform:translate3d(0,70px,0) rotate(-15deg)}to{transform:translate3d(0,-80px,0) rotate(-3deg)}}
+    @keyframes rp2{from{transform:translate3d(0,-60px,0) rotate(13deg)}to{transform:translate3d(0,90px,0) rotate(2deg)}}
+    @keyframes rp3{from{transform:translate3d(0,50px,0) rotate(-9deg)}to{transform:translate3d(0,-60px,0) rotate(-1deg)}}
+    @keyframes gh-a{from{transform:translate3d(7%,0,0)}to{transform:translate3d(-7%,0,0)}}
+    @keyframes gh-b{from{transform:translate3d(-7%,0,0)}to{transform:translate3d(7%,0,0)}}
+    .respiro .p1{animation:rp1 linear both;animation-timeline:--fl;animation-range:cover 0% cover 100%}
+    .respiro .p2{animation:rp2 linear both;animation-timeline:--fl;animation-range:cover 0% cover 100%}
+    .respiro .p3{animation:rp3 linear both;animation-timeline:--fl;animation-range:cover 0% cover 100%}
+    .respiro .g1{animation:gh-a linear both;animation-timeline:--fl;animation-range:cover 0% cover 100%}
+    .respiro .g2{animation:gh-b linear both;animation-timeline:--fl;animation-range:cover 0% cover 100%}
+  }
+}
+
+/* ---------- transicoes entre paginas (View Transitions API; progressivo: sem suporte, navegacao normal) ----------
+   Nomes unicos por pagina: header, logo, seg-title (so a faixa Agricola na Home e o H1 do segmento). Nome duplicado aborta a transicao. */
+@media (prefers-reduced-motion:no-preference){
+  @view-transition{navigation:auto}
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:260ms;animation-timing-function:var(--ease-out-quart)}
+  ::view-transition-group(seg-title){animation-duration:520ms;animation-timing-function:var(--ease-out-expo)}
+  .faixas>.faixa:first-child .nome-h{view-transition-name:seg-title}
+}

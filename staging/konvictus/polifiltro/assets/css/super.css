@@ -1,0 +1,14 @@
+/* gerado por tools/build.py */
+.super-in:has(.s-list a:is(:hover,:focus-visible)) .s-prev:first-child{opacity:0;visibility:hidden}
+.super-in:has(.s-list a[data-k="agricola"]:is(:hover,:focus-visible)) .s-prev[data-k="agricola"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="transporte"]:is(:hover,:focus-visible)) .s-prev[data-k="transporte"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="industria"]:is(:hover,:focus-visible)) .s-prev[data-k="industria"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="maritimo"]:is(:hover,:focus-visible)) .s-prev[data-k="maritimo"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="ferrovia"]:is(:hover,:focus-visible)) .s-prev[data-k="ferrovia"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="mineracao"]:is(:hover,:focus-visible)) .s-prev[data-k="mineracao"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="geradores-de-energia"]:is(:hover,:focus-visible)) .s-prev[data-k="geradores-de-energia"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="filtros"]:is(:hover,:focus-visible)) .s-prev[data-k="filtros"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="lubrificantes"]:is(:hover,:focus-visible)) .s-prev[data-k="lubrificantes"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="aditivos"]:is(:hover,:focus-visible)) .s-prev[data-k="aditivos"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="ultrafiltracao-de-diesel"]:is(:hover,:focus-visible)) .s-prev[data-k="ultrafiltracao-de-diesel"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="equipamentos-e-armazenamento"]:is(:hover,:focus-visible)) .s-prev[data-k="equipamentos-e-armazenamento"]{opacity:1;visibility:visible}

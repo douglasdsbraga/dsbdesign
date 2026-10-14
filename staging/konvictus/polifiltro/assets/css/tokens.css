@@ -1,0 +1,52 @@
+/* ============================================================
+   TOKENS  Polifiltro  (3 camadas: primitivo > semantico > componente)
+   Proposta de design v1. Azul UI (ADR-D02) e fonte display (ADR-D03) AINDA em aberto.
+   ============================================================ */
+:root{
+  /* --- 1. primitivos --- */
+  --navy-950:#07122B; --navy-900:#0B1B3F; --navy-800:#10265A; --navy-700:#173474;
+  --blue-600:#3157AE;   /* azul de UI (botoes, links) */
+  --blue-500:#3B73B9;   /* azul do logo */
+  --blue-300:#8FB4E3; --blue-200:#B9C6D8;
+  --ice-50:#F6FAF9; --ice-100:#EBF3F2; --ice-200:#D9E6E4; --ice-300:#BFD0CE;
+  --ink-900:#142033; --graphite-600:#5F6062; --graphite-500:#6E7076;
+
+  /* cor por segmento (PROVISORIA, so dentro do contexto do segmento). Tres tokens por segmento:
+     seg = superficie/acento; seg-ink = texto sobre seg; seg-deep = texto/link sobre gelo */
+  --seg-agricola:#8DB63C;  --seg-agricola-deep:#436B12;
+  --seg-transporte:#E3A623; --seg-transporte-deep:#7A5400;
+  --seg-industria:#E0743A;  --seg-industria-deep:#9A3F0F;
+  --seg-maritimo:#3FB0C4;   --seg-maritimo-deep:#0E6677;
+  --seg-ferrovia:#B39A6E;   --seg-ferrovia-deep:#6B5530;
+  --seg-mineracao:#D9705A;  --seg-mineracao-deep:#9A2F1C;
+  --seg-geradores-de-energia:#DDCB3A; --seg-geradores-de-energia-deep:#6B6000;
+
+  /* --- 2. semanticos --- */
+  --bg:var(--ice-100); --bg-raised:var(--ice-50); --bg-dark:var(--navy-900); --bg-dark-2:var(--navy-800);
+  --text:var(--ink-900); --text-2:var(--graphite-600); --text-on-dark:var(--ice-100); --text-on-dark-2:var(--blue-200);
+  --accent:var(--blue-600); --accent-on-dark:var(--blue-300); --line:var(--ice-300); --line-on-dark:rgb(185 198 216 / .22);
+  --focus:#1E6BFF; --focus-on-dark:#BFD8FF;
+  --seg:var(--seg-agricola); --seg-ink:var(--navy-900); --seg-deep:var(--seg-agricola-deep);
+
+  /* --- tipografia --- */
+  --f-display:"Archivo","Archivo Fallback",system-ui,sans-serif;
+  --f-text:"Poppins","Poppins Fallback",system-ui,sans-serif;
+  --fs-0:clamp(.8125rem,.79rem + .1vw,.875rem);   --fs-1:clamp(.9375rem,.9rem + .15vw,1rem);
+  --fs-2:clamp(1.0625rem,1rem + .3vw,1.25rem);    --fs-3:clamp(1.375rem,1.2rem + .8vw,1.875rem);
+  --fs-4:clamp(1.875rem,1.4rem + 2vw,3.25rem);    --fs-5:clamp(2.5rem,1.6rem + 3.8vw,5.25rem);
+  --fs-hero:clamp(2.625rem,1.2rem + 6.2vw,6.75rem);
+
+  /* --- espaco / forma --- */
+  --gutter:clamp(20px,4vw,72px); --wrap:1200px; --wrap-wide:1760px;
+  --r-card:12px; --r-field:10px; --r-pill:999px; --header-h:68px; --tabbar-h:64px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:72px; --sp-9:112px;
+  --shadow-1:0 1px 2px rgb(11 27 63 / .06),0 8px 24px -8px rgb(11 27 63 / .18);
+  --shadow-2:0 2px 4px rgb(11 27 63 / .08),0 24px 60px -16px rgb(11 27 63 / .38);
+
+  /* --- motion (skill motion-design) --- */
+  --ease-out-quart:cubic-bezier(.165,.84,.44,1); --ease-out-expo:cubic-bezier(.16,1,.3,1); --ease-inout:cubic-bezier(.77,0,.175,1);
+  --dur-1:120ms; --dur-2:180ms; --dur-3:240ms; --dur-4:300ms; --dur-5:500ms; --dur-illustrative:900ms;
+
+  /* z-index (escala unica) */
+  --z-header:40; --z-super:45; --z-tabbar:50; --z-sheet:60;
+}

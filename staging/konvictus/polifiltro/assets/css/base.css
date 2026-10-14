@@ -1,0 +1,30 @@
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:calc(var(--header-h) + 16px)}
+body{margin:0;background:var(--bg);color:var(--text);font:400 var(--fs-1)/1.6 var(--f-text);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip}
+img,svg,video{display:block;max-width:100%}
+h1,h2,h3,h4,p,ul,ol,figure,dl,dd{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+.on-dark :focus-visible,.dark :focus-visible{outline-color:var(--focus-on-dark)}
+.skip{position:absolute;left:var(--gutter);top:-80px;z-index:100;background:var(--navy-900);color:var(--ice-100);padding:12px 18px;border-radius:0 0 var(--r-field) var(--r-field)}
+.skip:focus{top:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* tipografia de display: duas camadas de peso (Light + Black), eixo de largura variavel */
+.display{font-family:var(--f-display);font-weight:800;font-stretch:100%;letter-spacing:-.02em;line-height:.98;text-wrap:balance}
+.lt{font-weight:200}.bk{font-weight:900}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em;line-height:1.05;text-wrap:balance}
+h2{font-size:var(--fs-4);font-weight:800;font-stretch:88%}
+h3{font-size:var(--fs-3);font-weight:700;font-stretch:92%}
+.wrap{width:100%;max-width:calc(var(--wrap) + 2*var(--gutter));margin-inline:auto;padding-inline:var(--gutter)}
+.wrap-wide{max-width:calc(var(--wrap-wide) + 2*var(--gutter))}
+.lead{font-size:var(--fs-2);line-height:1.5;max-width:52ch;color:var(--text-2)}
+.dark{background:var(--bg-dark);color:var(--text-on-dark)}
+.dark .lead{color:var(--text-on-dark-2)}
+.lbl{font-size:var(--fs-0);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2)}
+.dark .lbl{color:var(--text-on-dark-2)}
+.confirmar{display:inline-block;font:600 .6875rem/1 var(--f-text);letter-spacing:.04em;text-transform:uppercase;padding:3px 6px;border:1px dashed currentColor;border-radius:4px;vertical-align:middle;color:var(--graphite-600)}
+.dark .confirmar{color:var(--blue-200)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}}
