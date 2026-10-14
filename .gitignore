@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Backup local da home antiga
+old/
