@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Douglas Braga | Staff Design Engineer e Tech Lead</title>
+    <meta name="description" content="Staff Design Engineer e Tech Lead. Design systems, UX engineering, branding, front-end e segurança para times de produto.">
+
+    <script>
+        // Motion so liga se o usuario nao pediu reduced-motion. Sem GSAP em 4s, o conteudo aparece igual.
+        (function () {
+            var d = document.documentElement;
+            try { var t = localStorage.getItem('theme'); if (t) d.setAttribute('data-theme', t); } catch (e) { }
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                d.classList.add('motion');
+                setTimeout(function () { if (!window.gsap) d.classList.remove('motion'); }, 4000);
+            }
+        })();
+    </script>
+
+    <!-- Prototipo: fontes via Google Fonts. Na versao final, self-host com font-display: swap. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- Tokens ---------- */
+        :root {
+            --bg: #0d0d0f;
+            --surface: #16161a;
+            --fg: #ecece8;
+            --mute: #8d8d88;
+            --line: rgba(236, 236, 232, .14);
+            --accent: #e9cf4a;
+            --accent-ink: #0d0d0f;
+            --accent-text: #e9cf4a;
+
+            --font: 'Geist', system-ui, sans-serif;
+            --mono: 'Geist Mono', ui-monospace, monospace;
+
+            /* tipografia fluida: rem + vw, nunca vw isolado (respeita zoom) */
+            --t-display: clamp(2.5rem, 1rem + 6.6vw, 8.25rem);
+            --t-h2: clamp(2rem, 1.2rem + 3.4vw, 4.75rem);
+            --t-h3: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+            --t-body: clamp(1rem, .95rem + .25vw, 1.1875rem);
+
+            --gutter: clamp(1rem, .4rem + 2.6vw, 4rem);
+            --nav-h: 68px;
+            --r-media: 6px;   /* midia e superficies */
+            --r-pill: 999px;  /* elementos interativos */
+            --ease: cubic-bezier(.16, 1, .3, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #e9e9e7;
+            --surface: #dcdcda;
+            --fg: #111114;
+            --mute: #55554f;
+            --line: rgba(17, 17, 20, .16);
+            --accent-text: #6b5a00;
+        }
+
+        /* ---------- Base ---------- */
+        *, *::before, *::after { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font);
+            font-size: var(--t-body);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color .4s var(--ease), color .4s var(--ease);
+        }
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        h1, h2, h3, p, dl, dd { margin: 0; }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+        .wrap { padding-inline: var(--gutter); max-width: 1600px; margin-inline: auto; }
+        .em { color: var(--accent-text); }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: .6rem; white-space: nowrap;
+            padding: .95rem 1.6rem; border-radius: var(--r-pill);
+            font-weight: 600; font-size: 1rem; letter-spacing: -.01em;
+            background: var(--accent); color: var(--accent-ink);
+            transition: transform .35s var(--ease), background-color .3s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(0) scale(.98); }
+        .btn--sm { padding: .55rem 1.1rem; font-size: .9375rem; }
+
+        /* ---------- Nav ---------- */
+        .nav {
+            position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 40;
+            display: flex; align-items: center;
+            background: color-mix(in srgb, var(--bg) 78%, transparent);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+        .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: 100%; }
+        .nav__brand { font-weight: 700; letter-spacing: -.02em; }
+        .nav__links { display: flex; gap: 2rem; margin-left: auto; margin-right: 1rem; }
+        .nav__links a { color: var(--mute); font-size: .9375rem; transition: color .25s; }
+        .nav__links a:hover { color: var(--fg); }
+        .nav__end { display: flex; align-items: center; gap: .75rem; }
+        .theme {
+            background: none; border: 1px solid var(--line); color: var(--fg);
+            border-radius: var(--r-pill); padding: .5rem .9rem; font: inherit; font-size: .875rem; cursor: pointer;
+            transition: border-color .25s;
+        }
+        .theme:hover { border-color: var(--fg); }
+        @media (max-width: 767px) { .nav__links { display: none; } .nav__brand { margin-right: auto; } }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            min-height: 100dvh; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3rem;
+            display: flex; flex-direction: column; justify-content: space-between; gap: 3rem;
+        }
+        .hero h1 {
+            font-size: var(--t-display); font-weight: 700; line-height: .98; letter-spacing: -.045em;
+            padding-bottom: .08em;
+        }
+        .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+        .line > span { display: inline-block; }
+        .thumb {
+            display: inline-block; width: 1.55em; height: .78em; border-radius: var(--r-media);
+            overflow: hidden; vertical-align: -.04em; margin-inline: .1em;
+        }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .hero__base { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: end; }
+        .hero__portrait { width: clamp(150px, 16vw, 260px); aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; }
+        .hero__portrait img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
+        .hero__copy { display: flex; flex-direction: column; gap: 1.75rem; align-items: flex-start; max-width: 40rem; }
+        .hero__copy p { color: var(--mute); font-size: clamp(1.0625rem, 1rem + .4vw, 1.375rem); line-height: 1.45; }
+        .hero__copy p strong { color: var(--fg); font-weight: 600; }
+        @media (min-width: 768px) {
+            .hero__base { grid-template-columns: 1fr auto; gap: clamp(2rem, 6vw, 6rem); }
+            .hero__portrait { order: 2; }
+        }
+        @media (max-width: 767px) {
+            .hero { justify-content: flex-start; }
+            .hero__portrait { order: 2; }
+        }
+
+        .motion .hero .line > span { transform: translateY(108%); }
+        .motion .hero__portrait { clip-path: inset(100% 0 0 0); }
+        .motion .hero__copy > * { opacity: 0; transform: translateY(18px); }
+
+        /* ---------- Manifesto ---------- */
+        .manifesto { padding-block: clamp(6rem, 14vw, 14rem); }
+        .manifesto p {
+            font-size: var(--t-h3); font-weight: 500; line-height: 1.18; letter-spacing: -.03em;
+            max-width: 30em;
+        }
+        .motion .m-word { opacity: .16; }
+
+
+
+        /* ---------- Numeros ---------- */
+        .numbers { padding-bottom: clamp(5rem, 10vw, 10rem); }
+        .numbers .grid { display: grid; gap: 3rem 2rem; grid-template-columns: 1fr; }
+        .num { border-top: 1px solid var(--line); padding-top: 1.25rem; }
+        .num strong { display: block; font-size: clamp(2.5rem, 1rem + 4.2vw, 6rem); font-weight: 700; letter-spacing: -.055em; line-height: .95; white-space: nowrap; }
+        .num p { color: var(--mute); margin-top: 1rem; max-width: 24rem; }
+        @media (min-width: 900px) {
+            .numbers .grid { grid-template-columns: repeat(12, 1fr); align-items: end; }
+            .num:nth-child(1) { grid-column: span 5; }
+            .num:nth-child(2) { grid-column: span 3; }
+            .num:nth-child(3) { grid-column: span 4; }
+        }
+
+        /* ---------- Trajetoria ---------- */
+        .path { padding-block: clamp(5rem, 10vw, 10rem); }
+        .path .wrap { display: grid; gap: 3rem; grid-template-columns: 1fr; }
+        .path h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .path__list { display: flex; flex-direction: column; gap: clamp(2rem, 4vw, 3.25rem); }
+        .path__item { display: grid; gap: .5rem 2rem; grid-template-columns: 1fr; }
+        .path__year { font-family: var(--mono); font-size: .8125rem; color: var(--mute); padding-top: .35rem; }
+        .path__item h3 { font-size: var(--t-h3); font-weight: 600; letter-spacing: -.035em; line-height: 1.1; }
+        .path__role { color: var(--accent-text); font-size: .9375rem; margin-top: .35rem; }
+        .path__item p { color: var(--mute); margin-top: .75rem; max-width: 36rem; }
+        @media (min-width: 900px) {
+            .path .wrap { grid-template-columns: 4fr 8fr; gap: 4rem; }
+            .path h2 { position: sticky; top: calc(var(--nav-h) + 2rem); align-self: start; }
+            .path__item { grid-template-columns: 9rem 1fr; }
+        }
+
+        /* ---------- Estudio ---------- */
+        .studio { padding-bottom: clamp(5rem, 10vw, 10rem); }
+        .studio h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .studio > .wrap > p { color: var(--mute); max-width: 40rem; margin-top: 1.5rem; }
+        .studio .bento .cell { display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
+        .studio .cell h3 { font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.02; }
+        .studio .cell p { color: var(--mute); margin-top: .75rem; }
+        .studio .cell small { font-family: var(--mono); font-size: .8125rem; color: var(--mute); }
+        .cell--flow { background: var(--surface); border: 1px solid var(--line); min-height: 320px; }
+        .cell--flow .flow { font-family: var(--mono); font-size: .875rem; line-height: 1.9; color: var(--fg); }
+        .cell--flow .flow b { font-weight: 500; color: var(--accent-text); }
+        .cell--tool { border: 1px solid var(--line); }
+        .cell--tool-alt { background: var(--accent); color: var(--accent-ink); }
+        .studio .cell--tool-alt p, .studio .cell--tool-alt small { color: var(--accent-ink); }
+        @media (min-width: 900px) {
+            .studio .cell--flow { grid-column: span 7; grid-row: span 2; }
+            .studio .cell--tool, .studio .cell--tool-alt { grid-column: span 5; }
+        }
+        .motion .path__item, .motion .num { opacity: 0; transform: translateY(28px); }
+
+        /* ---------- Marcas ---------- */
+        .brands { padding-bottom: clamp(5rem, 10vw, 10rem); }
+        .brands h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .brands > .wrap > p { color: var(--mute); max-width: 40rem; margin-top: 1.5rem; }
+        .brands ul { list-style: none; margin: clamp(2.5rem, 5vw, 4.5rem) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35em 1.1em; font-size: var(--t-h3); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; }
+        .brands li { color: var(--mute); transition: color .25s; cursor: default; }
+        .brands li:hover { color: var(--accent-text); }
+        .brands ul.direct { margin-top: 1.25rem; }
+        .brands ul.direct li { color: var(--fg); }
+        .brands .sub { font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.05; margin-top: clamp(3rem, 6vw, 5rem); }
+        .brands .sub + p { color: var(--mute); max-width: 36rem; margin-top: .75rem; }
+        .motion .brands li { opacity: 0; }
+
+        /* ---------- Cases (sticky stack) ---------- */
+        .cases { padding-bottom: 2rem; }
+        .cases__head { padding-block: 2rem 3rem; }
+        .cases__soon { color: var(--mute); font-size: 1.25rem; padding-bottom: 3rem; }
+        .cases__head h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .stack { position: relative; }
+        .case {
+            position: relative;
+            margin-bottom: 1.5rem;
+            background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-media);
+            padding: clamp(1.25rem, 2.4vw, 2.75rem);
+            display: grid; gap: clamp(1.5rem, 3vw, 3rem); grid-template-columns: 1fr;
+            transform-origin: 50% 0;
+        }
+        .case__text { display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; }
+        .case__title { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: .98; }
+        .case__desc { color: var(--mute); max-width: 34rem; margin-top: 1.25rem; }
+        .case dl { display: grid; grid-template-columns: max-content 1fr; gap: .6rem 1.5rem; font-size: .9375rem; }
+        .case dt { color: var(--mute); }
+        .case dd { color: var(--fg); }
+        .case__img { border-radius: var(--r-media); overflow: hidden; align-self: center; aspect-ratio: 1440 / 860; }
+        .case__img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        @media (min-width: 900px) {
+            .case {
+                position: sticky; top: calc(var(--nav-h) + var(--i) * 14px);
+                grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+                /* altura fixa: as bordas inferiores dos cards empilhados coincidem, nada vaza por baixo */
+                height: calc(100dvh - var(--nav-h) - 2rem - var(--i) * 14px);
+            }
+        }
+        .motion .case__img { clip-path: inset(0 0 100% 0); }
+
+        /* ---------- Metodo (bento) ---------- */
+        .method { padding-block: clamp(5rem, 10vw, 10rem); }
+        .method h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; max-width: 14em; }
+        .method > .wrap > p { color: var(--mute); max-width: 42rem; margin-top: 1.5rem; }
+        .bento { display: grid; gap: 1rem; margin-top: clamp(2.5rem, 5vw, 4.5rem); grid-template-columns: 1fr; }
+        .cell { border-radius: var(--r-media); padding: clamp(1.25rem, 2vw, 2rem); position: relative; overflow: hidden; }
+        .cell--tese { background: var(--accent); color: var(--accent-ink); display: flex; align-items: flex-end; min-height: 320px; }
+        .cell--tese p { font-size: var(--t-h3); font-weight: 600; line-height: 1.12; letter-spacing: -.035em; }
+        .cell--adr { background: var(--surface); border: 1px solid var(--line); font-family: var(--mono); font-size: .8125rem; line-height: 1.7; }
+        .cell--adr b { font-weight: 500; color: var(--accent-text); }
+        .cell--adr .k { color: var(--mute); display: block; margin-top: 1.1rem; }
+        .cell--adr .k:first-child { margin-top: 0; }
+        .cell--layers { border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; min-height: 260px; }
+        .cell--layers .stackword { font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.02; }
+        .cell--layers p { color: var(--mute); font-size: .9375rem; }
+        .cell--sec { border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; min-height: 260px; }
+        .cell--sec .stackword { font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.02; }
+        .cell--sec p:last-child { color: var(--mute); font-size: .9375rem; }
+        .cell--shot { padding: 0; min-height: 300px; margin: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); }
+        .cell--shot img { width: 100%; flex: 1; min-height: 0; object-fit: cover; object-position: top left; }
+        .cell--shot figcaption { padding: 1rem 1.5rem; font-size: .9375rem; color: var(--mute); border-top: 1px solid var(--line); }
+        @media (min-width: 900px) {
+            .bento { grid-template-columns: repeat(12, 1fr); }
+            .cell--tese { grid-column: span 7; }
+            .cell--adr { grid-column: span 5; }
+            .cell--layers { grid-column: span 4; }
+            .cell--sec { grid-column: span 3; }
+            .cell--shot { grid-column: span 5; }
+        }
+
+        /* ---------- Escrita (unico marquee) ---------- */
+        .writing { padding-block: clamp(4rem, 8vw, 8rem); border-top: 1px solid var(--line); }
+        .writing h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .writing p { color: var(--mute); max-width: 38rem; margin-top: 1.5rem; }
+        .marquee { overflow: hidden; margin-top: clamp(2.5rem, 5vw, 4rem); border-block: 1px solid var(--line); }
+        .marquee__track { display: flex; width: max-content; animation: slide 46s linear infinite; }
+        .marquee__track span {
+            font-size: var(--t-h3); font-weight: 600; letter-spacing: -.035em; padding: 1.4rem 2.5rem; white-space: nowrap;
+        }
+        .marquee__track span:nth-child(even) { color: var(--mute); font-weight: 400; }
+        @keyframes slide { to { transform: translateX(-50%); } }
+        @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } .marquee { overflow-x: auto; } }
+
+        /* ---------- Contato ---------- */
+        .contact { padding-block: clamp(5rem, 11vw, 11rem) 2.5rem; }
+        .contact__big {
+            display: inline-block; font-size: clamp(3rem, 1rem + 14.5vw, 17rem); font-weight: 700;
+            letter-spacing: -.055em; line-height: .95; padding-bottom: .1em;
+            background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0% .06em;
+            transition: background-size .6s var(--ease), color .3s;
+        }
+        .contact__big:hover { background-size: 100% .06em; color: var(--accent-text); }
+        .contact__row { display: flex; flex-wrap: wrap; gap: 1.25rem 2.5rem; margin-top: clamp(2rem, 5vw, 4rem); color: var(--mute); }
+        .contact__row a { transition: color .25s; }
+        .contact__row a:hover { color: var(--fg); }
+        .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: clamp(3rem, 7vw, 7rem); padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--mute); font-size: .875rem; }
+    </style>
+</head>
+
+<body>
+
+    <header class="nav">
+        <div class="wrap">
+            <a class="nav__brand" href="#top">Douglas Braga</a>
+            <nav class="nav__links" aria-label="Principal">
+                <a href="#cases">Cases</a>
+                <a href="#trajetoria">Trajetória</a>
+                <a href="#estudio">Estúdio</a>
+                <a href="#metodo">Método</a>
+                <a href="#escrita">Escrita</a>
+            </nav>
+            <div class="nav__end">
+                <button class="theme" id="theme" type="button" aria-label="Alternar tema claro e escuro">Tema</button>
+                <a class="btn btn--sm" href="https://wa.me/5548991295154" target="_blank" rel="noopener noreferrer">Fale comigo</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+
+        <!-- HERO -->
+        <section class="hero wrap">
+            <h1>
+                <span class="line"><span>Desenho o sistema</span></span>
+                <span class="line"><span>e construo o <span class="em">produto.</span></span></span>
+            </h1>
+            <div class="hero__base">
+                <figure class="hero__portrait" style="margin:0">
+                    <img src="img/douglas.jpg" alt="Retrato de Douglas Braga" width="460" height="460">
+                </figure>
+                <div class="hero__copy">
+                    <p><strong>Staff Design Engineer e Tech Lead.</strong> Design, branding, código, segurança e liderança técnica, do Figma à produção.</p>
+                    <a class="btn" href="#cases">Ver cases <span aria-hidden="true">↓</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- MANIFESTO -->
+        <section class="manifesto wrap" aria-label="Sobre">
+            <p id="manifesto">Trabalho onde branding, copy, design e tecnologia se encontram. É ali que muita coisa dá errado quando ninguém assume a interseção. Meu papel é transformar complexidade em sistemas claros, coerentes e funcionais, conectando produto, experiência e negócio.</p>
+        </section>
+
+        <!-- NUMEROS -->
+        <section class="numbers wrap" aria-label="Em números">
+            <div class="grid">
+                <div class="num"><strong>Desde 2009</strong><p>sendo o braço direito e com o voto de confiança de empresas, primeiro como CLT e depois como PJ, entregando design, branding e front-end engineering para grandes marcas nacionais e internacionais.</p></div>
+                <div class="num"><strong>600+</strong><p>projetos entregues no dsbdigital studio, entre 2016 e 2024.</p></div>
+                <div class="num"><strong>R$ 320 mil</strong><p>de faturamento mensal da Dom Sorriso, rede de clínicas odontológicas, que estava em R$ 80 mil. Reposicionamento e growth.</p></div>
+            </div>
+        </section>
+
+        <!-- MARCAS -->
+        <section class="brands" id="marcas">
+            <div class="wrap">
+                <h2>Setores diferentes. Mesmo rigor.</h2>
+                <p>Marcas que atendi pela NacionalVOX, como designer, diretor criativo e desenvolvedor front-end. O que muda é o briefing. O jeito de decidir, registrar e entregar é o mesmo. Buscando sempre a excelência, elevando a marca ao próximo nível.</p>
+                <ul><li>Techspeed</li><li>BMW</li><li>Uniavan</li><li>Visto Sistemas</li><li>Terras e Terras</li><li>Komcorp</li><li>Schaefer Yachts</li><li>Escola do MP</li><li>Pamplona</li><li>Ducati</li><li>Imperatriz Gourmet</li><li>Automatisa</li><li>ADVB/SC</li><li>Agratto</li><li>Dígitro</li><li>Kawamura Advocacia</li><li>Athena</li><li>Floripa Airport</li><li>Beiramar Shopping</li><li>Nexxera</li><li>Junckes Construtora</li><li>Brasil Atacadista</li><li>Jaguar</li><li>FACISC</li><li>Audi</li><li>Postos Galo</li><li>Imperatriz</li><li>Engie</li><li>Formacco</li><li>Duatto Contabilidade</li><li>Empreendedor</li><li>TM4</li><li>Banco do Empreendedor</li><li>Land Rover</li><li>BMW Motos</li><li>Hoplon</li><li>Associação do MP</li><li>Fecomércio</li><li>Chai Carioni</li><li>Ventisol</li><li>FIESC</li><li>Escola Dinâmica</li><li>Andrea Cardoso</li><li>Mini</li><li>Revista Mural</li><li>Hotel Coroa Vermelha</li></ul>
+                <h3 class="sub">Sem agência no meio.</h3>
+                <p>Onde eu era o responsável pelo produto, pela marca ou pelo estúdio.</p>
+                <ul class="direct">
+                    <li>Palavra Viva Church</li><li>Avivah</li><li>Unigrace</li><li>Houdini Group</li><li>Falar Bem Conecta</li><li>Street Diligence</li><li>Dom Sorriso</li><li>Triboo</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CASES -->
+        <section class="cases wrap" id="cases">
+            <div class="cases__head"><h2>Cases</h2></div>
+            <p class="cases__soon">Em breve. Estou montando os cases com calma.</p>
+            <!-- CASES (reativar quando estiverem prontos)
+            <div class="stack">
+
+                <article class="case" style="--i:0">
+                    <div class="case__text">
+                        <div>
+                            <h3 class="case__title">Instituto Jurerê Mais</h3>
+                            <p class="case__desc">Portal institucional de um instituto de moradores de Florianópolis. Do briefing e sitemap ao design system, com handoff para o time de desenvolvimento.</p>
+                        </div>
+                        <dl>
+                            <dt>Time</dt><dd>NacionalVOX</dd>
+                            <dt>Papel</dt><dd>UX/UI Designer</dd>
+                            <dt>Entrega</dt><dd>Pesquisa, wireframes, UI e design system</dd>
+                            <dt>Status</dt><dd>Em andamento</dd>
+                        </dl>
+                    </div>
+                    <div class="case__img"><img src="img/jurere.jpg" alt="Home do portal do Instituto Jurerê Mais" loading="lazy"></div>
+                </article>
+
+                <article class="case" style="--i:1">
+                    <div class="case__text">
+                        <div>
+                            <h3 class="case__title">Sinduscon Florianópolis</h3>
+                            <p class="case__desc">Redesenho do site de um sindicato de construtoras, mantendo o plugin que sincroniza dados com o Drive. Benchmark, design system e protótipo multipágina.</p>
+                        </div>
+                        <dl>
+                            <dt>Time</dt><dd>NacionalVOX</dd>
+                            <dt>Papel</dt><dd>UI Designer e front-end WordPress</dd>
+                            <dt>Entrega</dt><dd>Benchmark, design system, 8 ADRs e protótipo</dd>
+                            <dt>Status</dt><dd>Home aprovada pelo cliente</dd>
+                        </dl>
+                    </div>
+                    <div class="case__img"><img src="img/sinduscon.jpg" alt="Home do site do Sinduscon Florianópolis" loading="lazy"></div>
+                </article>
+
+                <article class="case" style="--i:2">
+                    <div class="case__text">
+                        <div>
+                            <h3 class="case__title">Dr. Carriço</h3>
+                            <p class="case__desc">Site institucional de uma clínica de coluna vertebral. Do Figma ao ar, com foco em clareza para quem chega com dor e precisa agendar.</p>
+                        </div>
+                        <dl>
+                            <dt>Time</dt><dd>NacionalVOX</dd>
+                            <dt>Papel</dt><dd>Designer e implementação</dd>
+                            <dt>Entrega</dt><dd>Design no Figma e site publicado</dd>
+                        </dl>
+                    </div>
+                    <div class="case__img"><img src="img/carrico.jpg" alt="Home do site da clínica Dr. Carriço" loading="lazy"></div>
+                </article>
+
+            </div>
+            -->
+        </section>
+
+        <!-- TRAJETORIA -->
+        <section class="path" id="trajetoria">
+            <div class="wrap">
+                <h2>Trajetória</h2>
+                <div class="path__list">
+                    <article class="path__item">
+                        <span class="path__year">2025 até hoje</span>
+                        <div>
+                            <h3>InCuca</h3>
+                            <div class="path__role">Product Designer e UX Engineer</div>
+                            <p>Liderança técnica da squad. Design system do zero, auditoria de 117 blocos Gutenberg para CLS e LCP e ADRs no monorepo.</p>
+                        </div>
+                    </article>
+                    <article class="path__item">
+                        <span class="path__year">2024 a 2025</span>
+                        <div>
+                            <h3>Houdini Group e Street Diligence</h3>
+                            <div class="path__role">Designer de Produto e UX Designer</div>
+                            <p>Redesign completo do Falar Bem Conecta, com design system próprio. UX de uma fintech americana de análise de contratos.</p>
+                        </div>
+                    </article>
+                    <article class="path__item">
+                        <span class="path__year">2020 a 2023</span>
+                        <div>
+                            <h3>Palavra Viva Church</h3>
+                            <div class="path__role">Head de Produtos Digitais e Infraestrutura</div>
+                            <p>Design system e tipografia proprietária para mais de 10 sub-marcas. Streaming, CRM/ERP próprio e segurança dos servidores.</p>
+                        </div>
+                    </article>
+                    <article class="path__item">
+                        <span class="path__year">2016 a 2024</span>
+                        <div>
+                            <h3>dsbdigital studio</h3>
+                            <div class="path__role">Fundador e Head de Design Engineering</div>
+                            <p>Estúdio boutique de design de alto nível e engenharia front-end. Mais de 600 projetos, do conceito à produção.</p>
+                        </div>
+                    </article>
+                    <article class="path__item">
+                        <span class="path__year">2012 a 2024</span>
+                        <div>
+                            <h3>NacionalVOX</h3>
+                            <div class="path__role">De Web Designer Júnior a UI/UX e Lead Front-End</div>
+                            <p>Interfaces, direção de arte e front-end para marcas de montadoras premium a instituições da indústria e do comércio.</p>
+                        </div>
+                    </article>
+                    <article class="path__item">
+                        <span class="path__year">2007</span>
+                        <div>
+                            <h3>Hoplon Infotainment</h3>
+                            <div class="path__role">QA de jogos</div>
+                            <p>Comecei testando jogos. Anos depois, atendi a Hoplon pela NacionalVOX e fiz o front-end de um dos projetos deles.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ESTUDIO -->
+        <section class="studio" id="estudio">
+            <div class="wrap">
+                <h2>Também construo produtos.</h2>
+                <p>Ferramentas próprias, nascidas de problemas que encontrei no trabalho. Desenho a interface e escrevo o código.</p>
+                <div class="bento">
+                    <div class="cell cell--flow">
+                        <div>
+                            <h3>Figma Plugin Bridge</h3>
+                            <p>Ponte entre agentes de IA e a Plugin API do Figma, com verificação independente pela REST API.</p>
+                        </div>
+                        <div class="flow" aria-label="Fluxo da ponte">
+                            <b>Agente de IA</b> pede a edição via MCP<br>
+                            <b>WebSocket local</b> entrega ao plugin<br>
+                            <b>Plugin do Figma</b> escreve no arquivo<br>
+                            <b>REST API</b> confirma o que foi escrito
+                        </div>
+                    </div>
+                    <div class="cell cell--tool">
+                        <div>
+                            <h3>Visual Sitemap e GhostEngine</h3>
+                            <p>Canvas infinito para planejar a arquitetura de sites, com crawler e auditoria de SEO por IA rodando por linha de comando.</p>
+                        </div>
+                        <small>Node, Prisma, IA local ou Claude</small>
+                    </div>
+                    <div class="cell cell--tool-alt">
+                        <div>
+                            <h3>zapDog</h3>
+                            <p>WhatsApp e CRM de leads com funil de vendas e ROI por campanha. Chat em tempo real e links rastreáveis.</p>
+                        </div>
+                        <small>Docker, Evolution API, Postgres</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- METODO -->
+        <section class="method" id="metodo">
+            <div class="wrap">
+                <h2>Decisão registrada, não improvisada.</h2>
+                <p>Todo projeto meu deixa rastro: o que foi decidido, por quê, e o que ficou de fora. Isso vale para o time que herda o trabalho e para mim daqui a seis meses.</p>
+
+                <div class="bento">
+                    <div class="cell cell--tese">
+                        <p>Output se regenera em minutos. Contexto curado e decisão registrada, não.</p>
+                    </div>
+
+                    <div class="cell cell--adr" aria-label="Trecho de um ADR real do projeto Sinduscon">
+                        <span class="k">ADR-D01</span>
+                        <b>CTA de conversão fixo no header</b>
+                        <span class="k">Contexto</span>
+                        O briefing coloca conversão como prioridade. A CBIC esconde o "Associe-se"; Sinduscon-SP e Joinville mantêm fixo.
+                        <span class="k">Decisão</span>
+                        Adotar CTA sempre visível. Acento verde reservado para ações de conversão.
+                        <span class="k">Autor</span>
+                        Douglas Braga
+                    </div>
+
+                    <div class="cell cell--layers">
+                        <p class="stackword">Registro.<br>Mapa.<br><span class="em">Prosa.</span></p>
+                        <p>A prosa nunca é a fonte da verdade. O registro é. O resto se gera a partir dele.</p>
+                    </div>
+
+                    <div class="cell cell--sec">
+                        <p class="stackword">Segurança no front-end.</p>
+                        <p>Pixel perfeito não pode custar dados nem performance.</p>
+                    </div>
+
+                    <figure class="cell cell--shot">
+                        <img src="img/sinduscon.jpg" alt="Header do Sinduscon com o botão Seja um associado fixo" loading="lazy">
+                        <figcaption>A decisão D01 no protótipo aprovado: o botão de associação nunca sai do header.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ESCRITA -->
+        <section class="writing" id="escrita">
+            <div class="wrap">
+                <h2>Escrevo o que pratico.</h2>
+                <p>Uma série de ebooks sobre trabalhar com IA sem perder o porquê. Cada conceito aponta para um arquivo real de um projeto real. Em produção.</p>
+            </div>
+            <div class="marquee" aria-label="Títulos da série de ebooks">
+                <div class="marquee__track">
+                    <span>Prova Real</span><span>Briefing Reverso</span><span>Cadê o porquê?</span><span>Copy como Engenharia de Linguagem</span><span>ADR, o manual que faltava</span><span>Sua Playlist Revela Quem Você É</span>
+                    <span aria-hidden="true">Prova Real</span><span aria-hidden="true">Briefing Reverso</span><span aria-hidden="true">Cadê o porquê?</span><span aria-hidden="true">Copy como Engenharia de Linguagem</span><span aria-hidden="true">ADR, o manual que faltava</span><span aria-hidden="true">Sua Playlist Revela Quem Você É</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CONTATO -->
+    <footer class="contact wrap">
+        <a class="contact__big" href="https://wa.me/5548991295154" target="_blank" rel="noopener noreferrer">Fale comigo</a>
+        <div class="contact__row">
+            <a href="https://www.linkedin.com/in/douglasdsbraga/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.behance.net/douglasdsbraga" target="_blank" rel="noopener noreferrer">Behance</a>
+            <a href="https://www.instagram.com/douglasdsbraga/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://br.pinterest.com/douglasdsbraga/" target="_blank" rel="noopener noreferrer">Pinterest</a>
+        </div>
+        <div class="foot">
+            <span>Douglas de S. Braga, 2026</span>
+            <span>Certificado em Liderança Técnica (Tech Lead)</span>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script>
+        // Tema: persistencia e um conforto por viewer, nunca requisito.
+        (function () {
+            var root = document.documentElement, btn = document.getElementById('theme');
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) { }
+            });
+        })();
+
+        // Manifesto: o texto existe inteiro no HTML; o JS so quebra em palavras para o reveal.
+        (function () {
+            var el = document.getElementById('manifesto');
+            el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) {
+                return '<span class="m-word">' + w + '</span>';
+            }).join(' ');
+        })();
+
+        if (window.gsap && window.ScrollTrigger) {
+            gsap.registerPlugin(ScrollTrigger);
+            var mm = gsap.matchMedia();
+
+            mm.add('(prefers-reduced-motion: no-preference)', function () {
+                // Scroll suave: hierarquia de leitura, sem hijack.
+                var lenis = new Lenis({ lerp: 0.1 });
+                lenis.on('scroll', ScrollTrigger.update);
+                var tick = function (t) { lenis.raf(t * 1000); };
+                gsap.ticker.add(tick);
+                gsap.ticker.lagSmoothing(0);
+
+                // Hero: sequencia de entrada define a ordem de leitura (nome, retrato, proposta).
+                var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+                tl.to('.hero .line > span', { y: 0, duration: 1.1, stagger: 0.12 })
+                    .to('.hero__portrait', { clipPath: 'inset(0% 0 0 0)', duration: 1.1 }, '-=0.7')
+                    .to('.hero__copy > *', { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, '-=0.8');
+
+                // Manifesto: a leitura acompanha o scroll, palavra a palavra.
+                gsap.to('.m-word', {
+                    opacity: 1, ease: 'none', stagger: 0.1,
+                    scrollTrigger: { trigger: '#manifesto', start: 'top 80%', end: 'bottom 45%', scrub: true }
+                });
+
+                // Numeros e trajetoria: entram na ordem em que se leem.
+                gsap.utils.toArray('.num, .path__item').forEach(function (el) {
+                    gsap.to(el, {
+                        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+                        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+                    });
+                });
+                gsap.from('.studio .cell', {
+                    y: 48, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12,
+                    scrollTrigger: { trigger: '.studio .bento', start: 'top 80%', once: true }
+                });
+
+                // Marcas: a amplitude aparece em onda, so uma vez.
+                gsap.to('.brands li', {
+                    opacity: 1, duration: 0.6, ease: 'power2.out', stagger: { each: 0.03, from: 'random' },
+                    scrollTrigger: { trigger: '.brands ul', start: 'top 80%', once: true }
+                });
+
+                // Cases: empilha; o card anterior recua quando o proximo chega (sticky-stack).
+                var cards = gsap.utils.toArray('.case');
+                cards.forEach(function (card, i) {
+                    gsap.to(card.querySelector('.case__img'), {
+                        clipPath: 'inset(0% 0 0% 0)', duration: 1.1, ease: 'power4.out',
+                        scrollTrigger: { trigger: card, start: 'top 75%', once: true }
+                    });
+                    if (i < cards.length - 1 && matchMedia('(min-width: 900px)').matches) {
+                        gsap.to(card, {
+                            scale: 0.94, filter: 'brightness(0.55)', ease: 'none',
+                            scrollTrigger: { trigger: cards[i + 1], start: 'top 90%', end: 'top 20%', scrub: true }
+                        });
+                    }
+                });
+
+                // Bento: entrada em sequencia, uma vez.
+                gsap.from('.method .cell', {
+                    y: 48, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1,
+                    scrollTrigger: { trigger: '.bento', start: 'top 80%', once: true }
+                });
+
+                document.fonts && document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+
+                return function () {
+                    gsap.ticker.remove(tick);
+                    lenis.destroy();
+                };
+            });
+        }
+    </script>
+</body>
+
+</html>
