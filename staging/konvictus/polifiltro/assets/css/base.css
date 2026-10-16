@@ -9,7 +9,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
 .on-dark :focus-visible,.dark :focus-visible{outline-color:var(--focus-on-dark)}
-.skip{position:absolute;left:var(--gutter);top:-80px;z-index:100;background:var(--navy-900);color:var(--ice-100);padding:12px 18px;border-radius:0 0 var(--r-field) var(--r-field)}
+.skip{position:absolute;left:var(--gutter);top:-80px;z-index:100;background:var(--bg-dark);color:var(--ice-100);padding:12px 18px;border-radius:0 0 var(--r-field) var(--r-field)}
 .skip:focus{top:0}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* tipografia de display: duas camadas de peso (Light + Black), eixo de largura variavel */

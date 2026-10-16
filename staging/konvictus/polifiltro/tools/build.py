@@ -26,7 +26,7 @@ SOLS = [  # chave, nome, 1 linha, destino
 ]
 FILTROS = [("oleo", "Óleo"), ("cabine", "Cabine"), ("combustivel", "Combustível"), ("ar", "Ar"), ("separadores", "Separadores"), ("ecologicos", "Ecológicos"),
            ("arrefecimento", "Arrefecimento"), ("desumidificador", "Desumidificador"), ("ureia", "Ureia"), ("hidraulico", "Hidráulico")]
-CIDADES = ["Manaus/AM", "Ananindeua/PA", "Sinop/MT", "Cuiabá/MT", "Goiânia/GO", "Uberlândia/MG", "Belo Horizonte/MG", "São Paulo/SP", "Araçatuba/SP", "Curitiba/PR", "Itajaí/SC", "Porto Alegre/RS"]
+CIDADES = ["Manaus/AM", "Ananindeua/PA", "Sinop/MT", "Cuiabá/MT", "Goiânia/GO", "Uberlândia/MG", "Contagem/MG", "São Paulo/SP", "Araçatuba/SP", "Curitiba/PR", "Itajaí/SC", "Porto Alegre/RS"]
 PAGINAS_REAIS = {"segmentos/agricola/": "segmentos/agricola/", "filtros/": "filtros/"}
 
 
@@ -189,7 +189,7 @@ def render(p):
     body = body.replace("{{R}}", R)
     html = f'''<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<title>{titulo}</title><meta name="description" content="{desc}"><meta name="robots" content="noindex"><meta name="theme-color" content="#0B1B3F"><link rel="icon" href="{R}assets/svg/marca.svg" type="image/svg+xml">
+<title>{titulo}</title><meta name="description" content="{desc}"><meta name="robots" content="noindex"><meta name="theme-color" content="#066FBA"><link rel="icon" href="{R}assets/svg/marca.svg" type="image/svg+xml">
 <link rel="preload" href="{R}assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 {links}
 </head><body class="p-{atual}">{sprite}<a class="skip" href="#conteudo">Ir para o conteúdo</a>

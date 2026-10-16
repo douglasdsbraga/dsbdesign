@@ -41,7 +41,7 @@ svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="non
 (ROOT / "assets" / "svg" / "brasil-pontos.svg").write_text(svg)
 
 CIDADES = [("Manaus/AM", -3.12, -60.02), ("Ananindeua/PA", -1.37, -48.38), ("Sinop/MT", -11.86, -55.50), ("Cuiabá/MT", -15.60, -56.10),
-           ("Goiânia/GO", -16.68, -49.25), ("Uberlândia/MG", -18.92, -48.28), ("Belo Horizonte/MG", -19.92, -43.94), ("São Paulo/SP", -23.55, -46.63),
+           ("Goiânia/GO", -16.68, -49.25), ("Uberlândia/MG", -18.92, -48.28), ("Contagem/MG", -19.92, -43.94), ("São Paulo/SP", -23.55, -46.63),
            ("Araçatuba/SP", -21.21, -50.43), ("Curitiba/PR", -25.43, -49.27), ("Itajaí/SC", -26.91, -48.66), ("Porto Alegre/RS", -30.03, -51.23)]
 pins = []
 for i, (n, lat, lon) in enumerate(CIDADES):
