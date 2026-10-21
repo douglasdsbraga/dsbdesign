@@ -68,8 +68,76 @@
     a.addEventListener('focus', function () { on(true); }); a.addEventListener('blur', function () { on(false); });
   });
   var sel = document.getElementById('uni-sel');
-  if (sel) sel.addEventListener('change', function () {
+  var cards = document.querySelectorAll('.un-card');
+  function destacar(i) {  // acende o pin e, na pagina de Unidades, o card correspondente
     pins.forEach(function (p) { p.classList.remove('on'); });
-    if (sel.selectedIndex > 0 && pins[sel.selectedIndex - 1]) pins[sel.selectedIndex - 1].classList.add('on');
+    cards.forEach(function (c) { c.classList.remove('on'); });
+    if (pins[i]) pins[i].classList.add('on');
+    if (cards[i]) cards[i].classList.add('on');
+  }
+  cards.forEach(function (c) {
+    var i = +c.dataset.i;
+    c.addEventListener('mouseenter', function () { if (pins[i]) pins[i].classList.add('on'); });
+    c.addEventListener('mouseleave', function () { if (pins[i]) pins[i].classList.remove('on'); });
   });
+  if (sel) sel.addEventListener('change', function () {
+    var i = sel.selectedIndex - 1;
+    destacar(i);
+    if (i >= 0 && cards[i]) cards[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  });
+  // "usar minha localizacao": unidade mais proxima em linha reta (centro aproximado de cada municipio, na ordem do select)
+  var PTS = [[-3.119, -60.022], [-1.366, -48.372], [-11.864, -55.502], [-15.601, -56.097], [-16.686, -49.264], [-18.918, -48.277],
+             [-19.932, -44.054], [-23.55, -46.633], [-21.208, -50.433], [-25.43, -49.27], [-26.908, -48.662], [-30.03, -51.23]];
+  document.querySelectorAll('[data-geo]').forEach(function (b) {
+    var msg = document.getElementById('geo-msg');
+    function say(t) { if (msg) msg.textContent = t; }
+    if (!navigator.geolocation) { b.hidden = true; return; }
+    b.addEventListener('click', function () {
+      say('Buscando sua localização…');
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var la = pos.coords.latitude * Math.PI / 180, lo = pos.coords.longitude * Math.PI / 180, best = 0, bd = 1e9;
+        PTS.forEach(function (p, i) {
+          var a = p[0] * Math.PI / 180, o = p[1] * Math.PI / 180;
+          var d = 6371 * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin((a - la) / 2), 2) + Math.cos(la) * Math.cos(a) * Math.pow(Math.sin((o - lo) / 2), 2)));
+          if (d < bd) { bd = d; best = i; }
+        });
+        if (sel) { sel.selectedIndex = best + 1; sel.dispatchEvent(new Event('change')); }
+        say('Unidade mais próxima: ' + (sel ? sel.options[best + 1].text : '') + ', a cerca de ' + Math.round(bd) + ' km em linha reta.');
+      }, function () { say('Não foi possível ler sua localização. Escolha a cidade na lista.'); }, { timeout: 8000, maximumAge: 600000 });
+    });
+  });
+  // formularios de cotacao: PROTOTIPO, sem validacao e sem envio. O submit so segue para /obrigado/ levando as escolhas de segmento/solucao/filtro/unidade
+  // (nunca nome, telefone, e-mail ou mensagem: nada pessoal vai para a URL)
+  document.querySelectorAll('#cotacao, form.cot').forEach(function (f) {
+    f.setAttribute('novalidate', '');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = new URLSearchParams();
+      ['segmento', 'solucao', 'filtro', 'unidade'].forEach(function (k) { if (f.elements[k] && f.elements[k].value) q.set(k, f.elements[k].value); });
+      location.href = f.getAttribute('action') + (q.toString() ? '?' + q.toString() : '');
+    });
+  });
+  // cotacao: os links "Cotacao para ..." mandam ?segmento= ?solucao= ?filtro= ?unidade=; aqui viram campo ja preenchido
+  var cot = document.getElementById('cotacao');
+  if (cot) {
+    var q = new URLSearchParams(location.search);
+    ['segmento', 'solucao', 'filtro', 'unidade'].forEach(function (k) {
+      var v = q.get(k), s = cot.elements[k];
+      if (!v || !s) return;
+      for (var i = 0; i < s.options.length; i++) if (s.options[i].value === v) { s.selectedIndex = i; break; }
+    });
+    if (q.get('filtro') && !q.get('solucao') && cot.elements.solucao) cot.elements.solucao.value = 'filtros';
+  }
+  // obrigado: resumo do que foi preenchido (so no navegador; nada e enviado)
+  var recap = document.getElementById('recap'), rot = document.getElementById('rotulos');
+  if (recap && rot) {
+    var L = JSON.parse(rot.textContent), p = new URLSearchParams(location.search), linhas = [['segmento', 'Segmento'], ['solucao', 'Solução'], ['filtro', 'Filtro'], ['unidade', 'Unidade']];
+    linhas.forEach(function (l) {
+      var v = p.get(l[0]); if (!v) return;
+      var dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = l[1]; dd.textContent = (L[l[0]] && L[l[0]][v]) || v;
+      recap.appendChild(dt); recap.appendChild(dd);
+    });
+    if (recap.children.length) recap.hidden = false;
+  }
 })();

@@ -1,0 +1,346 @@
+- generic [active] [ref=e1]:
+  - link "Ir para o conteúdo" [ref=e2] [cursor=pointer]:
+    - /url: "#conteudo"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Polifiltro, página inicial" [ref=e5] [cursor=pointer]:
+        - /url: ../../index.html
+        - img "Polifiltro" [ref=e6]
+      - navigation "Principal" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Segmentos" [ref=e10] [cursor=pointer]:
+              - /url: ../../stub.html?u=/segmentos/
+            - generic:
+              - generic: Agrícola
+              - generic:
+                - heading "Agrícola" [level=3]
+                - paragraph: Filtros e lubrificantes para tratores, colheitadeiras e pulverizadores.
+                - paragraph: Mais procurados
+                - generic:
+                  - link "Filtro de óleo":
+                    - /url: ../../filtros/#oleo
+                  - link "Filtro de combustível":
+                    - /url: ../../filtros/#combustivel
+                  - link "Filtro de ar":
+                    - /url: ../../filtros/#ar
+                - paragraph:
+                  - link "Ver segmento":
+                    - /url: ../../segmentos/agricola/
+                  - link "Cotação para agrícola":
+                    - /url: ../../stub.html?u=/contato/&segmento=agricola
+            - option "Escolha a cidade" [selected]
+            - option "Manaus/AM"
+            - option "Ananindeua/PA"
+            - option "Sinop/MT"
+            - option "Cuiabá/MT"
+            - option "Goiânia/GO"
+            - option "Uberlândia/MG"
+            - option "Contagem/MG"
+            - option "São Paulo/SP"
+            - option "Araçatuba/SP"
+            - option "Curitiba/PR"
+            - option "Itajaí/SC"
+            - option "Porto Alegre/RS"
+          - listitem [ref=e13]:
+            - link "Soluções" [ref=e14] [cursor=pointer]:
+              - /url: ../../solucoes/
+            - generic:
+              - generic: Filtros
+              - generic:
+                - heading "Filtros" [level=3]
+                - paragraph: Escolha o tipo
+                - generic:
+                  - link "Óleo":
+                    - /url: ../../filtros/#oleo
+                  - link "Cabine":
+                    - /url: ../../filtros/#cabine
+                  - link "Combustível":
+                    - /url: ../../filtros/#combustivel
+                  - link "Ar":
+                    - /url: ../../filtros/#ar
+                  - link "Separadores":
+                    - /url: ../../filtros/#separadores
+                  - link "Ecológicos":
+                    - /url: ../../filtros/#ecologicos
+                  - link "Arrefecimento":
+                    - /url: ../../filtros/#arrefecimento
+                  - link "Desumidificador":
+                    - /url: ../../filtros/#desumidificador
+                  - link "Ureia":
+                    - /url: ../../filtros/#ureia
+                  - link "Hidráulico":
+                    - /url: ../../filtros/#hidraulico
+                - paragraph:
+                  - link "Ver filtros":
+                    - /url: ../../filtros/
+          - listitem [ref=e17]:
+            - link "Unidades" [ref=e18] [cursor=pointer]:
+              - /url: ../../unidades/
+          - listitem [ref=e19]:
+            - link "Marcas" [ref=e20] [cursor=pointer]:
+              - /url: ../../stub.html?u=/marcas/
+          - listitem [ref=e21]:
+            - link "Empresa" [ref=e22] [cursor=pointer]:
+              - /url: ../../stub.html?u=/empresa/
+      - generic [ref=e23]:
+        - link "WhatsApp" [ref=e24] [cursor=pointer]:
+          - /url: ../../stub.html?u=/contato/
+        - link "Solicite sua cotação" [ref=e28] [cursor=pointer]:
+          - /url: ../../stub.html?u=/contato/
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - region [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - navigation "Breadcrumb" [ref=e35]:
+              - link "Início" [ref=e36] [cursor=pointer]:
+                - /url: ../../index.html
+              - generic [aria-hidden] [ref=e37]: /
+              - link "Segmentos" [ref=e38] [cursor=pointer]:
+                - /url: ../../stub.html?u=/segmentos/
+              - generic [aria-hidden] [ref=e39]: /
+              - generic [ref=e40]: Transporte
+            - heading "Segmento Transporte" [level=1] [ref=e41]
+            - paragraph [ref=e42]: Filtros e lubrificantes para frotas de caminhões e ônibus, com atendimento da unidade mais próxima da sua rota.
+            - generic [ref=e43]:
+              - link "Cotação para transporte" [ref=e44] [cursor=pointer]:
+                - /url: ../../stub.html?u=/contato/&segmento=transporte
+              - link "Ver todos os filtros" [ref=e46] [cursor=pointer]:
+                - /url: ../../filtros/
+          - figure "Ilustração em corte mostrando onde ficam os filtros" [ref=e49]:
+            - generic [ref=e50]:
+              - img "Ilustração técnica de um caminhão em corte, com filtros no chassi" [ref=e51]
+              - link "Filtro de óleo" [ref=e53] [cursor=pointer]:
+                - /url: ../../filtros/#oleo
+                - generic [aria-hidden]: Filtro de óleo
+              - link "Filtro de ar" [ref=e54] [cursor=pointer]:
+                - /url: ../../filtros/#ar
+                - generic [aria-hidden]: Filtro de ar
+              - link "Filtro de cabine" [ref=e55] [cursor=pointer]:
+                - /url: ../../filtros/#cabine
+                - generic [aria-hidden]: Filtro de cabine
+      - region [ref=e56]:
+        - generic [ref=e57]:
+          - heading "Soluções para o transporte" [level=2] [ref=e58]
+          - list [ref=e59]:
+            - listitem [ref=e60]:
+              - link "Filtro de óleo Retém partículas do óleo do motor e protege as peças em movimento. Ver filtro de óleo" [ref=e61] [cursor=pointer]:
+                - /url: ../../filtros/#oleo
+                - generic [ref=e64]:
+                  - strong [ref=e65]: Filtro de óleo
+                  - generic [ref=e66]: Retém partículas do óleo do motor e protege as peças em movimento.
+                - generic [ref=e67]: Ver filtro de óleo
+            - listitem [ref=e70]:
+              - link "Filtro de ar Barra a poeira antes que ela chegue ao motor." [ref=e71] [cursor=pointer]:
+                - /url: ../../filtros/#ar
+                - generic [ref=e74]:
+                  - strong [ref=e75]: Filtro de ar
+                  - generic [ref=e76]: Barra a poeira antes que ela chegue ao motor.
+            - listitem [ref=e77]:
+              - 'link "Filtro de cabine Filtra o ar que entra na cabine: menos poeira para o operador." [ref=e78] [cursor=pointer]':
+                - /url: ../../filtros/#cabine
+                - generic [ref=e81]:
+                  - strong [ref=e82]: Filtro de cabine
+                  - generic [ref=e83]: "Filtra o ar que entra na cabine: menos poeira para o operador."
+          - paragraph [ref=e84]:
+            - link "Ver os 10 tipos de filtro" [ref=e85] [cursor=pointer]:
+              - /url: ../../filtros/
+      - region [ref=e88]:
+        - generic [ref=e89]:
+          - heading "Sobre o segmento" [level=2] [ref=e90]
+          - generic [ref=e92]:
+            - paragraph [ref=e93]:
+              - strong [ref=e94]: Espaço para o texto do cliente.
+              - text: "Aqui entra o que a Polifiltro quiser contar sobre este segmento, com liberdade de formato: títulos, parágrafos, listas, links e imagens."
+            - paragraph [ref=e95]:
+              - text: Texto do cliente
+              - generic [ref=e96]: a receber
+      - region [ref=e97]:
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - heading "Onde atendemos" [level=2] [ref=e100]
+            - paragraph [ref=e101]: Unidades perto das suas operações.
+            - list [ref=e102]:
+              - listitem [ref=e103]:
+                - link "São Paulo/SP" [ref=e104] [cursor=pointer]:
+                  - /url: ../../unidades/#sao-paulo-sp
+              - listitem [ref=e108]:
+                - link "Contagem/MG" [ref=e109] [cursor=pointer]:
+                  - /url: ../../unidades/#contagem-mg
+              - listitem [ref=e113]:
+                - link "Curitiba/PR" [ref=e114] [cursor=pointer]:
+                  - /url: ../../unidades/#curitiba-pr
+              - listitem [ref=e118]:
+                - link "Porto Alegre/RS" [ref=e119] [cursor=pointer]:
+                  - /url: ../../unidades/#porto-alegre-rs
+              - listitem [ref=e123]:
+                - link "Goiânia/GO" [ref=e124] [cursor=pointer]:
+                  - /url: ../../unidades/#goiania-go
+              - listitem [ref=e128]:
+                - link "Cuiabá/MT" [ref=e129] [cursor=pointer]:
+                  - /url: ../../unidades/#cuiaba-mt
+            - paragraph [ref=e133]:
+              - text: "Seleção de unidades para este segmento:"
+              - generic [ref=e134]: validar com o cliente
+            - link "Ver as 12 unidades" [ref=e135] [cursor=pointer]:
+              - /url: ../../unidades/
+          - generic [ref=e138]:
+            - link "Manaus/AM" [ref=e139] [cursor=pointer]:
+              - /url: ../../unidades/#manaus-am
+            - link "Ananindeua/PA" [ref=e140] [cursor=pointer]:
+              - /url: ../../unidades/#ananindeua-pa
+            - link "Sinop/MT" [ref=e141] [cursor=pointer]:
+              - /url: ../../unidades/#sinop-mt
+            - link "Cuiabá/MT" [ref=e142] [cursor=pointer]:
+              - /url: ../../unidades/#cuiaba-mt
+            - link "Goiânia/GO" [ref=e143] [cursor=pointer]:
+              - /url: ../../unidades/#goiania-go
+            - link "Uberlândia/MG" [ref=e144] [cursor=pointer]:
+              - /url: ../../unidades/#uberlandia-mg
+            - link "Contagem/MG" [ref=e145] [cursor=pointer]:
+              - /url: ../../unidades/#contagem-mg
+            - link "São Paulo/SP" [ref=e146] [cursor=pointer]:
+              - /url: ../../unidades/#sao-paulo-sp
+            - link "Araçatuba/SP" [ref=e147] [cursor=pointer]:
+              - /url: ../../unidades/#aracatuba-sp
+            - link "Curitiba/PR" [ref=e148] [cursor=pointer]:
+              - /url: ../../unidades/#curitiba-pr
+            - link "Itajaí/SC" [ref=e149] [cursor=pointer]:
+              - /url: ../../unidades/#itajai-sc
+            - link "Porto Alegre/RS" [ref=e150] [cursor=pointer]:
+              - /url: ../../unidades/#porto-alegre-rs
+      - region [ref=e151]:
+        - generic [ref=e152]:
+          - heading "Nossos parceiros" [level=2] [ref=e153]
+          - list [ref=e154]:
+            - listitem [ref=e155]: Arla 32
+            - listitem [ref=e156]: Baldwin
+            - listitem [ref=e157]: Des-Case
+            - listitem [ref=e158]: Duppai
+            - listitem [ref=e159]: DML
+            - listitem [ref=e160]: Donaldson
+            - listitem [ref=e161]: Filtrec
+            - listitem [ref=e162]: Fleetguard
+          - paragraph [ref=e163]:
+            - text: 8 de 19 marcas. Logos dependem de autorização
+            - generic [ref=e164]: confirmar
+      - region [ref=e165]:
+        - generic [ref=e166]:
+          - heading "Para saber mais" [level=2] [ref=e167]
+          - list [ref=e168]:
+            - listitem [ref=e169]:
+              - link "Lubrificantes Linha completa" [ref=e170] [cursor=pointer]:
+                - /url: ../../stub.html?u=/lubrificantes/
+                - strong [ref=e171]: Lubrificantes
+                - generic [ref=e172]: Linha completa
+            - listitem [ref=e175]:
+              - link "Aditivos Desempenho e proteção do motor" [ref=e176] [cursor=pointer]:
+                - /url: ../../stub.html?u=/aditivos/
+                - strong [ref=e177]: Aditivos
+                - generic [ref=e178]: Desempenho e proteção do motor
+      - region [ref=e181]:
+        - generic [ref=e182]:
+          - heading "Cotação para transporte" [level=2] [ref=e183]
+          - generic [ref=e184]:
+            - link "Solicite sua cotação" [ref=e185] [cursor=pointer]:
+              - /url: ../../stub.html?u=/contato/&segmento=transporte
+            - link "WhatsApp" [ref=e187] [cursor=pointer]:
+              - /url: ../../stub.html?u=/contato/
+  - contentinfo [ref=e191]:
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - link [ref=e194] [cursor=pointer]:
+          - /url: ../../index.html
+          - img "Polifiltro, desde 1989" [ref=e195]
+        - paragraph [ref=e196]:
+          - text: ISO 9001. Distribuindo filtros desde 1989.
+          - generic [ref=e197]: confirmar
+      - generic [ref=e198]:
+        - generic [ref=e199]:
+          - strong [ref=e200]: Segmentos
+          - link "Agrícola" [ref=e201] [cursor=pointer]:
+            - /url: ../../segmentos/agricola/
+          - link "Transporte" [ref=e202] [cursor=pointer]:
+            - /url: ../../segmentos/transporte/
+          - link "Indústria" [ref=e203] [cursor=pointer]:
+            - /url: ../../segmentos/industria/
+          - link "Marítimo" [ref=e204] [cursor=pointer]:
+            - /url: ../../segmentos/maritimo/
+          - link "Ferrovia" [ref=e205] [cursor=pointer]:
+            - /url: ../../segmentos/ferrovia/
+          - link "Mineração" [ref=e206] [cursor=pointer]:
+            - /url: ../../segmentos/mineracao/
+          - link "Geradores de energia" [ref=e207] [cursor=pointer]:
+            - /url: ../../segmentos/geradores-de-energia/
+        - generic [ref=e208]:
+          - strong [ref=e209]: Soluções
+          - link "Filtros" [ref=e210] [cursor=pointer]:
+            - /url: ../../filtros/
+          - link "Lubrificantes" [ref=e211] [cursor=pointer]:
+            - /url: ../../stub.html?u=/lubrificantes/
+          - link "Aditivos" [ref=e212] [cursor=pointer]:
+            - /url: ../../stub.html?u=/aditivos/
+          - link "Ultrafiltração de diesel" [ref=e213] [cursor=pointer]:
+            - /url: ../../stub.html?u=/ultrafiltracao-de-diesel/
+          - link "Equipamentos e armazenamento" [ref=e214] [cursor=pointer]:
+            - /url: ../../stub.html?u=/equipamentos-e-armazenamento/
+          - link "Marcas" [ref=e215] [cursor=pointer]:
+            - /url: ../../stub.html?u=/marcas/
+        - generic [ref=e216]:
+          - strong [ref=e217]: Unidades
+          - link "Manaus/AM" [ref=e218] [cursor=pointer]:
+            - /url: ../../unidades/#manaus-am
+          - link "Ananindeua/PA" [ref=e219] [cursor=pointer]:
+            - /url: ../../unidades/#ananindeua-pa
+          - link "Sinop/MT" [ref=e220] [cursor=pointer]:
+            - /url: ../../unidades/#sinop-mt
+          - link "Cuiabá/MT" [ref=e221] [cursor=pointer]:
+            - /url: ../../unidades/#cuiaba-mt
+          - link "Goiânia/GO" [ref=e222] [cursor=pointer]:
+            - /url: ../../unidades/#goiania-go
+          - link "Uberlândia/MG" [ref=e223] [cursor=pointer]:
+            - /url: ../../unidades/#uberlandia-mg
+        - generic [ref=e224]:
+          - strong [ref=e225]
+          - link "Contagem/MG" [ref=e226] [cursor=pointer]:
+            - /url: ../../unidades/#contagem-mg
+          - link "São Paulo/SP" [ref=e227] [cursor=pointer]:
+            - /url: ../../unidades/#sao-paulo-sp
+          - link "Araçatuba/SP" [ref=e228] [cursor=pointer]:
+            - /url: ../../unidades/#aracatuba-sp
+          - link "Curitiba/PR" [ref=e229] [cursor=pointer]:
+            - /url: ../../unidades/#curitiba-pr
+          - link "Itajaí/SC" [ref=e230] [cursor=pointer]:
+            - /url: ../../unidades/#itajai-sc
+          - link "Porto Alegre/RS" [ref=e231] [cursor=pointer]:
+            - /url: ../../unidades/#porto-alegre-rs
+        - generic [ref=e232]:
+          - strong [ref=e233]: Empresa
+          - link "História" [ref=e234] [cursor=pointer]:
+            - /url: ../../stub.html?u=/empresa/
+          - link "Qualidade e certificados" [ref=e235] [cursor=pointer]:
+            - /url: ../../stub.html?u=/qualidade-e-certificados/
+          - link "Lançamentos" [ref=e236] [cursor=pointer]:
+            - /url: ../../stub.html?u=/lancamentos/
+          - link "Notícias" [ref=e237] [cursor=pointer]:
+            - /url: ../../stub.html?u=/noticias/
+          - link "Trabalhe conosco" [ref=e238] [cursor=pointer]:
+            - /url: ../../stub.html?u=/trabalhe-conosco/
+          - link "Canal Voz Segura" [ref=e239] [cursor=pointer]:
+            - /url: ../../stub.html?u=/canal-voz-segura/
+    - generic [ref=e241]:
+      - link "Fale com a unidade mais próxima" [ref=e242] [cursor=pointer]:
+        - /url: ../../unidades/
+      - generic [ref=e245]:
+        - link "Instagram" [ref=e246] [cursor=pointer]:
+          - /url: ../../stub.html?u=/contato/
+        - link "Facebook" [ref=e249] [cursor=pointer]:
+          - /url: ../../stub.html?u=/contato/
+        - link "LinkedIn" [ref=e252] [cursor=pointer]:
+          - /url: ../../stub.html?u=/contato/
+      - generic [ref=e255]:
+        - link "Privacidade" [ref=e256] [cursor=pointer]:
+          - /url: ../../stub.html?u=/politica-de-privacidade/
+        - link "Cookies" [ref=e257] [cursor=pointer]:
+          - /url: ../../stub.html?u=/politica-de-cookies/

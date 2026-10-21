@@ -228,6 +228,7 @@ dialog.menu-full[open]{display:flex}
 form.cot{display:grid;gap:14px}
 .rx{position:relative;margin:0;background:var(--bg-dark);border-radius:var(--r-card);padding:clamp(20px,3vw,48px);--k-acc:var(--blue-300);
   background-image:linear-gradient(rgb(185 198 216 / .07) 1px,transparent 1px),linear-gradient(90deg,rgb(185 198 216 / .07) 1px,transparent 1px);background-size:32px 32px}
+.rx-in{position:relative}  
 .rx-art{width:100%;height:auto;aspect-ratio:760/420}
 .hs{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;display:grid;place-items:center}
 .hs::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--ice-100);box-shadow:0 0 0 3px var(--navy-900)}

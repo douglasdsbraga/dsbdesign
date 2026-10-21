@@ -6,7 +6,7 @@ status: 🟡 PROPOSTA — protótipo hi-fi para a reunião de layout (até 23/10
 created: 2026-10-10
 ---
 
-# Protótipo hi-fi v1 — Polifiltro (Home + Segmento Agrícola + Filtros)
+# Protótipo hi-fi v1 — Polifiltro (Home + 7 segmentos + Filtros + Unidades)
 
 > **Projeto Konvictus, não Incuca:** sem `report/`, sem modo espelho, sem `incuca-ai`. Nada vai ao grupo do cliente antes de Ismael/Vitória verem.
 > **Copy do cliente não foi editada.** Onde o cliente não tem texto, o texto é **proposta nossa** (marcado `data-copy="proposta"` no HTML).
@@ -18,6 +18,18 @@ python3 tools/serve.py 8742        # servidor local com gzip (sem cache)
 open http://127.0.0.1:8742/        # View Transitions só funcionam em http, não em file://
 ```
 Parar o servidor: `pkill -f "serve.py 8742"`. Reconstruir páginas após editar `src/` ou os CSS parciais: `python3 -I tools/build.py`.
+
+## Atualização 21/10/2026 — segmentos restantes + página Unidades (pedido do Ismael, 16/10)
+- **6 segmentos novos** (Transporte, Indústria, Marítimo, Ferrovia, Mineração, Geradores de energia), mesmo gabarito do Agrícola: herói com **ilustração em corte e 3 hotspots de filtro**, soluções, onde atendemos, parceiros, CTA. Arte: `tools/gen_veiculos.py` (escreve no sprite e em `tools/dados/seg-art.json`); páginas: `segmento_body()` em `tools/build.py`. O glifo de cada filtro é o mesmo da página de Filtros.
+- **Página Unidades** (`unidades/`): cards por região (Norte, Centro-Oeste, Sudeste, Sul), mapa no herói, "usar minha localização" (unidade mais próxima em linha reta), `tel:` e "Como chegar". **Dados de endereço/telefone vêm do site atual** (polifiltro.com.br/unidades, 21/10/2026), copiados como estão. **Contagem e Uberlândia sem dado** (BH virou Contagem; Uberlândia é nova) → "a confirmar".
+- **Fotos de fachada: espaço reservado.** Soltar `assets/img/fachadas/<cidade-uf>.webp|jpg` (ver `LEIA-ME.md` da pasta) e rodar `python3 -I tools/build.py`. As fotos de cidade em `assets/img/unidades/` seguem só no hover do mapa (desktop).
+- **Bloco de texto livre em cada segmento** ("Sobre o segmento"): espaço para o cliente escrever depois, com título, parágrafos, listas, links, citação e imagem (a tipografia cobre tudo isso). Hoje mostra um espaço reservado. Quando o texto chegar, salvar o HTML em `src/segmentos-texto/<segmento>.html` (ex.: `agricola.html`) e rodar `python3 -I tools/build.py`. No WordPress vira um bloco com `InnerBlocks`, sem HTML fixo. **Esse texto é copy do cliente: não escrevemos nem editamos.**
+- **Contato e cotação** (`contato/`) + **Obrigado** (`obrigado/`): formulário com os campos da IA v1 (nome, WhatsApp/telefone, e-mail, segmento, solução, tipo de filtro, unidade, mensagem, aceite LGPD). Todo botão "Cotação para…" do site já abre o formulário preenchido (`?segmento=` `?solucao=` `?filtro=` `?unidade=`), e o formulário do celular (aba Cotar) também envia para `obrigado/`. **Por decisão do Douglas (21/10/2026) é só validação de página: sem validação de campo e sem envio.** O botão só leva a `obrigado/`, com apenas segmento/solução/filtro/unidade na URL (nada pessoal). Destino do lead (R&D Station) a definir. Textos de apoio e do aceite LGPD são proposta nossa. Número de WhatsApp: a coletar.
+- **Hub Soluções** (`solucoes/`): entrada por solução (Filtros com os 10 tipos, Lubrificantes, Aditivos, Ultrafiltração de diesel, Equipamentos e armazenamento) e por segmento (7 tiles). É o destino do "Soluções" do menu e da tab bar. As 4 linhas além de Filtros ainda não têm página (vão ao `stub.html`); os textos delas são proposta nossa.
+- **Correção:** hotspots do trator (Home e Agrícola) eram calibrados à mão contra o padding da figura e desalinhavam fora de 1440 px; agora ficam presos ao SVG (`.rx-in`, y exato 59,3%).
+- **Proposta nossa, a validar:** seleção de unidades por segmento ("onde atendemos"); textos de apoio dos segmentos; os 8 parceiros repetem os da Home.
+- **Copy do cliente mantida como veio:** "Águas Linda" (Ananindeua) e "n1364 qd40" (Goiânia) parecem erro de digitação no site atual; não corrigi (copy do cliente é imutável), fica para confirmar.
+- **Não medido:** Lighthouse das páginas novas, iOS Safari real, botão de localização (precisa da permissão do navegador).
 
 ## Design Read e dials
 *Distribuidor industrial B2B (operadores de frota, agro, mineração, compradores). Linguagem de engenharia de precisão / blueprint técnico, com tipografia bold e corte em raio-X.*
