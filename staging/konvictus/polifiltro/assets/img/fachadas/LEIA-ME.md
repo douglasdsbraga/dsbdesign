@@ -6,5 +6,5 @@ Soltar aqui a foto de cada unidade com o nome da unidade (minúsculo, sem acento
 Nomes esperados: manaus-am · ananindeua-pa · sinop-mt · cuiaba-mt · goiania-go · uberlandia-mg · contagem-mg · sao-paulo-sp ·
 aracatuba-sp · curitiba-pr · itajai-sc · porto-alegre-rs
 
-Ainda não recebidas do cliente (Ismael, 14/10/2026: tem de Porto Alegre, Itajaí e Curitiba). As fotos de cidade em `../unidades/`
-são provisórias e só aparecem no hover do mapa (desktop).
+Recebidas do Ismael em 22–23/10/2026 (10 unidades; faltam Uberlândia e Contagem). Originais e inventário em
+`Contexto/brutos/img/unidades/`. As mesmas fotos (480×300) alimentam o hover do mapa em `../unidades/`.
