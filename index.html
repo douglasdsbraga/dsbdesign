@@ -94,6 +94,8 @@
         .btn:hover { transform: translateY(-2px); }
         .btn:active { transform: translateY(0) scale(.98); }
         .btn--sm { padding: .55rem 1.1rem; font-size: .9375rem; }
+        .btn--ghost { background: none; color: var(--fg); border: 1px solid var(--line); transition: transform .35s var(--ease), border-color .3s; }
+        .btn--ghost:hover { border-color: var(--fg); }
 
         /* ---------- Nav ---------- */
         .nav {
@@ -195,6 +197,7 @@
         .studio { padding-bottom: clamp(5rem, 10vw, 10rem); }
         .studio h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
         .studio > .wrap > p { color: var(--mute); max-width: 40rem; margin-top: 1.5rem; }
+        .studio .lab-link { margin-top: 1.75rem; }
         .studio .bento .cell { display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
         .studio .cell h3 { font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.02; }
         .studio .cell p { color: var(--mute); margin-top: .75rem; }
@@ -326,6 +329,7 @@
                 <a href="#estudio">Estúdio</a>
                 <a href="#metodo">Método</a>
                 <a href="#escrita">Escrita</a>
+                <a href="https://lab.douglasdsbraga.com.br">Lab <span aria-hidden="true">↗</span></a>
             </nav>
             <div class="nav__end">
                 <button class="theme" id="theme" type="button" aria-label="Alternar tema claro e escuro">Tema</button>
@@ -501,6 +505,7 @@
             <div class="wrap">
                 <h2>Também construo produtos.</h2>
                 <p>Ferramentas próprias, nascidas de problemas que encontrei no trabalho. Desenho a interface e escrevo o código.</p>
+                <a class="btn btn--ghost lab-link" href="https://lab.douglasdsbraga.com.br">Ver o que está na bancada do lab <span aria-hidden="true">↗</span></a>
                 <div class="bento">
                     <div class="cell cell--flow">
                         <div>
@@ -526,7 +531,7 @@
                             <h3>zapDog</h3>
                             <p>WhatsApp e CRM de leads com funil de vendas e ROI por campanha. Chat em tempo real e links rastreáveis.</p>
                         </div>
-                        <small>Docker, Evolution API, Postgres</small>
+                        <small>Funil, ROI e chat em tempo real</small>
                     </div>
                 </div>
             </div>
@@ -596,6 +601,7 @@
             <a href="https://www.behance.net/douglasdsbraga" target="_blank" rel="noopener noreferrer">Behance</a>
             <a href="https://www.instagram.com/douglasdsbraga/" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="https://br.pinterest.com/douglasdsbraga/" target="_blank" rel="noopener noreferrer">Pinterest</a>
+            <a href="https://lab.douglasdsbraga.com.br">Lab</a>
         </div>
         <div class="foot">
             <span>Douglas de S. Braga, 2026</span>

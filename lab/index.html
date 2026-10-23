@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Lab | Douglas Braga</title>
+    <meta name="description" content="O playground do Douglas Braga. Experimentos, protótipos e coisas que podem quebrar, parte de douglasdsbraga.com.br.">
+
+    <script>
+        // Mesmo contrato do site principal: tema persistido e motion so sem reduced-motion.
+        (function () {
+            var d = document.documentElement;
+            try { var t = localStorage.getItem('theme'); if (t) d.setAttribute('data-theme', t); } catch (e) { }
+            if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                d.classList.add('motion');
+                setTimeout(function () { if (!window.gsap) d.classList.remove('motion'); }, 4000);
+            }
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- Tokens (ADR-D01) ---------- */
+        :root {
+            --bg: #0d0d0f;
+            --surface: #16161a;
+            --fg: #ecece8;
+            --mute: #8d8d88;
+            --line: rgba(236, 236, 232, .14);
+            --accent: #e9cf4a;
+            --accent-ink: #0d0d0f;
+            --accent-text: #e9cf4a;
+
+            --font: 'Geist', system-ui, sans-serif;
+            --mono: 'Geist Mono', ui-monospace, monospace;
+
+            --t-display: clamp(2.5rem, 1rem + 6.6vw, 8.25rem);
+            --t-h2: clamp(2rem, 1.2rem + 3.4vw, 4.75rem);
+            --t-h3: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+            --t-body: clamp(1rem, .95rem + .25vw, 1.1875rem);
+
+            --gutter: clamp(1rem, .4rem + 2.6vw, 4rem);
+            --nav-h: 68px;
+            --r-media: 6px;
+            --r-pill: 999px;
+            --ease: cubic-bezier(.16, 1, .3, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #e9e9e7;
+            --surface: #dcdcda;
+            --fg: #111114;
+            --mute: #55554f;
+            --line: rgba(17, 17, 20, .16);
+            --accent-text: #6b5a00;
+        }
+
+        /* ---------- Base ---------- */
+        *, *::before, *::after { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        body {
+            margin: 0; background: var(--bg); color: var(--fg);
+            font-family: var(--font); font-size: var(--t-body); line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color .4s var(--ease), color .4s var(--ease);
+        }
+        a { color: inherit; text-decoration: none; }
+        h1, h2, h3, p, ol, ul, dl, dd { margin: 0; }
+        ol, ul { padding: 0; list-style: none; }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+        .wrap { padding-inline: var(--gutter); max-width: 1600px; margin-inline: auto; }
+        .em { color: var(--accent-text); }
+        .mono { font-family: var(--mono); font-size: .8125rem; letter-spacing: 0; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: .6rem; white-space: nowrap;
+            padding: .95rem 1.6rem; border-radius: var(--r-pill);
+            font-weight: 600; font-size: 1rem; letter-spacing: -.01em;
+            background: var(--accent); color: var(--accent-ink);
+            transition: transform .35s var(--ease);
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(0) scale(.98); }
+        .btn--ghost { background: none; color: var(--fg); border: 1px solid var(--line); }
+        .btn--ghost:hover { border-color: var(--fg); }
+        .btn--sm { padding: .55rem 1.1rem; font-size: .9375rem; }
+
+        /* ---------- Nav ---------- */
+        .nav {
+            position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 40;
+            display: flex; align-items: center;
+            background: color-mix(in srgb, var(--bg) 78%, transparent);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+        .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: 100%; }
+        .nav__brand { font-weight: 700; letter-spacing: -.02em; display: flex; align-items: baseline; gap: .5rem; }
+        .nav__brand .tag {
+            font-family: var(--mono); font-weight: 500; font-size: .75rem;
+            padding: .15rem .55rem; border-radius: var(--r-pill); background: var(--accent); color: var(--accent-ink);
+        }
+        .nav__links { display: flex; gap: 2rem; margin-left: auto; margin-right: 1rem; }
+        .nav__links a { color: var(--mute); font-size: .9375rem; transition: color .25s; }
+        .nav__links a:hover { color: var(--fg); }
+        .nav__end { display: flex; align-items: center; gap: .75rem; }
+        .theme {
+            background: none; border: 1px solid var(--line); color: var(--fg);
+            border-radius: var(--r-pill); padding: .5rem .9rem; font: inherit; font-size: .875rem; cursor: pointer;
+            transition: border-color .25s;
+        }
+        .theme:hover { border-color: var(--fg); }
+        @media (max-width: 767px) { .nav__links { display: none; } .nav__brand { margin-right: auto; } .nav__end .btn { display: none; } }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            min-height: 100dvh; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3rem;
+            display: flex; flex-direction: column; justify-content: space-between; gap: 3rem;
+        }
+        .hero__host { color: var(--mute); display: flex; flex-wrap: wrap; gap: .25rem .6rem; align-items: center; }
+        .hero__host b { color: var(--accent-text); font-weight: 500; }
+        .hero h1 {
+            font-size: var(--t-display); font-weight: 700; line-height: .98; letter-spacing: -.045em; padding-bottom: .08em;
+        }
+        .line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+        .line > span { display: inline-block; }
+        .strike { position: relative; display: inline-block; }
+        .strike::after {
+            content: ""; position: absolute; left: -.04em; right: -.04em; top: 54%; height: .07em;
+            background: var(--accent); transform-origin: left; transform: scaleX(1);
+        }
+        .motion .strike::after { transform: scaleX(0); }
+        .hero__base { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: end; }
+        .hero__copy { display: flex; flex-direction: column; gap: 1.75rem; align-items: flex-start; max-width: 40rem; }
+        .hero__copy p { color: var(--mute); font-size: clamp(1.0625rem, 1rem + .4vw, 1.375rem); line-height: 1.45; }
+        .hero__copy p strong { color: var(--fg); font-weight: 600; }
+        .hero__ctas { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+        /* Caderno de bancada: o "agora" do lab */
+        .bench {
+            border: 1px solid var(--line); border-radius: var(--r-media); background: var(--surface);
+            padding: 1.25rem 1.5rem; font-family: var(--mono); font-size: .8125rem; line-height: 1.75;
+            width: 100%; max-width: 26rem;
+        }
+        .bench .k { color: var(--mute); }
+        .bench .v { color: var(--fg); }
+        .bench .v.em { color: var(--accent-text); }
+        .bench__row { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--line); padding-block: .35rem; }
+        .bench__row:last-child { border-bottom: 0; }
+        @media (min-width: 900px) { .hero__base { grid-template-columns: 1fr auto; gap: clamp(2rem, 6vw, 6rem); } }
+
+        .motion .hero .line > span { transform: translateY(108%); }
+        .motion .hero__copy > *, .motion .hero__host, .motion .bench { opacity: 0; transform: translateY(18px); }
+
+        /* ---------- Manifesto ---------- */
+        .manifesto { padding-block: clamp(6rem, 14vw, 14rem); }
+        .manifesto p { font-size: var(--t-h3); font-weight: 500; line-height: 1.18; letter-spacing: -.03em; max-width: 30em; }
+        .motion .m-word { opacity: .16; }
+
+        /* ---------- Experimentos ---------- */
+        .exps { padding-bottom: clamp(5rem, 10vw, 10rem); }
+        .exps__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 2rem; }
+        .exps h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+        .filters button {
+            font: inherit; font-size: .875rem; cursor: pointer; color: var(--mute);
+            background: none; border: 1px solid var(--line); border-radius: var(--r-pill); padding: .45rem .95rem;
+            transition: color .25s, border-color .25s, background-color .25s;
+        }
+        .filters button:hover { color: var(--fg); border-color: var(--fg); }
+        .filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+        .filters button span { font-family: var(--mono); font-size: .75rem; opacity: .7; margin-left: .3rem; }
+
+        .exp-list { margin-top: clamp(2.5rem, 5vw, 4rem); border-top: 1px solid var(--line); }
+        .exp { border-bottom: 1px solid var(--line); }
+        .exp[hidden] { display: none; }
+        .exp__btn {
+            width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer;
+            display: grid; grid-template-columns: 3.5rem 1fr auto; gap: 1rem; align-items: baseline;
+            padding: clamp(1.25rem, 2.4vw, 2rem) 0;
+        }
+        .exp__id { color: var(--mute); white-space: nowrap; }
+        .exp__name {
+            font-size: var(--t-h3); font-weight: 700; letter-spacing: -.04em; line-height: 1.05;
+            transition: color .3s, transform .5s var(--ease); display: inline-block;
+        }
+        .exp__btn:hover .exp__name { color: var(--accent-text); transform: translateX(.35rem); }
+        .exp__status { color: var(--mute); white-space: nowrap; }
+        .exp__status b { font-weight: 500; color: var(--fg); }
+        .exp__status b.is-live { color: var(--accent-text); }
+        .exp__sign { display: inline-block; margin-left: .75rem; transition: transform .4s var(--ease); }
+        .exp__btn[aria-expanded="true"] .exp__sign { transform: rotate(45deg); }
+
+        .exp__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
+        .exp__body > div { overflow: hidden; }
+        .exp.is-open .exp__body { grid-template-rows: 1fr; }
+        .exp__inner {
+            display: grid; gap: 1.5rem; padding: 0 0 clamp(1.5rem, 3vw, 2.5rem) 0;
+        }
+        .exp__inner p { color: var(--mute); max-width: 42rem; }
+        .exp__inner p strong { color: var(--fg); font-weight: 600; }
+        .exp__tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+        .exp__tags li { font-family: var(--mono); font-size: .75rem; border: 1px solid var(--line); border-radius: var(--r-pill); padding: .25rem .7rem; color: var(--mute); }
+        .exp__log { font-family: var(--mono); font-size: .8125rem; color: var(--mute); line-height: 1.7; }
+        .exp__log b { color: var(--accent-text); font-weight: 500; }
+        @media (min-width: 900px) {
+            .exp__inner { grid-template-columns: 3.5rem 7fr 5fr; column-gap: 1rem; }
+            .exp__inner > :first-child { grid-column: 2; }
+        }
+        @media (max-width: 599px) {
+            .exp__btn { grid-template-columns: 4rem 1fr; gap: .25rem .75rem; }
+            .exp__id { font-size: .6875rem; }
+            .exp__status { grid-column: 2; }
+        }
+        .empty { color: var(--mute); padding-block: 2rem; }
+
+        /* ---------- Regras da bancada ---------- */
+        .rules { padding-block: clamp(5rem, 10vw, 10rem); border-top: 1px solid var(--line); }
+        .rules .wrap { display: grid; gap: 3rem; grid-template-columns: 1fr; }
+        .rules h2 { font-size: var(--t-h2); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+        .rules__list { counter-reset: r; display: flex; flex-direction: column; }
+        .rules__list li {
+            counter-increment: r; display: grid; grid-template-columns: 3rem 1fr; gap: 1rem;
+            padding-block: 1.5rem; border-top: 1px solid var(--line);
+        }
+        .rules__list li::before { content: "0" counter(r); font-family: var(--mono); font-size: .8125rem; color: var(--accent-text); padding-top: .4rem; }
+        .rules__list h3 { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); font-weight: 600; letter-spacing: -.03em; line-height: 1.2; }
+        .rules__list p { color: var(--mute); margin-top: .5rem; max-width: 34rem; }
+        @media (min-width: 900px) { .rules .wrap { grid-template-columns: 5fr 7fr; } .rules h2 { position: sticky; top: calc(var(--nav-h) + 2rem); align-self: start; } }
+        .motion .rules__list li { opacity: 0; transform: translateY(24px); }
+
+        /* ---------- Saida ---------- */
+        .exit { padding-block: clamp(5rem, 11vw, 11rem) 2.5rem; }
+        .exit .mono { color: var(--mute); }
+        .exit__big {
+            display: inline-block; margin-top: 1.5rem;
+            font-size: clamp(2.5rem, 1rem + 9vw, 11rem); font-weight: 700; letter-spacing: -.055em; line-height: .95; padding-bottom: .1em;
+            background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0% .06em;
+            transition: background-size .6s var(--ease), color .3s;
+            overflow-wrap: anywhere;
+        }
+        .exit__big:hover { background-size: 100% .06em; color: var(--accent-text); }
+        .exit__row { display: flex; flex-wrap: wrap; gap: 1.25rem 2.5rem; margin-top: clamp(2rem, 5vw, 4rem); color: var(--mute); }
+        .exit__row a { transition: color .25s; }
+        .exit__row a:hover { color: var(--fg); }
+        .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: clamp(3rem, 7vw, 7rem); padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--mute); font-size: .875rem; }
+    </style>
+</head>
+
+<body>
+    <header class="nav">
+        <div class="wrap">
+            <a class="nav__brand" href="#top">Douglas Braga <span class="tag">lab</span></a>
+            <nav class="nav__links" aria-label="Principal">
+                <a href="#experimentos">Experimentos</a>
+                <a href="#regras">Regras</a>
+                <a href="https://douglasdsbraga.com.br">Site principal</a>
+            </nav>
+            <div class="nav__end">
+                <button class="theme" id="theme" type="button" aria-label="Alternar tema claro e escuro">Tema</button>
+                <a class="btn btn--sm" href="https://douglasdsbraga.com.br">Voltar ao site <span aria-hidden="true">↗</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- HERO -->
+        <section class="hero wrap">
+            <div>
+                <p class="hero__host mono"><b>lab.</b>douglasdsbraga.com.br <span aria-hidden="true">/</span> o playground do site principal</p>
+                <h1 style="margin-top:1.5rem">
+                    <span class="line"><span>Aqui eu testo antes</span></span>
+                    <span class="line"><span>de <span class="strike">prometer</span> <span class="em">entregar.</span></span></span>
+                </h1>
+            </div>
+            <div class="hero__base">
+                <div class="hero__copy">
+                    <p><strong>Este é o meu laboratório.</strong> Protótipos, ideias pela metade, ferramentas que eu construo pra mim mesmo e testes que podem dar errado. O que sobrevive aqui vira case no site principal.</p>
+                    <div class="hero__ctas">
+                        <a class="btn" href="#experimentos">Ver a bancada <span aria-hidden="true">↓</span></a>
+                        <a class="btn btn--ghost" href="https://douglasdsbraga.com.br">Ir pro portfólio</a>
+                    </div>
+                </div>
+                <dl class="bench" aria-label="Estado atual do lab">
+                    <div class="bench__row"><dt class="k">ambiente</dt><dd class="v">playground</dd></div>
+                    <div class="bench__row"><dt class="k">pai</dt><dd class="v">douglasdsbraga.com.br</dd></div>
+                    <div class="bench__row"><dt class="k">experimentos</dt><dd class="v em" id="count">0</dd></div>
+                    <div class="bench__row"><dt class="k">erros</dt><dd class="v">todos documentados</dd></div>
+                    <div class="bench__row"><dt class="k">café</dt><dd class="v">o suficiente</dd></div>
+                    <div class="bench__row"><dt class="k">você chegou</dt><dd class="v" id="now">agora</dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- MANIFESTO -->
+        <section class="manifesto wrap" aria-label="Sobre o lab">
+            <p id="manifesto">O portfólio mostra o que já deu certo. O lab mostra o caminho até lá. É onde eu exploro uma API antes de propor, desmonto um problema até entender e construo a ferramenta que eu queria ter. Nem tudo aqui está pronto, e é exatamente esse o ponto.</p>
+        </section>
+
+        <!-- EXPERIMENTOS -->
+        <section class="exps wrap" id="experimentos">
+            <div class="exps__head">
+                <h2>Na bancada</h2>
+                <div class="filters" role="group" aria-label="Filtrar experimentos por estado" id="filters"></div>
+            </div>
+            <ol class="exp-list" id="exp-list"></ol>
+            <p class="empty" id="empty" hidden>Nada nesse estado por enquanto.</p>
+        </section>
+
+        <!-- REGRAS -->
+        <section class="rules" id="regras">
+            <div class="wrap">
+                <h2>Regras da <span class="em">bancada.</span></h2>
+                <ol class="rules__list">
+                    <li><div><h3>Pode quebrar.</h3><p>Nada aqui tem SLA. Se uma página sumir amanhã, é porque eu aprendi o que precisava com ela.</p></div></li>
+                    <li><div><h3>Todo experimento tem um porquê.</h3><p>Antes do código vem a pergunta. Depois dele, o registro: o que funcionou, o que não funcionou e por quê.</p></div></li>
+                    <li><div><h3>O que dá certo, sobe.</h3><p>Quando um teste vira solução, ele sai daqui e vira case, produto ou padrão no site principal.</p></div></li>
+                    <li><div><h3>Nada de dado de cliente.</h3><p>O lab usa dados fictícios ou públicos. Projeto de cliente fica no ambiente do cliente.</p></div></li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <!-- SAIDA -->
+    <footer class="exit wrap">
+        <p class="mono">Gostou de algo que viu aqui?</p>
+        <a class="exit__big" href="https://douglasdsbraga.com.br">Ver o portfólio</a>
+        <div class="exit__row">
+            <a href="https://wa.me/5548991295154" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="https://www.linkedin.com/in/douglasdsbraga/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.behance.net/douglasdsbraga" target="_blank" rel="noopener noreferrer">Behance</a>
+            <a href="https://www.instagram.com/douglasdsbraga/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        <div class="foot">
+            <span>Douglas de S. Braga, <span id="year">2026</span></span>
+            <span>lab.douglasdsbraga.com.br faz parte de douglasdsbraga.com.br</span>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script>
+        /* ------------------------------------------------------------------
+           EXPERIMENTOS: para adicionar um novo, é só acrescentar um objeto.
+           status: "bancada" | "no-ar" | "graduou" | "arquivado"
+           url opcional: se existir, aparece o link "Abrir experimento".
+        ------------------------------------------------------------------ */
+        var EXPERIMENTS = [
+            {
+                name: 'Prumo',
+                status: 'graduou',
+                summary: 'Medidor de saúde de projeto que cruza o quantitativo com o qualitativo. Prazo, escopo e esforço de um lado; percepção do cliente, clareza das decisões e moral do time do outro. Um número sozinho mente, os dois juntos contam a história. Já tem MVP como template de Notion.',
+                tags: ['Métricas', 'Gestão de projeto', 'Notion', 'MVP'],
+                log: ['número e percepção na mesma régua', 'nasceu do meu sistema de gestão de projetos', 'MVP entregue como template de Notion']
+            },
+            {
+                name: 'zapDog',
+                status: 'bancada',
+                summary: 'Um CRM de WhatsApp totalmente diferente do que você está imaginando. Mais detalhes em breve.',
+                tags: ['WhatsApp', 'CRM'],
+                log: ['conversa como centro do relacionamento', 'em construção']
+            },
+            {
+                name: 'Orquestra',
+                status: 'bancada',
+                summary: 'Orquestrador de agentes de IA trabalhando em paralelo, nascido como alternativa ao Maestri, do jeito que o meu fluxo pede. App nativo em Swift para macOS e iOS.',
+                tags: ['Swift', 'macOS', 'iOS', 'Agentes de IA'],
+                log: ['app nativo, não web', 'multi-agente como fluxo de trabalho', 'documentação antes do código']
+            },
+            {
+                name: 'Figma Plugin Bridge',
+                status: 'bancada',
+                summary: 'Ponte entre agentes de IA e a Plugin API do Figma. O agente pede a edição, o plugin escreve no arquivo e uma verificação independente confirma o que foi de fato escrito.',
+                tags: ['Figma', 'MCP', 'Plugin API', 'Agentes de IA'],
+                log: ['agente pede, plugin escreve', 'confiar, mas verificar pela REST API']
+            },
+            {
+                name: 'SEO Ghost Engine',
+                status: 'no-ar',
+                summary: 'Ferramenta em Node.js que lê exports do Google Search Console e usa um modelo local via Ollama para apontar oportunidades de SEO, sem mandar dado pra fora.',
+                tags: ['Node.js', 'Ollama', 'LLM local', 'Search Console'],
+                log: ['modelo rodando local', 'análise a partir de export, sem API']
+            },
+            {
+                name: 'Scroll-video patterns',
+                status: 'graduou',
+                summary: 'Padrões de landing page com vídeo guiado pelo scroll, testados em vários modelos de IA até ficarem estáveis. Saiu do lab e virou produto.',
+                tags: ['Motion', 'Scroll', 'Templates', 'Gumroad'],
+                log: ['testado em Claude, GPT, GLM e Grok', 'curadoria virou produto']
+            },
+            {
+                name: 'Visual Sitemap',
+                status: 'arquivado',
+                summary: 'Canvas infinito para planejar a arquitetura de sites. Não deu certo, e tudo bem: a parte que funcionava seguiu viva como SEO Ghost Engine. O resto virou lição.',
+                tags: ['Canvas', 'Arquitetura de informação', 'Node'],
+                log: ['o que funcionou foi extraído', 'o que não funcionou ficou registrado']
+            }
+        ];
+
+        var STATUS = {
+            'bancada':   { label: 'em bancada', live: false },
+            'no-ar':     { label: 'no ar',      live: true  },
+            'graduou':   { label: 'graduou',    live: true  },
+            'arquivado': { label: 'virou lição', live: false }
+        };
+
+        function esc(s) {
+            return String(s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function pad(n) { return ('00' + n).slice(-3); }
+
+        // Lista
+        (function () {
+            var list = document.getElementById('exp-list');
+            list.innerHTML = EXPERIMENTS.map(function (x, i) {
+                var st = STATUS[x.status] || STATUS['bancada'];
+                var id = 'exp-' + (i + 1);
+                return '<li class="exp" data-status="' + esc(x.status) + '">' +
+                    '<button class="exp__btn" type="button" aria-expanded="false" aria-controls="' + id + '">' +
+                        '<span class="exp__id mono">EXP ' + pad(i + 1) + '</span>' +
+                        '<span><span class="exp__name">' + esc(x.name) + '</span></span>' +
+                        '<span class="exp__status mono">estado: <b class="' + (st.live ? 'is-live' : '') + '">' + st.label + '</b><span class="exp__sign" aria-hidden="true">+</span></span>' +
+                    '</button>' +
+                    '<div class="exp__body" id="' + id + '"><div><div class="exp__inner">' +
+                        '<div><p>' + esc(x.summary) + '</p>' +
+                        (x.url ? '<p style="margin-top:1.25rem"><a class="btn btn--sm" href="' + esc(x.url) + '">Abrir experimento ↗</a></p>' : '') +
+                        '</div>' +
+                        '<div style="display:grid;gap:1rem;align-content:start">' +
+                            '<ul class="exp__tags">' + x.tags.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
+                            '<p class="exp__log">' + x.log.map(function (l) { return '<b>›</b> ' + esc(l); }).join('<br>') + '</p>' +
+                        '</div>' +
+                    '</div></div></div>' +
+                '</li>';
+            }).join('');
+
+            list.addEventListener('click', function (e) {
+                var btn = e.target.closest('.exp__btn');
+                if (!btn) return;
+                var item = btn.parentElement, open = !item.classList.contains('is-open');
+                item.classList.toggle('is-open', open);
+                btn.setAttribute('aria-expanded', open);
+                if (window.ScrollTrigger) setTimeout(function () { ScrollTrigger.refresh(); }, 520);
+            });
+        })();
+
+        // Filtros
+        (function () {
+            var wrap = document.getElementById('filters');
+            var counts = { todos: EXPERIMENTS.length };
+            EXPERIMENTS.forEach(function (x) { counts[x.status] = (counts[x.status] || 0) + 1; });
+            var keys = ['todos'].concat(Object.keys(STATUS).filter(function (k) { return counts[k]; }));
+            wrap.innerHTML = keys.map(function (k, i) {
+                var label = k === 'todos' ? 'todos' : STATUS[k].label;
+                return '<button type="button" data-f="' + k + '" aria-pressed="' + (i === 0) + '">' + label + '<span>' + counts[k] + '</span></button>';
+            }).join('');
+
+            wrap.addEventListener('click', function (e) {
+                var b = e.target.closest('button');
+                if (!b) return;
+                var f = b.dataset.f, shown = 0;
+                wrap.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+                document.querySelectorAll('.exp').forEach(function (el) {
+                    var ok = f === 'todos' || el.dataset.status === f;
+                    el.hidden = !ok;
+                    if (ok) shown++;
+                });
+                document.getElementById('empty').hidden = shown > 0;
+                if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    gsap.fromTo('.exp:not([hidden])', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .5, stagger: .05, ease: 'power3.out' });
+                }
+                if (window.ScrollTrigger) ScrollTrigger.refresh();
+            });
+        })();
+
+        // Caderno de bancada
+        (function () {
+            document.getElementById('count').textContent = EXPERIMENTS.length;
+            document.getElementById('year').textContent = new Date().getFullYear();
+            var d = new Date();
+            document.getElementById('now').textContent =
+                d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        })();
+
+        // Tema
+        (function () {
+            var root = document.documentElement, btn = document.getElementById('theme');
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) { }
+            });
+        })();
+
+        // Manifesto: texto inteiro no HTML, JS so quebra em palavras.
+        (function () {
+            var el = document.getElementById('manifesto');
+            el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) {
+                return '<span class="m-word">' + w + '</span>';
+            }).join(' ');
+        })();
+
+        // Motion (ADR-D03): cada animacao comunica algo.
+        if (window.gsap && window.ScrollTrigger) {
+            gsap.registerPlugin(ScrollTrigger);
+            var mm = gsap.matchMedia();
+
+            mm.add('(prefers-reduced-motion: no-preference)', function () {
+                var lenis = new Lenis({ lerp: 0.1 });
+                lenis.on('scroll', ScrollTrigger.update);
+                var tick = function (t) { lenis.raf(t * 1000); };
+                gsap.ticker.add(tick);
+                gsap.ticker.lagSmoothing(0);
+
+                document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+                    a.addEventListener('click', function (e) {
+                        var t = document.querySelector(a.getAttribute('href'));
+                        if (t) { e.preventDefault(); lenis.scrollTo(t, { offset: -68 }); }
+                    });
+                });
+
+                // Hero: endereço, frase, o risco em "prometer" (a tese), depois proposta e bancada.
+                var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+                tl.to('.hero__host', { opacity: 1, y: 0, duration: .7 })
+                  .to('.hero .line > span', { y: 0, duration: 1.1, stagger: 0.12 }, '-=0.4')
+                  .to('.hero__copy > *', { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, '-=0.5')
+                  .to('.bench', { opacity: 1, y: 0, duration: 0.8 }, '-=0.6');
+
+                // O risco desenha depois que a frase assenta.
+                var strikeStyle = document.createElement('style');
+                document.head.appendChild(strikeStyle);
+                gsap.to({ p: 0 }, {
+                    p: 1, duration: .7, delay: 1.2, ease: 'power3.inOut',
+                    onUpdate: function () { strikeStyle.textContent = '.motion .strike::after{transform:scaleX(' + this.targets()[0].p + ')}'; }
+                });
+
+                // Manifesto: leitura acompanha o scroll.
+                gsap.to('.m-word', {
+                    opacity: 1, ease: 'none', stagger: 0.1,
+                    scrollTrigger: { trigger: '#manifesto', start: 'top 80%', end: 'bottom 45%', scrub: true }
+                });
+
+                // Experimentos entram em ordem de numeração.
+                gsap.from('.exp', {
+                    y: 32, opacity: 0, duration: .8, ease: 'power3.out', stagger: .08,
+                    scrollTrigger: { trigger: '.exp-list', start: 'top 82%', once: true }
+                });
+
+                // Regras: uma de cada vez, na ordem em que se leem.
+                gsap.utils.toArray('.rules__list li').forEach(function (el) {
+                    gsap.to(el, {
+                        opacity: 1, y: 0, duration: .9, ease: 'power3.out',
+                        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+                    });
+                });
+
+                document.fonts && document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+
+                return function () { gsap.ticker.remove(tick); lenis.destroy(); };
+            });
+        }
+    </script>
+</body>
+
+</html>
