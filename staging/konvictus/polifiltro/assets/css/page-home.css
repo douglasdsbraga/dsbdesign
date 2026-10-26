@@ -55,6 +55,7 @@
 .corpo .d{font-size:var(--fs-1);line-height:1.45;opacity:.9}
 .corpo .go{display:inline-flex;align-items:center;gap:8px;font-weight:600}
 .glifo{position:absolute;right:5%;top:14%;width:min(70%,260px);height:auto;aspect-ratio:200/280;opacity:0;transform:translate3d(24px,0,0);transition:opacity var(--dur-4),transform 700ms var(--ease-out-expo);--k-acc:var(--c);z-index:-1}
+.faixa:last-child .glifo{top:4%;width:min(52%,230px)}  
 .faixas>.faixa:first-child{flex-grow:5}
 .faixas:hover>.faixa,.faixas:focus-within>.faixa{flex-grow:1}
 .faixas>.faixa:hover,.faixas>.faixa:focus-within{flex-grow:5}

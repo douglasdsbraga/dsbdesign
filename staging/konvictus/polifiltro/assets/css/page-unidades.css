@@ -86,10 +86,7 @@
 .hero-tools{max-width:560px}
 .hero-tools .fld{color:var(--blue-200)}
 .geo-msg{min-height:1.6em;margin-top:calc(var(--sp-3) * -1)}
-.un-map{max-width:520px;max-height:calc(100svh - var(--header-h) - 80px);width:auto;height:auto;justify-self:center}
-.un-map .mapa-pts{filter:brightness(0) invert(1);opacity:.32}  
-.un-map .pin::before{background:var(--ice-50);box-shadow:0 0 0 3px var(--brand)}
-.un-map .pin::after{border-color:var(--ice-50)}
+.un-map{width:100%;max-width:520px;max-height:calc(100svh - var(--header-h) - 80px);height:auto;justify-self:center}
 .idx{position:sticky;top:var(--header-h);z-index:30;background:var(--ice-50);border-bottom:1px solid var(--line)}
 .idx-in{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
 .idx-in::-webkit-scrollbar{display:none}

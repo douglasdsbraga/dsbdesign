@@ -40,6 +40,19 @@ svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="non
        f'<path d="{path}"/></svg>')
 (ROOT / "assets" / "svg" / "brasil-pontos.svg").write_text(svg)
 
+# Mapa com divisas dos estados (IBGE, malha por UF, qualidade minima): mesma projecao e viewBox da matriz de pontos, entao os pins servem nos dois.
+uf = json.loads((ROOT / "tools" / "dados" / "brasil-ibge-uf-minima.geojson").read_text())
+def anel(r):
+    return "M" + "L".join(f"{x:.1f} {y:.1f}" for x, y in (proj(lon, lat) for lon, lat in r)) + "Z"
+estados = []
+for f in uf["features"]:
+    g = f["geometry"]
+    for poly in (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]):
+        estados.append("".join(anel(r) for r in poly))
+svg_uf = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="#0B1B3F" stroke="#9CC3F0" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round">'
+          f'<path d="{"".join(estados)}"/></svg>')
+(ROOT / "assets" / "svg" / "brasil-estados.svg").write_text(svg_uf)
+
 CIDADES = [("Manaus/AM", -3.12, -60.02), ("Ananindeua/PA", -1.37, -48.38), ("Sinop/MT", -11.86, -55.50), ("Cuiabá/MT", -15.60, -56.10),
            ("Goiânia/GO", -16.68, -49.25), ("Uberlândia/MG", -18.92, -48.28), ("Contagem/MG", -19.92, -43.94), ("São Paulo/SP", -23.55, -46.63),
            ("Araçatuba/SP", -21.21, -50.43), ("Curitiba/PR", -25.43, -49.27), ("Itajaí/SC", -26.91, -48.66), ("Porto Alegre/RS", -30.03, -51.23)]
@@ -48,5 +61,7 @@ for i, (n, lat, lon) in enumerate(CIDADES):
     px, py = proj(lon, lat)
     pins.append(f'<a class="pin" href="{{{{R}}}}stub.html?u=/unidades/" style="left:{px/W*100:.2f}%;top:{py/H*100:.2f}%;--i:{i}"><span class="l">{n}</span></a>')
 (ROOT / "src" / "parts").mkdir(exist_ok=True)
-(ROOT / "src" / "parts" / "pins.html").write_text("".join(pins))
+# pins.html agora tem foto no hover e link por unidade (feito a mao em build/parts): este script NAO sobrescreve mais
+if not (ROOT / "src" / "parts" / "pins.html").exists():
+    (ROOT / "src" / "parts" / "pins.html").write_text("".join(pins))
 print(f"{len(pts)} pontos, {len(svg)/1024:.1f} KB, viewBox {W}x{H}, razao {W/H:.3f}")

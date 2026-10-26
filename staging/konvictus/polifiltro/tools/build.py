@@ -161,7 +161,7 @@ UNIDADES = [
     dict(c="Cuiabá/MT", regiao="Centro-Oeste", end="Rua O, Esquina Projetada, 3.098 Lote A", cep="78098-410", tel=["+55 65 3637-1212"], ll=(-15.601, -56.097)),
     dict(c="Goiânia/GO", regiao="Centro-Oeste", end="Av. São Francisco n1364 qd40 lote 96/98, Setor Santa Genoveva", cep="74670-010", tel=["+55 62 3208-1453"], ll=(-16.686, -49.264)),
     dict(c="Uberlândia/MG", regiao="Sudeste", end=None, cep=None, tel=[], ll=(-18.918, -48.277)),
-    dict(c="Contagem/MG", regiao="Sudeste", end=None, cep=None, tel=[], ll=(-19.932, -44.054)),
+    dict(c="Contagem/MG", regiao="Sudeste", end="R. Um, 315 – Do Comércio", cep=None, tel=["+55 31 3191-0630"], ll=(-19.932, -44.054)),  # endereço e telefone: Ismael, WhatsApp 26/10/2026; CEP não informado
     dict(c="São Paulo/SP", regiao="Sudeste", end="Rua General Flores, 401 – Bom Retiro", cep="01129-010", tel=["+55 11 2188-5499"], ll=(-23.55, -46.633), matriz=True),
     dict(c="Araçatuba/SP", regiao="Sudeste", end="Rua Saudade, 2.376", cep="16021-520", tel=["+55 18 3600-8031", "+55 18 3600-8029"], ll=(-21.208, -50.433)),
     dict(c="Curitiba/PR", regiao="Sul", end="R. Carlos de Laet, 4029 – Hauer", cep="81650-040", tel=["+55 41 3073-9722"], ll=(-25.43, -49.27)),
@@ -189,7 +189,7 @@ def card_unidade(R, i, u):
     sl = slug(u["c"])
     cidade, uf = u["c"].split("/")
     if u["end"]:
-        dados = (f'<address><span>{esc(u["end"])}</span><span>CEP {u["cep"]} – {cidade} – {uf}</span></address>'
+        dados = (f'<address><span>{esc(u["end"])}</span><span>{"CEP " + u["cep"] + " – " if u["cep"] else ""}{cidade} – {uf}</span></address>'
                  f'<p class="tels">{" ".join(f"<a href={chr(34)}{tel_href(t)}{chr(34)}>{t}</a>" for t in u["tel"])}</p>')
         maps = "https://www.google.com/maps/search/?api=1&amp;query=" + re.sub(r"\s+", "+", f'Polifiltro {u["end"]} {cidade} {uf}'.replace("&", "e"))
         acoes = (f'<a class="btn sm" href="{tel_href(u["tel"][0])}">{ic("phone")}<span>Ligar</span></a>'
@@ -219,7 +219,7 @@ def unidades_body(R):
     <div class="uni-tools hero-tools"><label class="fld">Cidade<select id="uni-sel"><option>Escolha a cidade</option>{"".join(f"<option>{c}</option>" for c in CIDADES)}</select></label><button class="btn sm" type="button" data-geo><span>Usar minha localização</span></button></div>
     <p class="geo-msg nota" id="geo-msg" role="status" aria-live="polite"></p>
   </div>
-  <div class="mapa un-map" aria-hidden="true"><img class="mapa-pts" src="{R}assets/svg/brasil-pontos.svg" alt="" width="615" height="637" decoding="async">{{{{PINS}}}}</div>
+  <div class="mapa un-map" aria-hidden="true"><img class="mapa-pts" src="{R}assets/svg/brasil-estados.svg" alt="" width="615" height="637" decoding="async">{{{{PINS}}}}</div>
 </div></section>
 <div class="idx" role="navigation" aria-label="Regiões"><div class="wrap wrap-wide idx-in">{nav}</div></div>
 <section class="blk un-page" aria-label="Lista de unidades"><div class="wrap wrap-wide un-main">{"".join(cards_por_regiao)}
@@ -275,6 +275,13 @@ def texto_livre(R, k):
             f'<div class="txt-body">{corpo}</div></div></section>')
 
 
+def rx_art(R, art):
+    """Ilustracao do hero: imagem do Ismael (art["img"]) quando existe; senao o SVG gerado por tools/gen_veiculos.py."""
+    if art.get("img"):
+        return f'<img class="rx-img" src="{R}assets/img/{art["img"]}" width="{art["w"]}" height="{art["h"]}" alt="Ilustração técnica de {art["alt"]}" decoding="async" fetchpriority="high">'
+    return f'<svg class="rx-art" viewBox="0 0 760 420" role="img" aria-label="Ilustração técnica de {art["alt"]}"><use href="#k-{art["id"]}"/></svg>'
+
+
 def segmento_body(R, k):
     nome, icone, desc, chips = next((n, i, d, c) for kk, n, i, d, c in SEGS if kk == k)
     lead, t_lt, t_bk, picks = SEG_TXT[k]
@@ -298,7 +305,7 @@ def segmento_body(R, k):
     <div class="hero-cta"><a class="btn" href="{cta}"><span>Cotação para {t_bk if k != "geradores-de-energia" else "geradores"}</span></a><a class="link" href="{R}filtros/">Ver todos os filtros {ic("arrow-right")}</a></div>
   </div>
   <figure class="rx rx-seg" aria-label="Ilustração em corte mostrando onde ficam os filtros"><div class="rx-in">
-    <svg class="rx-art" viewBox="0 0 760 420" role="img" aria-label="Ilustração técnica de {art["alt"]}"><use href="#k-{art["id"]}"/></svg>
+    {rx_art(R, art)}
     {pts}
   </div></figure>
 </div></section>
@@ -317,7 +324,7 @@ def segmento_body(R, k):
   <ul class="uni-list">{uni}</ul>
   <p class="nota">Seleção de unidades para este segmento: <span class="confirmar">validar com o cliente</span></p>
   <a class="link" href="{R}unidades/">Ver as 12 unidades {ic("arrow-right")}</a></div>
-  <div class="mapa mapa-s"><img class="mapa-pts" src="{R}assets/svg/brasil-pontos.svg" alt="" width="615" height="637" loading="lazy">{{{{PINS}}}}</div>
+  <div class="mapa mapa-s"><img class="mapa-pts" src="{R}assets/svg/brasil-estados.svg" alt="" width="615" height="637" loading="lazy">{{{{PINS}}}}</div>
 </div></section>
 
 <section class="blk" aria-labelledby="h-mar"><div class="wrap wrap-wide">
