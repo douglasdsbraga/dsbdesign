@@ -230,8 +230,6 @@ form.cot{display:grid;gap:14px}
   background-image:linear-gradient(rgb(185 198 216 / .07) 1px,transparent 1px),linear-gradient(90deg,rgb(185 198 216 / .07) 1px,transparent 1px);background-size:32px 32px}
 .rx-in{position:relative}  
 .rx-art{width:100%;height:auto;aspect-ratio:760/420}
-.rx-img{display:block;width:100%;height:auto;border-radius:var(--r-card)}
-.rx:has(.rx-img){padding:0;background:none}  
 .hs{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;display:grid;place-items:center}
 .hs::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--ice-100);box-shadow:0 0 0 3px var(--navy-900)}
 .hs::after{content:"";position:absolute;inset:6px;border-radius:50%;border:2px solid var(--blue-300)}

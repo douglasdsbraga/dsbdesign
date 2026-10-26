@@ -4,7 +4,7 @@
   "alt": "um caminhão em corte, com filtros no chassi",
   "hs": [
    {
-    "x": 35.9,
+    "x": 35.8,
     "y": 65.1,
     "label": "Filtro de óleo",
     "anchor": "oleo"
@@ -22,9 +22,10 @@
     "anchor": "cabine"
    }
   ],
-  "img": "segmentos/transporte.webp",
-  "w": 1264,
-  "h": 748
+  "vb": [
+   1264,
+   748
+  ]
  },
  "industria": {
   "id": "industria",
@@ -80,53 +81,55 @@
   "hs": [
    {
     "x": 36.5,
-    "y": 53.0,
+    "y": 53.2,
     "label": "Filtro de óleo",
     "anchor": "oleo"
    },
    {
     "x": 42.8,
-    "y": 53.0,
+    "y": 52.4,
     "label": "Filtro de combustível",
     "anchor": "combustivel"
    },
    {
     "x": 49.8,
-    "y": 53.0,
+    "y": 53.2,
     "label": "Filtro de ar",
     "anchor": "ar"
    }
   ],
-  "img": "segmentos/ferrovia.webp",
-  "w": 1256,
-  "h": 748
+  "vb": [
+   1256,
+   748
+  ]
  },
  "mineracao": {
   "id": "fora-de-estrada",
   "alt": "um caminhão fora de estrada em corte, com filtros no cofre do motor",
   "hs": [
    {
-    "x": 43.9,
+    "x": 44.6,
     "y": 64.6,
     "label": "Filtro hidráulico",
     "anchor": "hidraulico"
    },
    {
-    "x": 50.5,
+    "x": 51.2,
     "y": 64.6,
     "label": "Filtro de óleo",
     "anchor": "oleo"
    },
    {
-    "x": 57.1,
+    "x": 57.8,
     "y": 64.6,
     "label": "Filtro de ar",
     "anchor": "ar"
    }
   ],
-  "img": "segmentos/mineracao.webp",
-  "w": 1190,
-  "h": 670
+  "vb": [
+   1190,
+   670
+  ]
  },
  "geradores-de-energia": {
   "id": "gerador",

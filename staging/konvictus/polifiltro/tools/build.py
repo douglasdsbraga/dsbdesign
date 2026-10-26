@@ -276,10 +276,9 @@ def texto_livre(R, k):
 
 
 def rx_art(R, art):
-    """Ilustracao do hero: imagem do Ismael (art["img"]) quando existe; senao o SVG gerado por tools/gen_veiculos.py."""
-    if art.get("img"):
-        return f'<img class="rx-img" src="{R}assets/img/{art["img"]}" width="{art["w"]}" height="{art["h"]}" alt="Ilustração técnica de {art["alt"]}" decoding="async" fetchpriority="high">'
-    return f'<svg class="rx-art" viewBox="0 0 760 420" role="img" aria-label="Ilustração técnica de {art["alt"]}"><use href="#k-{art["id"]}"/></svg>'
+    """Ilustracao do hero: SVG gerado por tools/gen_veiculos.py; art["vb"] = viewBox proprio quando o desenho nao e 760x420."""
+    w, h = art.get("vb", (760, 420))
+    return f'<svg class="rx-art" viewBox="0 0 {w} {h}" style="aspect-ratio:{w}/{h}" role="img" aria-label="Ilustração técnica de {art["alt"]}"><use href="#k-{art["id"]}"/></svg>'
 
 
 def segmento_body(R, k):

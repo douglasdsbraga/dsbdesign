@@ -26,7 +26,7 @@ def janela(x, y, w, h):
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="4" fill="{BODY2}" stroke="{LINE}" stroke-width="1.6" stroke-dasharray="5 4"/>'
 
 
-def montar(itens):
+def montar(itens, W=760, H=420):
     """itens = [(ancora, x, y_centro, largura)] -> (svg dos filtros, hotspots em % do viewBox)"""
     svg, hs = [], []
     for anc, x, cy, w in itens:
@@ -34,7 +34,7 @@ def montar(itens):
         h = altura(kit, w)
         y = cy - h / 2
         svg.append(f'<use href="#k-{kit}" x="{f(x)}" y="{f(y)}" width="{f(w)}" height="{f(h)}"/>')
-        hs.append({"x": round((x + w / 2) / 760 * 100, 1), "y": round(cy / 420 * 100, 1), "label": ROTULO[anc], "anchor": anc})
+        hs.append({"x": round((x + w / 2) / W * 100, 1), "y": round(cy / H * 100, 1), "label": ROTULO[anc], "anchor": anc})
     return "".join(svg), hs
 
 
@@ -48,6 +48,41 @@ def roda_lisa(cx, cy, r, aro, cubo):
 
 
 ARTS = {}
+
+# ---------------------------------------------------------------------------------------------------------------
+# Redesenho em SVG das 3 ilustracoes que o Ismael mandou em 21/10/2026 (caminhao, locomotiva, fora-de-estrada):
+# mesma composicao e coordenadas da imagem dele (cada simbolo tem o viewBox do tamanho da imagem), com a NOSSA tecnologia:
+# vetor, cores por token (--k-*), filtros do kit. Referencias em Contexto/brutos/img/ilustracoes-ismael/.
+# ---------------------------------------------------------------------------------------------------------------
+def roda_i(cx, cy, r):
+    """Roda de 6 raios vista de lado, como no desenho dele: pneu, aro fino, cubo na cor de acento."""
+    return (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{BODY}" {st(2)}/><circle cx="{cx}" cy="{cy}" r="{f(r*.72)}" fill="none" {st(1.6, op=.55)}/>'
+            f'<circle cx="{cx}" cy="{cy}" r="{f(r*.28)}" fill="{ACC}" {st(1.6)}/>')
+
+
+def locomotiva_i():
+    W, H = 1256, 748
+    fil, hs = montar([("oleo", 424, 398, 70), ("combustivel", 499, 392, 76), ("ar", 590, 398, 70)], W, H)
+    rodas = "".join(roda_i(x, 541, 37) for x in (198, 291, 384, 799, 893, 987))
+    ticks = "".join(f'M{x} 594V610' for x in (119, 223, 328, 433, 537, 641, 746, 851, 957, 1062, 1167))
+    return f'''<symbol id="k-locomotiva" viewBox="0 0 {W} {H}">
+<path d="M45 578H1220M45 591H1220" {st(3)}/><path d="{ticks}" {st(2, op=.55)}/>
+<path d="M93 472H1080V537H742V520Q742 493 770 493H1020Q1048 493 1048 520V537H720V547Q720 547 698 547H491Q469 547 469 525V537H445V520Q445 493 417 493H165Q138 493 138 520V537H93Z" fill="{BODY}" {st(2)}/>{rodas}
+<rect x="469" y="493" width="251" height="54" rx="22" fill="{BODY}" {st(2)}/>
+<path d="M115 472V309Q115 295 130 295H767L797 262V195H1032L1050 215L1062 290L1140 302V472Z" fill="{BODY}" {st(2)}/>
+<rect x="209" y="269" width="63" height="26" rx="3" fill="{BODY}" {st(2)}/><rect x="445" y="274" width="217" height="21" rx="3" fill="{BODY}" {st(2)}/><rect x="732" y="262" width="48" height="33" rx="3" fill="{BODY}" {st(2)}/>
+<path d="M115 313H797" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/><path d="M1062 310L1140 328" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<path d="M797 295V472M1062 290V472" {st(1.8, op=.55)}/><path d="M1032 195L1042 198L1050 215" fill="none" {st(2)}/>
+<rect x="138" y="331" width="105" height="87" rx="9" fill="{BODY2}" {st(1.8)}/><path d="M162 345V405M183 345V405M204 345V405M224 345V405" {st(2.2, op=.8)}/>
+<rect x="407" y="331" width="276" height="123" rx="4" fill="{BODY2}" stroke="{LINE}" stroke-width="1.8" stroke-dasharray="6 5"/>{fil}
+<path d="M110 423H400M690 423H1040" stroke="{ACC}" stroke-width="5" stroke-linecap="round"/><path d="M116 418V468M308 418V468M785 418V468M1038 418V468" stroke="{ACC}" stroke-width="7" stroke-linecap="round"/>
+<path d="M104 423Q104 466 112 468" fill="none" {st(2.2, op=.7)}/>
+<rect x="824" y="227" width="96" height="81" fill="{BODY2}" {st(2)}/><rect x="935" y="227" width="82" height="81" fill="{BODY2}" {st(2)}/>
+<rect x="1142" y="308" width="16" height="40" rx="6" fill="{ACC}" {st(1.6)}/>
+<rect x="1140" y="420" width="14" height="138" rx="2" fill="{BODY}" {st(2)}/><path d="M1084 470H1138M1084 498H1138M1084 526H1138M1084 552H1138" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<rect x="1155" y="482" width="50" height="43" rx="6" fill="{BODY}" {st(2)}/><path d="M1154 503H1170" {st(3)}/>
+</symbol>''', hs, (W, H)
+
 
 
 def barco():
@@ -215,7 +250,52 @@ def gerador():
 </symbol>''', hs
 
 
-MAPA = {"transporte": caminhao, "industria": industria, "maritimo": barco, "ferrovia": locomotiva, "mineracao": fora_de_estrada, "geradores-de-energia": gerador}
+
+def caminhao_i():
+    W, H = 1264, 748
+    fil, hs = montar([("oleo", 418, 487, 70), ("ar", 504, 487, 72), ("cabine", 590, 487, 90)], W, H)
+    dentes = lambda cx, cy, r: "".join(f'M{f(cx+(r-2)*math.cos(a))} {f(cy+(r-2)*math.sin(a))}l{f(5*math.cos(a))} {f(5*math.sin(a))}' for a in (math.pi*(0.18+0.64*i/12) for i in range(13)))
+    def roda_c(cx, cy=535, r=67):
+        raios = "".join(f'M{f(cx+16*math.cos(a))} {f(cy+16*math.sin(a))}L{f(cx+44*math.cos(a))} {f(cy+44*math.sin(a))}' for a in (2*math.pi*i/10+.3 for i in range(10)))
+        return (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{BODY}" {st(2)}/><path d="{dentes(cx, cy, r)}" {st(1.2, op=.7)}/><circle cx="{cx}" cy="{cy}" r="46" fill="{BODY2}" {st(2)}/>'
+                f'<path d="{raios}" {st(1.6, op=.8)}/><circle cx="{cx}" cy="{cy}" r="13" fill="{ACC}" {st(1.6)}/>')
+    return f'''<symbol id="k-caminhao" viewBox="0 0 {W} {H}">
+<path d="M50 603H1200" {st(2, 'stroke-dasharray="6 7"')} stroke-opacity=".8"/>
+<rect x="364" y="122" width="799" height="306" rx="6" fill="{BODY}" {st(2.2)}/><path d="M570 155V383M764 155V383M957 155V383" {st(1.4, op=.45)}/>
+<path d="M364 398H1163" stroke="{ACC}" stroke-width="10" stroke-linecap="butt"/>
+<path d="M360 430V157Q250 165 188 218" fill="{BODY}" {st(2)}/>
+<rect x="340" y="428" width="823" height="112" fill="{BODY}" {st(1.8)}/>
+<rect x="397" y="437" width="301" height="103" rx="4" fill="{BODY2}" stroke="{LINE}" stroke-width="1.8" stroke-dasharray="6 5"/>{fil}
+<rect x="709" y="447" width="121" height="80" rx="22" fill="{BODY2}" {st(2)}/><path d="M737 447V440H751V447M795 447V440H809V447" fill="none" {st(2)}/>
+<path d="M140 452V240Q140 222 160 220H318Q340 222 340 245V430H210V500H100V472Q100 452 118 452Z" fill="{BODY}" {st(2.2)}/>
+<path d="M150 252Q150 244 160 244H280Q290 244 290 254V344Q290 354 280 354H176Q164 354 160 346Z" fill="{BODY2}" {st(2)}/><path d="M168 340L214 252" {st(1.6, op=.4)}/>
+<rect x="122" y="287" width="26" height="56" rx="7" fill="{BODY}" {st(2)}/><rect x="252" y="378" width="30" height="14" rx="6" fill="none" {st(2)}/><path d="M297 245V430" {st(1.6, op=.5)}/>
+<rect x="105" y="414" width="20" height="46" rx="4" fill="{ACC}" {st(1.4)}/><rect x="100" y="472" width="104" height="73" rx="6" fill="{BODY}" {st(2)}/><path d="M136 490H196M136 508H196" {st(1.6, op=.5)}/>
+<path d="M853 520Q856 456 925 452H1066Q1134 456 1140 510" fill="none" {st(2.2)}/><path d="M880 512Q884 470 925 466M1100 466Q1130 474 1128 512" fill="none" {st(1.4, op=.5)}/><rect x="1150" y="512" width="28" height="14" rx="3" fill="{BODY}" {st(2)}/>
+<path d="M205 500Q210 456 283 452Q350 456 358 500" fill="none" {st(2.2)}/>
+{roda_c(283)}{roda_c(924)}{roda_c(1069)}
+</symbol>''', hs, (W, H)
+
+
+def fora_de_estrada_i():
+    W, H = 1190, 670
+    fil, hs = montar([("hidraulico", 497, 433, 68), ("oleo", 575, 433, 68), ("ar", 654, 433, 68)], W, H)
+    ticks = lambda cx: "".join(f'M{f(cx+88*math.cos(a))} {f(462+88*math.sin(a))}l{f(22*math.cos(a))} {f(22*math.sin(a))}' for a in (2*math.pi*i/8+math.pi/8 for i in range(8)))
+    roda_m = lambda cx: (f'<circle cx="{cx}" cy="462" r="132" fill="{BODY}" {st(2.4)}/><circle cx="{cx}" cy="462" r="66" fill="none" {st(2)}/>'
+                        f'<circle cx="{cx}" cy="462" r="23" fill="{ACC}" {st(1.8)}/><path d="{ticks(cx)}" {st(2, op=.8)}/>')
+    return f'''<symbol id="k-fora-de-estrada" viewBox="0 0 {W} {H}">
+<path d="M42 596H1147" {st(2, 'stroke-dasharray="7 7"')} stroke-opacity=".8"/>
+<path d="M472 137H1068L1150 247L1098 287L1002 304L842 330L755 335H503Z" fill="{BODY}" {st(2.2)}/><path d="M132 92H440L472 137L385 127L232 152L150 128Z" fill="{BODY}" {st(2.2)}/>
+<path d="M438 162H1083" stroke="{ACC}" stroke-width="7" stroke-linecap="round"/><path d="M656 182L693 310M800 180L857 308M957 180L998 298" {st(2, op=.85)}/>
+<path d="M188 274L232 152H372L412 274Z" fill="{BODY}" {st(2.2)}/><path d="M250 170H356L372 258H220Z" fill="{BODY2}" stroke="#8EC1FF" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M160 274H410L438 330V510H160Z" fill="{BODY}" {st(2.2)}/>
+<rect x="132" y="290" width="30" height="172" rx="3" fill="{BODY}" {st(2)}/><path d="M100 332H160M100 372H160M100 420H160" {st(3)}/>
+<rect x="438" y="356" width="327" height="154" rx="14" fill="{BODY}" {st(2)}/>
+<rect x="462" y="373" width="272" height="109" rx="4" fill="{BODY2}" stroke="{LINE}" stroke-width="1.8" stroke-dasharray="6 5"/>{fil}
+{roda_m(302)}{roda_m(890)}
+</symbol>''', hs, (W, H)
+
+MAPA = {"transporte": caminhao_i, "industria": industria, "maritimo": barco, "ferrovia": locomotiva_i, "mineracao": fora_de_estrada_i, "geradores-de-energia": gerador}
 ID = {"transporte": "caminhao", "industria": "industria", "maritimo": "barco", "ferrovia": "locomotiva", "mineracao": "fora-de-estrada", "geradores-de-energia": "gerador"}
 ALT = {"transporte": "um caminhão em corte, com filtros no chassi", "industria": "uma máquina industrial em corte, com filtros no gabinete",
        "maritimo": "uma embarcação em corte, com filtros na casa de máquinas", "ferrovia": "uma locomotiva em corte, com filtros no capô",
@@ -224,9 +304,12 @@ ALT = {"transporte": "um caminhão em corte, com filtros no chassi", "industria"
 if __name__ == "__main__":
     syms, dados = [], {}
     for k, fn in MAPA.items():
-        sym, hs = fn()
+        r = fn()
+        sym, hs = r[0], r[1]
         syms.append(sym)
         dados[k] = {"id": ID[k], "alt": ALT[k], "hs": hs}
+        if len(r) > 2:
+            dados[k]["vb"] = list(r[2])  # viewBox proprio (redesenhos das imagens do Ismael); sem "vb" = 760x420
     s = SPRITE.read_text()
     s = re.sub(r"<!--veiculos-->.*?<!--/veiculos-->", "", s, flags=re.S)
     s = s.replace("</svg>", "<!--veiculos-->" + "".join(syms) + "<!--/veiculos--></svg>")
