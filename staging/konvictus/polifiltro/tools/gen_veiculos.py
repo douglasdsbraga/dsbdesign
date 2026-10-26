@@ -50,44 +50,6 @@ def roda_lisa(cx, cy, r, aro, cubo):
 ARTS = {}
 
 
-def caminhao():
-    fil, hs = montar([("oleo", 236, 270, 52), ("ar", 292, 270, 52), ("cabine", 348, 270, 72)])
-    return f'''<symbol id="k-caminhao" viewBox="0 0 760 420">
-<path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
-<rect x="56" y="314" width="646" height="12" rx="4" fill="{BODY2}" {st()}/>
-{roda_lisa(118, 342, 54, 30, 9)}{roda_lisa(556, 342, 54, 30, 9)}{roda_lisa(664, 342, 54, 30, 9)}
-<path d="M44 316V152Q44 120 76 120H150Q174 120 186 142L208 200V316Z" fill="{BODY}" {st()}/>
-<path d="M68 142H148L172 194H68Z" fill="{BODY2}" {st(2)}/><path d="M86 160H126" {st(1.4, op=.45)}/>
-<path d="M44 200H208" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
-<rect x="222" y="62" width="500" height="150" rx="6" fill="{BODY}" {st()}/>
-<path d="M222 200H722" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/><path d="M262 84V190M322 84V190M382 84V190M442 84V190M502 84V190M562 84V190M622 84V190M682 84V190" {st(1.4, op=.28)}/>
-{janela(228, 224, 204, 92)}{fil}
-<rect x="452" y="238" width="104" height="64" rx="22" fill="{BODY2}" {st(2)}/><path d="M480 238V302M508 238V302" {st(1.4, op=.5)}/>
-<path d="M206 300H224" {st(2.5)}/><path d="M60 246H40M60 270H40" {st(2, op=.6)}/>
-</symbol>''', hs
-
-
-def industria():
-    fil, hs = montar([("hidraulico", 322, 248, 52), ("separadores", 380, 248, 76), ("desumidificador", 464, 248, 76)])
-    aletas = "".join(f'<path d="M{x} 218V318"/>' for x in range(598, 704, 9))
-    return f'''<symbol id="k-industria" viewBox="0 0 760 420">
-<path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
-<rect x="30" y="366" width="700" height="18" rx="4" fill="{BODY2}" {st()}/>
-<path d="M92 300V366M236 300V366" {st(8)}/><path d="M86 366H98M230 366H242" {st(5)}/>
-<rect x="36" y="176" width="250" height="126" rx="60" fill="{BODY}" {st()}/>
-<path d="M92 176V302M230 176V302" {st(1.6, op=.45)}/><path d="M36 239H52M270 239H286" {st(2, op=.6)}/>
-<circle cx="160" cy="150" r="18" fill="{BODY2}" {st(2)}/><path d="M160 150L170 140" {st(2.5)}/><path d="M160 168V176" {st(4)}/>
-<path d="M286 238H312M286 264H312" {st(5)}/>
-<rect x="298" y="150" width="268" height="216" rx="6" fill="{BODY}" {st()}/>
-<path d="M298 160H566" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
-{janela(312, 186, 242, 124)}{fil}
-<path d="M312 322H554M312 336H554" {st(1.4, op=.35)}/>
-<rect x="580" y="206" width="136" height="160" rx="8" fill="{BODY}" {st()}/><g {st(2, op=.55)}>{aletas}</g>
-<rect x="716" y="256" width="16" height="40" rx="3" fill="{BODY2}" {st()}/>
-<path d="M566 276H580" {st(5)}/><path d="M620 206V190H676V206" fill="none" {st(2.5)}/>
-</symbol>''', hs
-
-
 def barco():
     fil, hs = montar([("combustivel", 172, 316, 52), ("separadores", 236, 316, 76), ("arrefecimento", 326, 316, 52)])
     ondas = "M0 332Q22 322 44 332T88 332T132 332T176 332T220 332T264 332T308 332T352 332T396 332T440 332T484 332T528 332T572 332T616 332T660 332T704 332T748 332"
@@ -105,55 +67,151 @@ def barco():
 </symbol>''', hs
 
 
+def arco(cx, cy, r, extra=0):
+    """Para-lama: arco sobre a roda (corpo desenhado antes, roda depois, arco por cima)."""
+    R = r + extra
+    return f'<path d="M{cx-R} {cy}A{R} {R} 0 0 1 {cx+R} {cy}" fill="none" {st(2.2)}/>'
+
+
+def montanhas():
+    """Contexto da mineracao: morros de minerio ao fundo, so contorno e baixa opacidade."""
+    return (f'<path d="M20 396L130 286L176 322L262 238L352 330L420 292L470 330" fill="none" {st(1.8, op=.28)}/>'
+            f'<path d="M520 396L600 318L650 350L712 270L750 310" fill="none" {st(1.8, op=.28)}/>')
+
+
+def fabrica():
+    """Contexto da industria: telhado em shed + chamines ao fundo, so contorno e baixa opacidade."""
+    return (f'<path d="M20 150V108L70 136V108L120 136V108L170 136V150" fill="none" {st(1.8, op=.28)}/>'
+            f'<path d="M540 150V64H566V150M600 150V92H622V150" fill="none" {st(1.8, op=.28)}/>'
+            f'<path d="M530 64H576M594 92H628" {st(1.8, op=.28)}/>')
+
+
+def torre():
+    """Contexto do gerador: torre de transmissao ao fundo, so contorno e baixa opacidade."""
+    return (f'<path d="M700 396L716 150L732 396M706 330H726M709 270H723M712 210H720M690 150H742M698 128H734M716 150V106" '
+            f'fill="none" {st(1.8, op=.28)}/>'
+            f'<path d="M690 150Q716 160 742 150M698 128Q716 136 734 128" fill="none" {st(1.4, op=.28)}/>')
+
+
+def caminhao():
+    # cavalo + bau, visto de lado (frente a esquerda); 3 filtros no vao do chassi, atras do tanque
+    fil, hs = montar([("oleo", 336, 282, 44), ("ar", 386, 282, 44), ("cabine", 436, 282, 60)])
+    rodas = roda_lisa(138, 346, 50, 29, 9) + roda_lisa(566, 346, 50, 29, 9) + roda_lisa(664, 346, 50, 29, 9)
+    arcos = arco(138, 346, 50, 9) + arco(566, 346, 50, 9) + arco(664, 346, 50, 9)
+    return f'''<symbol id="k-caminhao" viewBox="0 0 760 420">
+<path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
+<rect x="66" y="322" width="650" height="12" rx="4" fill="{BODY2}" {st()}/>
+<rect x="316" y="58" width="394" height="170" rx="8" fill="{BODY}" {st()}/>
+<path d="M316 214H710" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<path d="M365 74V204M414 74V204M463 74V204M512 74V204M561 74V204M610 74V204M659 74V204" {st(1.4, op=.28)}/>
+<path d="M316 70H710" {st(1.4, op=.4)}/><rect x="696" y="226" width="8" height="14" rx="2" fill="{ACC}" {st(1.4)}/>
+<rect x="252" y="240" width="56" height="76" rx="22" fill="{BODY2}" {st(2)}/><path d="M252 266H308M252 290H308" {st(1.4, op=.45)}/>
+<path d="M100 144Q122 86 178 78L316 66V136Z" fill="{BODY2}" {st()}/><path d="M170 98H300" {st(1.4, op=.4)}/>
+<path d="M58 322V228Q58 210 68 198L104 142Q114 124 134 124H236Q250 124 254 138V322Z" fill="{BODY}" {st()}/>
+<path d="M82 198L110 148Q116 138 130 138H224Q232 138 232 148V198Z" fill="{BODY2}" {st(2)}/><path d="M104 188L136 152M126 190L150 158" {st(1.4, op=.4)}/>
+<path d="M232 138V300" {st(1.6, op=.45)}/><rect x="212" y="206" width="14" height="5" rx="2.5" fill="{BODY2}" {st(1.4)}/>
+<path d="M58 266H254" stroke="{ACC}" stroke-width="5" stroke-linecap="round"/>
+<rect x="58" y="232" width="14" height="22" rx="4" fill="{ACC}" {st(1.6)}/><path d="M60 274H100M60 286H100M60 298H100" {st(1.4, op=.5)}/>
+<rect x="48" y="304" width="70" height="18" rx="5" fill="{BODY2}" {st(2)}/><rect x="40" y="152" width="20" height="30" rx="4" fill="{BODY2}" {st(2)}/>
+<path d="M254 306H276" {st(2.5)}/>
+{janela(326, 240, 178, 84)}{fil}
+<path d="M512 322V300H520" {st(1.6, op=.5)}/><rect x="506" y="300" width="9" height="14" rx="2" fill="{BODY2}" {st(1.4)}/>
+{rodas}{arcos}
+<path d="M722 312V352" {st(2.5)}/><rect x="716" y="340" width="12" height="22" rx="2" fill="{BODY2}" {st(1.6)}/>
+</symbol>''', hs
+
+
+def industria():
+    # pacote compressor/filtragem: reservatorio, gabinete com filtros, motor; fabrica ao fundo
+    fil, hs = montar([("hidraulico", 322, 250, 46), ("separadores", 376, 250, 78), ("desumidificador", 462, 250, 78)])
+    aletas = "".join(f'<path d="M{x} 226V326"/>' for x in range(604, 704, 9))
+    return f'''<symbol id="k-industria" viewBox="0 0 760 420">
+{fabrica()}
+<path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
+<rect x="24" y="364" width="712" height="20" rx="4" fill="{BODY2}" {st()}/><path d="M56 384V396M150 384V396M300 384V396M470 384V396M610 384V396M700 384V396" {st(5)}/>
+<path d="M88 306V364M232 306V364" {st(8)}/><path d="M78 364H98M222 364H242" {st(5)}/>
+<path d="M36 196Q36 178 56 178H266Q286 178 286 196V288Q286 306 266 306H56Q36 306 36 288Z" fill="{BODY}" {st()}/>
+<path d="M92 178V306M230 178V306" {st(1.6, op=.45)}/>
+<circle cx="160" cy="146" r="22" fill="{BODY2}" {st(2)}/><path d="M160 146L173 133" {st(2.5)}/><path d="M142 146H146M174 146H178M160 128V132" {st(1.6, op=.6)}/><path d="M160 168V178" {st(5)}/>
+<rect x="100" y="206" width="120" height="14" rx="3" fill="{BODY2}" {st(1.6)}/><path d="M112 213H208" {st(1.4, op=.5)}/>
+<path d="M286 242H306M286 270H306" {st(6)}/><circle cx="296" cy="256" r="5" fill="{ACC}" {st(1.4)}/>
+<rect x="300" y="154" width="276" height="212" rx="6" fill="{BODY}" {st()}/>
+<path d="M300 166H576" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<rect x="318" y="176" width="64" height="22" rx="3" fill="{BODY2}" {st(1.6)}/><path d="M326 187H374" {st(1.4, op=.5)}/><circle cx="552" cy="188" r="6" fill="{ACC}" {st(1.4)}/><circle cx="532" cy="188" r="6" fill="{BODY2}" {st(1.4)}/>
+{janela(312, 206, 252, 118)}{fil}
+<path d="M312 336H564M312 348H564" {st(1.4, op=.35)}/>
+<path d="M576 276H592" {st(6)}/><rect x="590" y="208" width="132" height="158" rx="8" fill="{BODY}" {st()}/><g {st(2, op=.55)}>{aletas}</g>
+<rect x="598" y="190" width="30" height="18" rx="3" fill="{BODY2}" {st(1.8)}/><rect x="722" y="262" width="14" height="44" rx="3" fill="{BODY2}" {st()}/>
+<path d="M618 190V170H676V190" fill="none" {st(2.5)}/>
+</symbol>''', hs
+
+
 def locomotiva():
-    fil, hs = montar([("oleo", 124, 258, 52), ("combustivel", 196, 258, 52), ("ar", 268, 258, 52)])
-    rodas = "".join(roda_lisa(x, 356, 29, 17, 6) for x in (108, 168, 228, 500, 560, 620))
+    # diesel-eletrica de lado (frente a direita): capo longo, cabine, truques de 3 eixos, tanque, trilho com dormentes
+    fil, hs = montar([("oleo", 124, 268, 48), ("combustivel", 196, 268, 48), ("ar", 268, 268, 48)])
+    rodas = "".join(roda_lisa(x, 358, 29, 17, 6) for x in (108, 168, 228, 500, 560, 620))
+    postes = "".join(f'<path d="M{x} 212V192"/>' for x in range(52, 470, 62))
     return f'''<symbol id="k-locomotiva" viewBox="0 0 760 420">
-<path d="M10 386H750" {st(2.5)}/><path d="M10 392H750" {st(1.2, op=.5)}/><path d="M40 392V404M120 392V404M200 392V404M280 392V404M360 392V404M440 392V404M520 392V404M600 392V404M680 392V404" {st(2, op=.35)}/>
+<path d="M10 388H750" {st(2.5)}/><path d="M10 394H750" {st(1.2, op=.5)}/><path d="M30 394V408M110 394V408M190 394V408M270 394V408M350 394V408M430 394V408M510 394V408M590 394V408M670 394V408" {st(2, op=.35)}/>
+<rect x="84" y="316" width="174" height="14" rx="5" fill="{BODY2}" {st()}/><rect x="478" y="316" width="174" height="14" rx="5" fill="{BODY2}" {st()}/>
+<path d="M92 316V330M250 316V330M486 316V330M644 316V330" {st(2, op=.5)}/><path d="M96 340H240M490 340H634" {st(1.4, op=.4)}/>
+<rect x="288" y="340" width="176" height="32" rx="15" fill="{BODY2}" {st(2)}/><path d="M318 340V372M432 340V372" {st(1.4, op=.4)}/>
 {rodas}
-<rect x="88" y="326" width="164" height="12" rx="4" fill="{BODY2}" {st()}/><rect x="482" y="326" width="164" height="12" rx="4" fill="{BODY2}" {st()}/>
-<rect x="290" y="338" width="170" height="30" rx="14" fill="{BODY2}" {st(2)}/>
-<path d="M24 328V196Q24 176 44 176H470L498 148V108Q498 92 514 92H706Q726 92 726 112V328Z" fill="{BODY}" {st()}/>
-<path d="M24 328H726" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/><path d="M24 196H470" stroke="{ACC}" stroke-width="5" stroke-linecap="round"/>
-{janela(100, 206, 248, 104)}{fil}
-<path d="M372 206V310M396 206V310M420 206V310M444 206V310" {st(1.6, op=.4)}/>
-<path d="M522 116H590V190H522ZM606 116H660V190H606Z" fill="{BODY2}" {st(2)}/><path d="M690 116V300" {st(1.6, op=.4)}/>
-<rect x="388" y="150" width="46" height="26" rx="4" fill="{BODY2}" {st(2)}/><path d="M726 250H744M726 290H744" {st(3)}/>
+<path d="M24 316V212Q24 196 44 196H470L498 164V128Q498 112 514 112H690L726 148V316Z" fill="{BODY}" {st()}/>
+<path d="M24 316H726" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/><path d="M24 212H470" stroke="{ACC}" stroke-width="5" stroke-linecap="round"/>
+<g {st(2.5)} stroke="{ACC}">{postes}</g><path d="M24 192H470" stroke="{ACC}" stroke-width="3" stroke-linecap="round"/>
+<rect x="76" y="176" width="68" height="20" rx="5" fill="{BODY2}" {st(1.8)}/><rect x="226" y="176" width="68" height="20" rx="5" fill="{BODY2}" {st(1.8)}/><rect x="376" y="178" width="62" height="18" rx="5" fill="{BODY2}" {st(1.8)}/>
+{janela(100, 222, 248, 90)}{fil}
+<path d="M366 224V310M390 224V310M414 224V310M438 224V310" {st(1.6, op=.4)}/>
+<rect x="38" y="226" width="44" height="72" rx="4" fill="{BODY2}" {st(1.8)}/><path d="M38 242H82M38 258H82M38 274H82M38 288H82" {st(1.4, op=.45)}/>
+<path d="M516 134H592V198H516ZM608 134H662V198H608Z" fill="{BODY2}" {st(2)}/><path d="M512 124H668" {st(3.5)}/><path d="M690 118V300" {st(1.6, op=.4)}/>
+<rect x="676" y="224" width="34" height="22" rx="3" fill="{BODY2}" {st(1.8)}/><circle cx="716" cy="156" r="6" fill="{ACC}" {st(1.6)}/>
+<path d="M726 262H746M726 294H746" {st(3)}/><path d="M726 262V316M740 262V316" {st(2, op=.55)}/>
+<path d="M24 300H4M24 270H4M4 270V316H20" fill="none" {st(2.2, op=.6)}/>
 </symbol>''', hs
 
 
 def fora_de_estrada():
-    fil, hs = montar([("hidraulico", 96, 257, 42), ("oleo", 160, 257, 42), ("ar", 224, 257, 42)])
+    # caminhao fora-de-estrada rigido: cabine pequena sob a viseira, cacamba basculante, pneus enormes; filtros no cofre
+    fil, hs = montar([("hidraulico", 326, 270, 42), ("oleo", 380, 270, 42), ("ar", 434, 270, 42)])
+    rodas = roda_lisa(204, 312, 84, 46, 14) + roda_lisa(590, 312, 84, 46, 14)
     return f'''<symbol id="k-fora-de-estrada" viewBox="0 0 760 420">
+{montanhas()}
 <path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
-{roda_lisa(192, 328, 68, 38, 12)}{roda_lisa(584, 328, 68, 38, 12)}
-<path d="M300 262L346 96Q350 84 362 84H640Q652 84 660 94L732 176Q738 184 736 194L722 296H300Z" fill="{BODY}" {st()}/>
-<path d="M340 262L378 112H640L706 190L696 262Z" fill="{BODY2}" {st(2)}/><path d="M400 130L372 244M470 118L444 250M540 118L520 250M610 120L596 252" {st(1.4, op=.3)}/>
-<path d="M300 262H722" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
-<path d="M44 300V218Q44 202 60 202H300V300Z" fill="{BODY}" {st()}/>
-<path d="M44 218H300" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
-{janela(74, 224, 214, 66)}{fil}
-<path d="M54 202V150Q54 134 70 134H168Q184 134 190 148L204 202Z" fill="{BODY}" {st()}/><path d="M72 150H160L172 190H72Z" fill="{BODY2}" {st(2)}/>
-<path d="M30 252H44M30 276H44" {st(3)}/><path d="M300 306H722" {st(2.5, op=.6)}/>
+<path d="M330 90H640L722 168Q730 178 728 190L716 226H330Z" fill="{BODY}" {st()}/>
+<path d="M356 112H632L700 178L694 208H356Z" fill="{BODY2}" {st(2)}/><path d="M410 114L388 206M476 114L458 206M542 114L530 206M608 118L598 206" {st(1.4, op=.3)}/>
+<path d="M342 100H640" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/><path d="M330 226H716" {st(3)}/>
+<path d="M728 190L744 192M722 204L738 208" {st(2.2, op=.6)}/><path d="M372 230L396 212" {st(5)}/><circle cx="372" cy="230" r="5" fill="{ACC}" {st(1.4)}/>
+<rect x="296" y="228" width="226" height="92" rx="6" fill="{BODY}" {st()}/>
+<path d="M62 322V214Q62 200 76 200H300V322Z" fill="{BODY}" {st()}/><path d="M62 214H300" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<path d="M92 200V148Q92 132 108 132H248Q260 132 266 144L282 200Z" fill="{BODY}" {st()}/>
+<path d="M114 150H236L248 190H114Z" fill="{BODY2}" {st(2)}/><path d="M130 160L152 182M154 160L176 182" {st(1.4, op=.4)}/>
+<rect x="80" y="108" width="256" height="16" rx="5" fill="{BODY2}" {st(2)}/><path d="M104 124V132M312 124V228" {st(2.5, op=.7)}/>
+<path d="M74 200V318M62 232H92M62 258H92M62 284H92" {st(2.2, op=.7)}/><path d="M44 262H62M44 290H62" {st(3)}/>
+{janela(308, 238, 182, 76)}{fil}
+{rodas}{arco(204, 312, 84, 10)}{arco(590, 312, 84, 10)}
 </symbol>''', hs
 
 
 def gerador():
+    # grupo gerador em carenagem: motor (filtros), alternador, radiador, escapamento, tanque-base, painel; torre de transmissao ao fundo
     fil, hs = montar([("oleo", 132, 232, 56), ("combustivel", 206, 232, 56), ("ar", 280, 232, 56)])
-    louvers = "".join(f'<path d="M{x} 150V318"/>' for x in range(560, 676, 9))
+    louvers = "".join(f'<path d="M{x} 150V318"/>' for x in range(556, 672, 9))
     return f'''<symbol id="k-gerador" viewBox="0 0 760 420">
+{torre()}
 <path d="M10 396H750" {st(2, 'stroke-dasharray="2 8"')}/>
-<rect x="64" y="350" width="632" height="18" rx="4" fill="{BODY2}" {st()}/><rect x="150" y="368" width="460" height="22" rx="10" fill="{BODY}" {st(2)}/>
-<path d="M90 368V390M670 368V390" {st(6)}/>
-<rect x="64" y="112" width="632" height="238" rx="10" fill="{BODY}" {st()}/>
-<path d="M64 132H696" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
-<rect x="118" y="46" width="44" height="66" rx="10" fill="{BODY2}" {st()}/><path d="M140 46V26H182" fill="none" {st(4)}/><path d="M122 62H158M122 78H158" {st(1.4, op=.45)}/>
-{janela(100, 156, 380, 168)}
-<rect x="116" y="244" width="336" height="64" rx="6" fill="{BODY}" {st(2, op=.9)}/><path d="M136 244V308M160 244V308M440 244V308" {st(1.4, op=.35)}/>
+<rect x="56" y="352" width="648" height="18" rx="4" fill="{BODY2}" {st()}/><rect x="140" y="370" width="480" height="22" rx="10" fill="{BODY}" {st(2)}/><path d="M164 380H596" {st(1.4, op=.4)}/>
+<path d="M88 370V392M672 370V392" {st(6)}/>
+<rect x="56" y="112" width="648" height="240" rx="10" fill="{BODY}" {st()}/>
+<path d="M56 132H704" stroke="{ACC}" stroke-width="6" stroke-linecap="round"/>
+<rect x="112" y="40" width="46" height="72" rx="10" fill="{BODY2}" {st()}/><path d="M135 40V20H184" fill="none" {st(4)}/><path d="M116 58H154M116 76H154M116 94H154" {st(1.4, op=.45)}/>
+<path d="M190 112V98H214V112M520 112V98H544V112" fill="none" {st(2.5)}/>
+{janela(92, 156, 380, 170)}
+<rect x="108" y="248" width="344" height="64" rx="6" fill="{BODY}" {st(2, op=.9)}/><path d="M130 248V312M154 248V312M430 248V312" {st(1.4, op=.35)}/>
 {fil}
-<rect x="540" y="136" width="136" height="188" rx="6" fill="{BODY2}" {st(2)}/><g {st(2, op=.55)}>{louvers}</g>
-<rect x="494" y="172" width="32" height="88" rx="4" fill="{BODY2}" {st(2)}/><circle cx="510" cy="196" r="7" fill="{ACC}" {st(1.5)}/><path d="M500 224H520M500 238H520" {st(2, op=.6)}/>
-<path d="M64 338H696" {st(1.4, op=.35)}/>
+<rect x="486" y="164" width="52" height="108" rx="5" fill="{BODY2}" {st(2)}/><rect x="494" y="174" width="36" height="24" rx="3" fill="{BODY}" {st(1.6)}/><path d="M506 190L514 180L514 188L522 186" fill="none" stroke="{ACC}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="504" cy="220" r="6" fill="{ACC}" {st(1.4)}/><circle cx="522" cy="220" r="6" fill="{BODY}" {st(1.4)}/><path d="M494 246H530M494 258H530" {st(2, op=.6)}/>
+<rect x="548" y="136" width="136" height="188" rx="6" fill="{BODY2}" {st(2)}/><g {st(2, op=.55)}>{louvers}</g>
+<path d="M56 338H704" {st(1.4, op=.35)}/>
 </symbol>''', hs
 
 
