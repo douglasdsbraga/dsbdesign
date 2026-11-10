@@ -106,14 +106,31 @@
       }, function () { say('Não foi possível ler sua localização. Escolha a cidade na lista.'); }, { timeout: 8000, maximumAge: 600000 });
     });
   });
-  // formularios de cotacao: PROTOTIPO, sem validacao e sem envio. O submit so segue para /obrigado/ levando as escolhas de segmento/solucao/filtro/unidade
-  // (nunca nome, telefone, e-mail ou mensagem: nada pessoal vai para a URL)
-  document.querySelectorAll('#cotacao, form.cot').forEach(function (f) {
+  // formularios de cotacao: PROTOTIPO, sem envio. So o ESTADO e obrigatorio (spec do Ismael, 07/11/2026: o lead precisa cair na unidade da regiao).
+  // O submit segue para /obrigado/ levando segmento/solucao/filtro/unidade/uf (nunca nome, telefone, e-mail, cidade ou mensagem: nada pessoal vai para a URL)
+  var mapaUf = null, elMapa = document.getElementById('mapa-uf');
+  if (elMapa) { try { mapaUf = JSON.parse(elMapa.textContent); } catch (e) { mapaUf = null; } }
+  function atende(f) {
+    var box = document.getElementById('uf-atende'), selU = f.elements.unidade, fldU = document.getElementById('fld-unidade'), uf = f.elements.uf && f.elements.uf.value;
+    if (!box) return;
+    var t = box.querySelector('.atende-t') || box.appendChild(document.createElement('p'));
+    t.className = 'atende-t'; if (fldU) fldU.hidden = true; if (selU) selU.value = '';
+    if (!uf) { t.textContent = 'Escolha o estado para ver qual unidade atende você.'; return; }
+    var un = mapaUf && mapaUf[uf];
+    if (!un) { t.textContent = 'Ainda não há unidade neste estado. A equipe indica qual unidade vai atender você.'; return; }
+    if (un.length === 1) { t.textContent = 'Seu atendimento será feito pela Polifiltro ' + un[0][1] + '.'; if (selU) selU.value = un[0][0]; return; }
+    t.textContent = 'O estado tem duas unidades: ' + un.map(function (u) { return u[1]; }).join(' e ') + '. Escolha a mais próxima.';
+    if (selU && fldU) { fldU.hidden = false; for (var i = 0; i < selU.options.length; i++) { var o = selU.options[i], ok = !o.value || un.some(function (u) { return u[0] === o.value; }); o.hidden = !ok; o.disabled = !ok; } }
+  }
+  document.querySelectorAll('#cotacao, #copa, form.cot').forEach(function (f) {
     f.setAttribute('novalidate', '');
+    var ufSel = f.elements.uf, erro = f.querySelector('.fld-erro');
+    if (ufSel) ufSel.addEventListener('change', function () { if (erro) erro.hidden = !!ufSel.value; ufSel.removeAttribute('aria-invalid'); atende(f); });
     f.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (ufSel && !ufSel.value) { if (erro) erro.hidden = false; ufSel.setAttribute('aria-invalid', 'true'); ufSel.focus(); return; }
       var q = new URLSearchParams();
-      ['segmento', 'solucao', 'filtro', 'unidade'].forEach(function (k) { if (f.elements[k] && f.elements[k].value) q.set(k, f.elements[k].value); });
+      ['segmento', 'solucao', 'filtro', 'unidade', 'uf'].forEach(function (k) { if (f.elements[k] && f.elements[k].value) q.set(k, f.elements[k].value); });
       location.href = f.getAttribute('action') + (q.toString() ? '?' + q.toString() : '');
     });
   });
@@ -121,17 +138,33 @@
   var cot = document.getElementById('cotacao');
   if (cot) {
     var q = new URLSearchParams(location.search);
-    ['segmento', 'solucao', 'filtro', 'unidade'].forEach(function (k) {
+    ['segmento', 'solucao', 'filtro', 'uf', 'unidade'].forEach(function (k) {
       var v = q.get(k), s = cot.elements[k];
       if (!v || !s) return;
       for (var i = 0; i < s.options.length; i++) if (s.options[i].value === v) { s.selectedIndex = i; break; }
     });
     if (q.get('filtro') && !q.get('solucao') && cot.elements.solucao) cot.elements.solucao.value = 'filtros';
+    // vindo da pagina de uma unidade (?unidade=): preenche o estado dela e mostra quem atende
+    if (q.get('unidade') && !q.get('uf') && mapaUf && cot.elements.uf) {
+      Object.keys(mapaUf).forEach(function (uf) { if (mapaUf[uf].some(function (u) { return u[0] === q.get('unidade'); })) cot.elements.uf.value = uf; });
+    }
+    atende(cot);
+    if (q.get('unidade') && cot.elements.unidade && !cot.elements.unidade.value) cot.elements.unidade.value = q.get('unidade');
   }
+  // listagens (noticias, lancamentos): chips filtram por categoria (so no navegador; sem dado externo)
+  document.querySelectorAll('[data-filtro]').forEach(function (bar) {
+    var main = document.querySelector('.nt-lista');
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-cat]'); if (!b || !main) return;
+      bar.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      var c = b.dataset.cat;
+      main.querySelectorAll('li[data-cat]').forEach(function (li) { li.hidden = !(c === 'Todas' || li.dataset.cat === c); });
+    });
+  });
   // obrigado: resumo do que foi preenchido (so no navegador; nada e enviado)
   var recap = document.getElementById('recap'), rot = document.getElementById('rotulos');
   if (recap && rot) {
-    var L = JSON.parse(rot.textContent), p = new URLSearchParams(location.search), linhas = [['segmento', 'Segmento'], ['solucao', 'Solução'], ['filtro', 'Filtro'], ['unidade', 'Unidade']];
+    var L = JSON.parse(rot.textContent), p = new URLSearchParams(location.search), linhas = [['segmento', 'Segmento'], ['solucao', 'Solução'], ['filtro', 'Filtro'], ['uf', 'Estado'], ['unidade', 'Unidade']];
     linhas.forEach(function (l) {
       var v = p.get(l[0]); if (!v) return;
       var dt = document.createElement('dt'), dd = document.createElement('dd');

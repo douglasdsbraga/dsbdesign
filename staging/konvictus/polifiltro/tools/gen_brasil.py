@@ -44,13 +44,18 @@ svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="non
 uf = json.loads((ROOT / "tools" / "dados" / "brasil-ibge-uf-minima.geojson").read_text())
 def anel(r):
     return "M" + "L".join(f"{x:.1f} {y:.1f}" for x, y in (proj(lon, lat) for lon, lat in r)) + "Z"
-estados = []
+# Cor por estado: paleta OFICIAL da "Politica de Identidade Visual" (Marketing Polifiltro, v1.0, set/2026; PDF reenviado pelo Ismael em 14/10/2026), hex exato, sem clarear.
+# Estado com mais de uma unidade usa a da capital/matriz: SP = Matriz #066FBA, MT = Cuiaba #2A6F97, MG = Belo Horizonte #2457A6 (Contagem ainda sem cor propria).
+# Estado novo = nova linha aqui (a cor vem do Marketing da matriz).
+COR_UF = {"13": "#006D8F", "15": "#0086C9", "51": "#2A6F97", "52": "#2095C7", "31": "#2457A6", "35": "#066FBA", "41": "#145DA0", "42": "#0077B6", "43": "#034F84"}
+base, coloridos = [], []
 for f in uf["features"]:
     g = f["geometry"]
-    for poly in (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]):
-        estados.append("".join(anel(r) for r in poly))
+    cod = f["properties"]["codarea"]
+    d_uf = "".join("".join(anel(r) for r in poly) for poly in (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]))
+    (coloridos.append(f'<path fill="{COR_UF[cod]}" d="{d_uf}"/>') if cod in COR_UF else base.append(d_uf))
 svg_uf = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="#0B1B3F" stroke="#9CC3F0" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round">'
-          f'<path d="{"".join(estados)}"/></svg>')
+          f'<path d="{"".join(base)}"/>{"".join(coloridos)}</svg>')
 (ROOT / "assets" / "svg" / "brasil-estados.svg").write_text(svg_uf)
 
 CIDADES = [("Manaus/AM", -3.12, -60.02), ("Ananindeua/PA", -1.37, -48.38), ("Sinop/MT", -11.86, -55.50), ("Cuiabá/MT", -15.60, -56.10),

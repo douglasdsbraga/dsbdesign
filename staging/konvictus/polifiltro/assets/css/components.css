@@ -242,3 +242,7 @@ form.cot{display:grid;gap:14px}
 .super .chip{background:var(--bg-raised);border-color:var(--line)}
 .super .chip:hover{border-color:var(--accent);color:var(--accent)}
 .s-art{min-height:260px}
+.fld-erro{grid-column:1/-1;margin:0;color:#B42318;font-size:var(--fs-0);font-weight:600}
+.fld-erro[hidden]{display:none}
+abbr.req{text-decoration:none;color:#B42318}
+.fld select[aria-invalid=true]{border-color:#B42318}

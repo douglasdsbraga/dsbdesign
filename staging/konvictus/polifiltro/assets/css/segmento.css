@@ -17,6 +17,8 @@
 .seg-hero-txt .lead{max-width:40ch}
 .rx-seg{--k-acc:var(--seg)}
 .rx-seg .hs::after{border-color:var(--seg)}
+.seg-hero.neutral{border-bottom-color:var(--blue-500)}  /* hero neutro nao e de segmento: sem o verde do Agricola herdado de --seg */
+.onde .btn{justify-self:start}
 .neutral .fil-hero,.fil-hero{display:grid;gap:var(--sp-5);padding-block:var(--sp-6) var(--sp-8)}
 .fil-hero .lead{max-width:46ch}
 .fil-hero h1{font-size:clamp(2.5rem,.4rem + 6.5vw,7.5rem);font-weight:200;line-height:.96;letter-spacing:-.025em}

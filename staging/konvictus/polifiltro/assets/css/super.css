@@ -7,6 +7,7 @@
 .super-in:has(.s-list a[data-k="ferrovia"]:is(:hover,:focus-visible)) .s-prev[data-k="ferrovia"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="mineracao"]:is(:hover,:focus-visible)) .s-prev[data-k="mineracao"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="geradores-de-energia"]:is(:hover,:focus-visible)) .s-prev[data-k="geradores-de-energia"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="construcao"]:is(:hover,:focus-visible)) .s-prev[data-k="construcao"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="filtros"]:is(:hover,:focus-visible)) .s-prev[data-k="filtros"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="lubrificantes"]:is(:hover,:focus-visible)) .s-prev[data-k="lubrificantes"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="aditivos"]:is(:hover,:focus-visible)) .s-prev[data-k="aditivos"]{opacity:1;visibility:visible}

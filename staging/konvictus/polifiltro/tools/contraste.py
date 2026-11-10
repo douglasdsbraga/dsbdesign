@@ -9,7 +9,7 @@ def cr(a, b):
 NAVY, ICE, ICE50, INK, GRAF, BLUE600, BLUE300, BLUE200 = "#0B1B3F", "#EBF3F2", "#F6FAF9", "#142033", "#5F6062", "#066FBA", "#E3F0FA", "#EAF4FB"
 BRAND = "#066FBA"  # azul institucional (fundos escuros); NAVY segue so como tinta
 SEG = {"agricola": ("#8DB63C", "#436B12"), "transporte": ("#E3A623", "#7A5400"), "industria": ("#E0743A", "#9A3F0F"), "maritimo": ("#3FB0C4", "#0E6677"),
-       "ferrovia": ("#B39A6E", "#6B5530"), "mineracao": ("#D9705A", "#9A2F1C"), "geradores-de-energia": ("#DDCB3A", "#6B6000")}
+       "ferrovia": ("#B39A6E", "#6B5530"), "mineracao": ("#D9705A", "#9A2F1C"), "geradores-de-energia": ("#DDCB3A", "#6B6000"), "construcao": ("#FFD21F", "#6E5500")}
 pares = [("texto ink / gelo", INK, ICE, 4.5), ("texto grafite / gelo", GRAF, ICE, 4.5), ("texto grafite / gelo-50", GRAF, ICE50, 4.5),
          ("botao: gelo-50 / azul UI", ICE50, BLUE600, 4.5), ("link azul UI / gelo", BLUE600, ICE, 4.5), ("link azul UI / gelo-50", BLUE600, ICE50, 4.5),
          ("texto gelo / brand", ICE, BRAND, 4.5), ("texto azul-200 / brand", BLUE200, BRAND, 4.5), ("botao: navy / gelo-50", NAVY, ICE50, 4.5),

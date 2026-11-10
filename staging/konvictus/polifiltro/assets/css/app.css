@@ -25,6 +25,7 @@
   --seg-ferrovia:#B39A6E;   --seg-ferrovia-deep:#6B5530;
   --seg-mineracao:#D9705A;  --seg-mineracao-deep:#9A2F1C;
   --seg-geradores-de-energia:#DDCB3A; --seg-geradores-de-energia-deep:#6B6000;
+  --seg-construcao:#FFD21F;   --seg-construcao-deep:#6E5500;   
   --bg:var(--ice-100); --bg-raised:var(--ice-50); --bg-dark:var(--brand); --bg-dark-2:color-mix(in srgb,var(--brand) 80%,#000); 
   --text:var(--ink-900); --text-2:var(--graphite-600); --text-on-dark:var(--ice-100); --text-on-dark-2:var(--blue-200);
   --accent:var(--blue-600); --accent-on-dark:var(--blue-300); --line:var(--ice-300); --line-on-dark:rgb(185 198 216 / .22);
@@ -283,6 +284,10 @@ form.cot{display:grid;gap:14px}
 .super .chip{background:var(--bg-raised);border-color:var(--line)}
 .super .chip:hover{border-color:var(--accent);color:var(--accent)}
 .s-art{min-height:260px}
+.fld-erro{grid-column:1/-1;margin:0;color:#B42318;font-size:var(--fs-0);font-weight:600}
+.fld-erro[hidden]{display:none}
+abbr.req{text-decoration:none;color:#B42318}
+.fld select[aria-invalid=true]{border-color:#B42318}
 .super-in:has(.s-list a:is(:hover,:focus-visible)) .s-prev:first-child{opacity:0;visibility:hidden}
 .super-in:has(.s-list a[data-k="agricola"]:is(:hover,:focus-visible)) .s-prev[data-k="agricola"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="transporte"]:is(:hover,:focus-visible)) .s-prev[data-k="transporte"]{opacity:1;visibility:visible}
@@ -291,6 +296,7 @@ form.cot{display:grid;gap:14px}
 .super-in:has(.s-list a[data-k="ferrovia"]:is(:hover,:focus-visible)) .s-prev[data-k="ferrovia"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="mineracao"]:is(:hover,:focus-visible)) .s-prev[data-k="mineracao"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="geradores-de-energia"]:is(:hover,:focus-visible)) .s-prev[data-k="geradores-de-energia"]{opacity:1;visibility:visible}
+.super-in:has(.s-list a[data-k="construcao"]:is(:hover,:focus-visible)) .s-prev[data-k="construcao"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="filtros"]:is(:hover,:focus-visible)) .s-prev[data-k="filtros"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="lubrificantes"]:is(:hover,:focus-visible)) .s-prev[data-k="lubrificantes"]{opacity:1;visibility:visible}
 .super-in:has(.s-list a[data-k="aditivos"]:is(:hover,:focus-visible)) .s-prev[data-k="aditivos"]{opacity:1;visibility:visible}

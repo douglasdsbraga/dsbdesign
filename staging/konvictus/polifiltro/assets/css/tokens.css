@@ -21,6 +21,7 @@
   --seg-ferrovia:#B39A6E;   --seg-ferrovia-deep:#6B5530;
   --seg-mineracao:#D9705A;  --seg-mineracao-deep:#9A2F1C;
   --seg-geradores-de-energia:#DDCB3A; --seg-geradores-de-energia-deep:#6B6000;
+  --seg-construcao:#FFD21F;   --seg-construcao-deep:#6E5500;   /* linha amarela; provisoria, perto de transporte e geradores */
 
   /* --- 2. semanticos --- */
   --bg:var(--ice-100); --bg-raised:var(--ice-50); --bg-dark:var(--brand); --bg-dark-2:color-mix(in srgb,var(--brand) 80%,#000); /* 2o plano derivado, so p/ separar camadas */

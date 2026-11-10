@@ -6,7 +6,7 @@ status: 🟡 PROPOSTA — protótipo hi-fi para a reunião de layout (até 23/10
 created: 2026-10-10
 ---
 
-# Protótipo hi-fi v1 — Polifiltro (Home + 7 segmentos + Filtros + Unidades)
+# Protótipo hi-fi v1 — Polifiltro (Home + 7 segmentos + Filtros + Unidades + institucionais)
 
 > **Projeto Konvictus, não Incuca:** sem `report/`, sem modo espelho, sem `incuca-ai`. Nada vai ao grupo do cliente antes de Ismael/Vitória verem.
 > **Copy do cliente não foi editada.** Onde o cliente não tem texto, o texto é **proposta nossa** (marcado `data-copy="proposta"` no HTML).
@@ -18,6 +18,31 @@ python3 tools/serve.py 8742        # servidor local com gzip (sem cache)
 open http://127.0.0.1:8742/        # View Transitions só funcionam em http, não em file://
 ```
 Parar o servidor: `pkill -f "serve.py 8742"`. Reconstruir páginas após editar `src/` ou os CSS parciais: `python3 -I tools/build.py`.
+
+## Atualização 10/11/2026 — conteúdo de exemplo (lorem + fotos Unsplash) e páginas que faltavam
+> Pedido do Douglas: onde não há texto do cliente, montar com **lorem ipsum** e **fotos do Unsplash**, para já termos protótipo de tudo. Tudo marcado "exemplo" / "a receber do cliente" (chip tracejado).
+- **Fotos:** 21 imagens do Unsplash em `assets/img/stock/` (1200x800, ~4 MB no total; ids em `CREDITOS.md`). **Provisórias: trocar por fotos do cliente.** Pesam; otimizar (WebP, menor) antes de ir ao ar.
+- **Notícias, com listagem e view:** `noticias/` (destaque + lista, chips de categoria que filtram) e 6 artigos de exemplo (`noticias/noticia-exemplo-NN/`: capa, texto, citação, lista, "Leia também").
+- **Lançamentos, com listagem e view:** mesmo gabarito (`lancamentos/` + 3 itens de exemplo).
+- **Unidades, com listagem e view:** a view (`unidades/<cidade-uf>/`) agora tem texto de exemplo, foto, galeria, "Quem atendemos" e a cor oficial da unidade.
+- **Copa Truck** (`copa-truck/`, nova): como participar (3 passos), cadastro da nota fiscal, **etapas com estados de exemplo** (encerrada, esgotado, inscrições abertas, em breve) e regulamento. **A regra do ingresso segue em aberto**; datas e estados são exemplo. Linkada no rodapé e no menu do celular.
+- **Construção** (segmento novo, linha amarela): herói com **foto** (não há ilustração em corte), mesma estrutura dos outros, faixa na Home e item nos menus. **Ainda é pergunta aberta ao Ismael se é segmento ou subitem.** Cor `--seg-construcao` provisória (perto de Transporte e Geradores).
+- **Soluções (Aditivos, Ultrafiltração, Equipamentos) e páginas legais** agora com lorem e fotos, no lugar do espaço reservado. **"Sobre o segmento"** dos segmentos também.
+- **Verificado:** 50 páginas, 0 links locais quebrados (só o botão do WhatsApp cai no stub, número a coletar); nenhuma imagem quebrada; sem rolagem horizontal em 360 e 1440 px nas páginas novas; contraste 0 falhas. **Não verificado:** Lighthouse, iOS Safari real, 768 e 1920 px, leitor de tela.
+
+## Atualização 09/11/2026 — páginas restantes da IA v1 + ajustes da call de 07/11
+> Origem dos pedidos: [[../../../Estratégia/Analises/ata-call-ismael-2026-11-07|ata da call de 07/11]]. Prazo: site no ar ainda em novembro.
+- **12 páginas institucionais/soluções novas** (as 25 da IA v1, exceto Notícias): `segmentos/` (hub), `empresa/`, `qualidade-e-certificados/`, `lubrificantes/`, `aditivos/`, `ultrafiltracao-de-diesel/`, `equipamentos-e-armazenamento/`, `marcas/`, `lancamentos/`, `trabalhe-conosco/`, `politica-de-privacidade/`, `politica-de-cookies/`. Código em `tools/build.py` (bloco "PAGINAS RESTANTES") e `assets/css/inst.css`.
+- **Copy do cliente, sem edição** (do site atual, copiado em 09/11, marcada `data-copy="cliente"`): História, Política da Qualidade, ISO 9001, números (20.000 / 30.000 / 200), Lubrificantes (Petrol, Repsol, Valvoline, YPF, Idemitsu) e Trabalhe conosco (com `rh@polifiltro.com.br`). O texto de História lista Belo Horizonte e Araçatuba como matriz; o de Unidades, Contagem e São Paulo. Fica para confirmar.
+- **Sem texto do cliente ainda** (espaço reservado `.txt-vazio`, "a receber"): Aditivos, Ultrafiltração, Equipamentos, os textos de cada unidade e as **páginas legais** (o texto jurídico não foi enviado; só a estrutura de seções). **Lançamentos** tem estado vazio porque a página do site atual também está vazia.
+- **Notícias (P20) não foi desenhada**, de propósito: blog fica fora por decisão de 07/11 ([[../../../Estratégia/global-Docs/Tradeoff/tradeoffs-call-2026-11-07|T-04]]). Links para `/noticias/` ainda caem no `stub.html`.
+- **Página por unidade** (N-02): `unidades/<cidade-uf>/` ×12, gerada de `UNIDADES`, com fachada, endereço, telefone, "Como chegar", cotação já direcionada, bloco "Sobre a unidade" reservado e lista das outras unidades. Os cards de Unidades ganharam o link "Página da unidade".
+- **Mapa por estado** (N-01): `assets/svg/brasil-estados.svg` pinta AM, PA, MT, GO, MG, SP, PR, SC e RS com a **paleta oficial da Política de Identidade Visual** (Marketing Polifiltro v1.0, set/2026; PDF reenviado pelo Ismael em 14/10), hex exato, sem clarear (`tools/gen_brasil.py`, tabela `COR_UF`). Estado com mais de uma unidade usa a da matriz/capital (SP = matriz `#066FBA`, MT = Cuiabá, MG = Belo Horizonte; **Contagem ainda sem cor própria**). Como SP usa o mesmo azul do fundo do herói, o mapa do herói de Unidades ganhou uma placa marinho atrás. Estado novo = uma linha em `COR_UF`. (Na primeira rodada de 09/11 eu tinha amostrado as cores do vídeo do Instagram; foi substituído pela paleta oficial.)
+- **Cor de cada unidade** (hex oficial) aparece na faixa do herói de cada página de unidade (`UNIT_COR` em `tools/build.py`).
+- **Cotação com região obrigatória** (N-04): campo **Estado** (obrigatório, com erro inline e foco) e **Cidade** (opcional) no `contato/` e no formulário rápido da aba Cotar. Mostra "Seu atendimento será feito pela Polifiltro <cidade>"; em **SP, MG e MT** (duas unidades) pede para escolher a unidade. Vindo da página de uma unidade, já abre com estado e unidade. **Regra de UF → unidade: WhatsApp do Ismael, 07/11 12:48.** Estados sem unidade: texto de fallback é **proposta nossa**. **Só o estado é validado; nada é enviado** (decisão de 21/10 mantida para o resto). WhatsApp das unidades: **a coletar**.
+- **Pequenos ajustes:** faixa verde do Agrícola deixou de vazar no herói das páginas neutras; "Canal Voz Segura" aponta para o link externo da IA v1 (`aloetica.com.br/polifiltro`).
+- **Fora desta rodada (depende de gente):** regra real do ingresso da Copa Truck (P-03), confirmação de que Construção é segmento, **logos de marcas** (autorização), texto real das unidades e das páginas legais, WhatsApp das unidades.
+- **Verificado:** 38 páginas, 0 links locais quebrados; sem rolagem horizontal em 360 e 1440 px nas páginas novas; contraste dos segmentos 0 falhas; validação do estado (bloqueia envio, foca o campo); fluxo unidade → cotação. **Não verificado:** Lighthouse das páginas novas, iOS Safari real, 768 e 1920 px, leitor de tela.
 
 ## Atualização 21/10/2026 — segmentos restantes + página Unidades (pedido do Ismael, 16/10)
 - **6 segmentos novos** (Transporte, Indústria, Marítimo, Ferrovia, Mineração, Geradores de energia), mesmo gabarito do Agrícola: herói com **ilustração em corte e 3 hotspots de filtro**, soluções, onde atendemos, parceiros, CTA. Arte: `tools/gen_veiculos.py` (escreve no sprite e em `tools/dados/seg-art.json`); páginas: `segmento_body()` em `tools/build.py`. O glifo de cada filtro é o mesmo da página de Filtros.
