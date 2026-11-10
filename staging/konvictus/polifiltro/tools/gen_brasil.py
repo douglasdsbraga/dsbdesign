@@ -48,14 +48,29 @@ def anel(r):
 # Estado com mais de uma unidade usa a da capital/matriz: SP = Matriz #066FBA, MT = Cuiaba #2A6F97, MG = Belo Horizonte #2457A6 (Contagem ainda sem cor propria).
 # Estado novo = nova linha aqui (a cor vem do Marketing da matriz).
 COR_UF = {"13": "#006D8F", "15": "#0086C9", "51": "#2A6F97", "52": "#2095C7", "31": "#2457A6", "35": "#066FBA", "41": "#145DA0", "42": "#0077B6", "43": "#034F84"}
-base, coloridos = [], []
+UF_SIGLA = {"13": "AM", "15": "PA", "51": "MT", "52": "GO", "31": "MG", "35": "SP", "41": "PR", "42": "SC", "43": "RS"}
+OFF_SIGLA = {"MT": (-34, 6), "GO": (6, -26), "SP": (-6, 12), "SC": (-10, 0)}
+def area(r):
+    pts = [proj(lon, lat) for lon, lat in r]
+    return abs(sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts)))) / 2, pts
+base, coloridos, siglas = [], [], []
 for f in uf["features"]:
-    g = f["geometry"]
+    g_ = f["geometry"]
     cod = f["properties"]["codarea"]
-    d_uf = "".join("".join(anel(r) for r in poly) for poly in (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]))
-    (coloridos.append(f'<path fill="{COR_UF[cod]}" d="{d_uf}"/>') if cod in COR_UF else base.append(d_uf))
+    polys = g_["coordinates"] if g_["type"] == "MultiPolygon" else [g_["coordinates"]]
+    d_uf = "".join("".join(anel(r) for r in poly) for poly in polys)
+    if cod in COR_UF:
+        # contorno branco: o fundo e transparente e o azul da matriz (SP) e igual ao azul de alguns fundos; a cor continua o hex oficial
+        coloridos.append(f'<path fill="{COR_UF[cod]}" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="1.6" d="{d_uf}"/>')
+        a_, pp = max((area(poly[0]) for poly in polys), key=lambda t: t[0])
+        xs, ys = [q[0] for q in pp], [q[1] for q in pp]
+        dx, dy = OFF_SIGLA.get(UF_SIGLA[cod], (0, 0))  # afasta a sigla do pin da unidade
+        siglas.append(f'<text x="{(min(xs) + max(xs)) / 2 + dx:.0f}" y="{(min(ys) + max(ys)) / 2 + 5 + dy:.0f}">{UF_SIGLA[cod]}</text>')
+    else:
+        base.append(d_uf)
 svg_uf = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="#0B1B3F" stroke="#9CC3F0" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round">'
-          f'<path d="{"".join(base)}"/>{"".join(coloridos)}</svg>')
+          f'<path d="{"".join(base)}"/>{"".join(coloridos)}'
+          f'<g fill="#FFFFFF" stroke="#0B1B3F" stroke-width="3.2" stroke-opacity="1" paint-order="stroke" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="14" text-anchor="middle">{"".join(siglas)}</g></svg>')
 (ROOT / "assets" / "svg" / "brasil-estados.svg").write_text(svg_uf)
 
 CIDADES = [("Manaus/AM", -3.12, -60.02), ("Ananindeua/PA", -1.37, -48.38), ("Sinop/MT", -11.86, -55.50), ("Cuiabá/MT", -15.60, -56.10),

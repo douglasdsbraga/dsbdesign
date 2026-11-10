@@ -288,5 +288,9 @@
   .et-d{grid-column:1}
 }
 @media (max-width:560px){.nt-card a{grid-template-columns:1fr}}
-.un-hero .un-map{isolation:isolate}
-.un-hero .un-map::before{content:"";position:absolute;inset:-3% -6%;background:var(--navy-950);border-radius:var(--r-card);box-shadow:var(--shadow-2);z-index:-1}
+.un-card{border-top:6px solid var(--uc,var(--blue-500))}
+.legenda{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.legenda a{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 12px;border-radius:var(--r-pill);border:1.5px solid var(--line-on-dark);color:var(--ice-100);font-size:var(--fs-0);font-weight:500}
+.legenda a:hover{background:rgb(255 255 255 / .12)}
+.legenda .sw{margin:0;width:12px;height:12px;box-shadow:0 0 0 1.5px #fff}
+.legenda-t{margin:0;color:var(--blue-200)}

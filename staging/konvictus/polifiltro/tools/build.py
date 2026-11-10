@@ -206,7 +206,8 @@ def card_unidade(R, i, u):
         acoes = (f'<a class="btn sm" href="{R}stub.html?u=/contato/&amp;unidade={sl}"><span>Falar com a Polifiltro</span></a>'
                  f'<a class="link" href="{R}unidades/{sl}/">Página da unidade {ic("arrow-right")}</a>')
     badge = '<span class="selo">Matriz</span>' if u.get("matriz") else ""
-    return (f'<li class="un-card" id="{sl}" data-i="{i}" data-lat="{u["ll"][0]}" data-lng="{u["ll"][1]}">{fachada(R, u)}'
+    uc = UNIT_COR.get(sl)
+    return (f'<li class="un-card" id="{sl}"{f" style=--uc:{uc}" if uc else ""} data-i="{i}" data-lat="{u["ll"][0]}" data-lng="{u["ll"][1]}">{fachada(R, u)}'
             f'<div class="un-b"><h3><span class="cid">{cidade}</span><span class="uf">{uf}</span>{badge}</h3>{dados}<div class="un-acoes">{acoes}</div></div></li>')
 
 
@@ -226,6 +227,8 @@ def unidades_body(R):
     <p class="lead" data-copy="proposta">Doze unidades em nove estados. Escolha a mais próxima e peça sua cotação direto com a equipe local.</p>
     <div class="uni-tools hero-tools"><label class="fld">Cidade<select id="uni-sel"><option>Escolha a cidade</option>{"".join(f"<option>{c}</option>" for c in CIDADES)}</select></label><button class="btn sm" type="button" data-geo><span>Usar minha localização</span></button></div>
     <p class="geo-msg nota" id="geo-msg" role="status" aria-live="polite"></p>
+    <p class="legenda-t nota">Cor de cada unidade</p>
+    <ul class="legenda">{"".join(f'<li><a href="#{slug(u["c"])}"><span class="sw" style="background:{UNIT_COR.get(slug(u["c"])) or "#3B73B9"}"></span>{u["c"].split("/")[0]}</a></li>' for u in UNIDADES)}</ul>
   </div>
   <div class="mapa un-map" aria-hidden="true"><img class="mapa-pts" src="{R}assets/svg/brasil-estados.svg" alt="" width="615" height="637" decoding="async">{{{{PINS}}}}</div>
 </div></section>
@@ -939,6 +942,8 @@ def render(p):
     for real in PAGINAS_REAIS.values():  # link para pagina que ja existe deixa de apontar pro stub (com ou sem parametros)
         html = html.replace(f'{R}stub.html?u=/{real}"', f'{R}{real}"')
         html = html.replace(f'{R}stub.html?u=/{real}&amp;', f'{R}{real}?')
+    # versao na URL das imagens: o CDN do Pages guarda por 4 h (max-age=14400); sem isso quem ja abriu o site ve o arquivo antigo
+    html = re.sub(r'((?:src|href)="[^"?]*assets/(?:svg|img)/[^"?]+\.(?:svg|jpg|webp|png))"', lambda m: m.group(1) + "?v=" + VER + '"', html)
     html = html.replace(f'href="{R}stub.html?u=/canal-voz-segura/"', 'href="https://aloetica.com.br/polifiltro" target="_blank" rel="noopener"')
     dest = ROOT / out
     dest.parent.mkdir(parents=True, exist_ok=True)
